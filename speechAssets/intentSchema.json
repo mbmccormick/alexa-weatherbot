@@ -1,0 +1,38 @@
+{
+  "intents": [
+    {
+      "intent": "ADDRESS",
+      "slots": [
+          {
+              "name": "street",
+              "type": "AMAZON.PostalAddress"
+          },
+          {
+              "name": "city",
+              "type": "AMAZON.US_CITY"
+          }
+      ]
+    },
+    {
+      "intent": "CONDITIONS"
+    },
+    {
+      "intent": "TEMPERATURE"
+    },
+    {
+      "intent": "PRECIPITATION"
+    },
+    {
+      "intent": "WIND"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}

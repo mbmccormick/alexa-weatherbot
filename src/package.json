@@ -1,0 +1,20 @@
+{
+  "name": "alexa-weatherbot",
+  "version": "1.0.0",
+  "description": "A hyperlocal weather skill.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "weather"
+  ],
+  "author": "Matt McCormick",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6",
+    "forecast.io": "^0.0.11",
+    "geocoder": "^0.2.2"
+  }
+}

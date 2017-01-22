@@ -1,0 +1,22 @@
+ADDRESS {street} {city}
+
+CONDITIONS what it's like outside
+CONDITIONS the current conditions outside
+CONDITIONS the current conditions
+CONDITIONS current conditions
+
+TEMPERATURE the temperature outside
+TEMPERATURE the temperature
+TEMPERATURE temperature
+
+PRECIPITATION if it's going to rain
+PRECIPITATION if it's going to snow
+PRECIPITATION the probability of precipitation
+PRECIPITATION probability of precipitation
+PRECIPITATION precipitation
+
+WIND how windy it is outside
+WIND how windy it is
+WIND the wind speed
+WIND wind speed
+WIND wind
