@@ -23,7 +23,7 @@ var newSessionHandler = {
         if (Object.keys(this.attributes).length === 0) {
             this.handler.state = states.SETUPMODE;
         } else {
-            this.handler.state = states.FORECASTMODE;
+            this.handler.state = this.attributes['STATE'];
         }
 
         this.emitWithState('LaunchRequest');
@@ -156,7 +156,7 @@ var askHandler = Alexa.CreateStateHandler(states.FORECASTMODE, {
 
 var changeAddressHandler = Alexa.CreateStateHandler(states.CHANGEADDRESSMODE, {
     'LaunchRequest': function() {
-        this.emit(':ask', 'Welcome to Weatherbot! You previously asked to me change your address, but we never finished the update. Please tell me your new address', 'Please tell me your new address.');
+        this.emit(':ask', 'Welcome to Weatherbot! You previously asked me to change your address, but we never finished the update. Please tell me your new address.', 'Please tell me your new address.');
     },
     'ADDRESS': function() {
         var street = this.event.request.intent.slots.street.value;
@@ -197,7 +197,7 @@ var changeAddressHandler = Alexa.CreateStateHandler(states.CHANGEADDRESSMODE, {
         this.handler.state = states.FORECASTMODE;
         this.emit(':saveState', true);
 
-        this.emit(':ask', 'OK, cancelling.');
+        this.emit(':tell', 'OK, cancelling. Your address has not been changed.');
     },
     'SessionEndedRequest': function () {
         this.emit(':tell', 'Goodbye!');
