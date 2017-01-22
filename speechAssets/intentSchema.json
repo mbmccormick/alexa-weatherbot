@@ -10,11 +10,21 @@
           {
               "name": "city",
               "type": "AMAZON.US_CITY"
+          },
+          {
+              "name": "postal_code",
+              "type": "AMAZON.NUMBER"
           }
       ]
     },
     {
+      "intent": "CHANGE_ADDRESS"
+    },
+    {
       "intent": "CONDITIONS"
+    },
+    {
+      "intent": "FORECAST"
     },
     {
       "intent": "TEMPERATURE"
@@ -33,6 +43,9 @@
     },
     {
       "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
     }
   ]
 }
