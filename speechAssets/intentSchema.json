@@ -18,9 +18,6 @@
       ]
     },
     {
-      "intent": "CHANGE_ADDRESS"
-    },
-    {
       "intent": "CONDITIONS"
     },
     {
@@ -34,6 +31,9 @@
     },
     {
       "intent": "WIND"
+    },
+    {
+      "intent": "CHANGE_ADDRESS"
     },
     {
       "intent": "AMAZON.YesIntent"

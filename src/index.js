@@ -105,28 +105,36 @@ var askHandler = Alexa.CreateStateHandler(states.FORECASTMODE, {
             var high = Math.round(data.daily.data[0].temperatureMax);
             var low = Math.round(data.daily.data[0].temperatureMin);
 
-            alexa.emit(':tell', 'Welcome to Weatherbot! Right now, there is ' + minutely_summary + '. Today, you can expect ' + hourly_summary + ' with a high of ' + high + ' degrees and a low of ' + low + ' degrees.');
+            var lead;
+
+            var adjective = minutely_summary.split(' ')[0];
+            if (adjective.endsWith('y')) {
+                lead = 'it is';
+            } else if (adjective.endsWith('s')) {
+                lead = 'there are';
+            } else {
+                lead = 'there is';
+            }
+
+            alexa.emit(':tell', 'Welcome to Weatherbot! Right now, ' + lead + ' ' + minutely_summary + '. Today, you can expect ' + hourly_summary + ' with a high of ' + high + ' degrees and a low of ' + low + ' degrees.');
         });
-    },
-    'CHANGE_ADDRESS': function() {
-        var formatted_address = this.attributes['FORMATTED_ADDRESS'];
-
-        this.emit(':ask', 'The address that I have for you is ' + formatted_address + '. Would you like to change it?', 'Would you like to change your address?');
-    },
-    'AMAZON.YesIntent': function() {
-        this.handler.state = states.CHANGEADDRESSMODE;
-        this.emit(':saveState', true);
-
-        this.emit(':ask', 'OK, please tell me your new address.', 'Please tell me your new address.');
-    },
-    'AMAZON.NoIntent': function() {
-        this.emit(':tell', 'OK.');
     },
     'CONDITIONS': function() {
         getForecast(this.attributes['LATITUDE'], this.attributes['LONGITUDE'], function (err, data) {
             var conditions = data.minutely.summary;
 
-            alexa.emit(':tell', 'Right now, there is ' + conditions + '.');
+            var lead;
+
+            var adjective = conditions.split(' ')[0];
+            if (adjective.endsWith('y')) {
+                lead = 'it is';
+            } else if (adjective.endsWith('s')) {
+                lead = 'there are';
+            } else {
+                lead = 'there is';
+            }
+
+            alexa.emit(':tell', 'Right now, ' + lead + ' ' + conditions + '.');
         });
     },
     'FORECAST': function() {
@@ -159,6 +167,20 @@ var askHandler = Alexa.CreateStateHandler(states.FORECASTMODE, {
 
             alexa.emit(':tell', 'Right now, there\'s a ' + wind + ' mph wind.');
         });
+    },
+    'CHANGE_ADDRESS': function() {
+        var formatted_address = this.attributes['FORMATTED_ADDRESS'];
+
+        this.emit(':ask', 'The address that I have for you is ' + formatted_address + '. Would you like to change it?', 'Would you like to change your address?');
+    },
+    'AMAZON.YesIntent': function() {
+        this.handler.state = states.CHANGEADDRESSMODE;
+        this.emit(':saveState', true);
+
+        this.emit(':ask', 'OK, please tell me your new address.', 'Please tell me your new address.');
+    },
+    'AMAZON.NoIntent': function() {
+        this.emit(':tell', 'OK.');
     },
     'AMAZON.HelpIntent': function() {
         this.emit(':ask', 'You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..', 'You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..');

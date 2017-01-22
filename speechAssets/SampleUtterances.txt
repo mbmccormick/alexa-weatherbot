@@ -8,14 +8,6 @@ ADDRESS {street} {city} {postal_code}
 ADDRESS {street} {city}
 ADDRESS {street} {postal_code}
 
-CHANGE_ADDRESS change my address
-CHANGE_ADDRESS change address
-CHANGE_ADDRESS update my address
-CHANGE_ADDRESS update address
-CHANGE_ADDRESS edit my address
-CHANGE_ADDRESS edit address
-CHANGE_ADDRESS address
-
 CONDITIONS what it's like outside
 CONDITIONS the current conditions outside
 CONDITIONS the current conditions
@@ -49,3 +41,11 @@ WIND how windy it is
 WIND the wind speed
 WIND wind speed
 WIND wind
+
+CHANGE_ADDRESS change my address
+CHANGE_ADDRESS change address
+CHANGE_ADDRESS update my address
+CHANGE_ADDRESS update address
+CHANGE_ADDRESS edit my address
+CHANGE_ADDRESS edit address
+CHANGE_ADDRESS address
