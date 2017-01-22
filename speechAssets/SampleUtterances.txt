@@ -1,9 +1,12 @@
 ADDRESS my address is {street} {city} {postal_code}
 ADDRESS my address is {street} {city}
+ADDRESS my address is {street} {postal_code}
 ADDRESS the address is {street} {city} {postal_code}
 ADDRESS the address is {street} {city}
+ADDRESS the address is {street} {postal_code}
 ADDRESS {street} {city} {postal_code}
 ADDRESS {street} {city}
+ADDRESS {street} {postal_code}
 
 CHANGE_ADDRESS change my address
 CHANGE_ADDRESS change address
@@ -27,6 +30,10 @@ TEMPERATURE how hot it is outside
 TEMPERATURE how hot it is
 TEMPERATURE how cold it is outside
 TEMPERATURE how cold it is
+TEMPERATURE if it is hot outside
+TEMPERATURE if it is hot out
+TEMPERATURE if it is cold outside
+TEMPERATURE if it is cold out
 TEMPERATURE the temperature outside
 TEMPERATURE the temperature
 TEMPERATURE temperature

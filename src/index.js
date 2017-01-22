@@ -39,21 +39,38 @@ var setupHandler = Alexa.CreateStateHandler(states.SETUPMODE, {
     },
     'ADDRESS': function() {
         var street = this.event.request.intent.slots.street.value;
-        var city = this.event.request.intent.slots.city.value;
+        var city = this.event.request.intent.slots.city ? this.event.request.intent.slots.city.value : undefined;
+        var postal_code = this.event.request.intent.slots.postal_code ? this.event.request.intent.slots.postal_code.value : undefined;
         
-        var address = street + ', ' + city;
+        var address = street;
+
+        if (city) {
+            address += ', ' + city;
+        }
+        
+        if (postal_code) {
+            if (city) { 
+                address += ' ' + postal_code;
+            } else {
+                address += ', ' + postal_code
+            }
+        }
 
         // TODO: passing this.attributes should be unnecessary, but it does not seem to be accessible as alexa.attributes
         getGeocodeResult(this.attributes, address, function (attributes, err, data) {
-            var formatted_address = data.formatted_address;
-            var latitude = data.geometry.location.lat;
-            var longitude = data.geometry.location.lng;
+            if (data) {
+                var formatted_address = data.formatted_address;
+                var latitude = data.geometry.location.lat;
+                var longitude = data.geometry.location.lng;
 
-            attributes['FORMATTED_ADDRESS'] = formatted_address;
-            attributes['LATITUDE'] = latitude;
-            attributes['LONGITUDE'] = longitude;
+                attributes['FORMATTED_ADDRESS'] = formatted_address;
+                attributes['LATITUDE'] = latitude;
+                attributes['LONGITUDE'] = longitude;
 
-            alexa.emit(':ask', 'The address I found is ' + formatted_address + '. Is that right?', 'Is that address right?');
+                alexa.emit(':ask', 'The address I found is ' + formatted_address + '. Is that right?', 'Is that address right?');
+            } else {
+                alexa.emit(':ask', 'Hmm, I couldn\'t find the address that I heard. Please try again.', 'Please tell me your address.');
+            }
         });
     },
     'AMAZON.YesIntent': function() {
@@ -125,7 +142,7 @@ var askHandler = Alexa.CreateStateHandler(states.FORECASTMODE, {
         getForecast(this.attributes['LATITUDE'], this.attributes['LONGITUDE'], function (err, data) {
             var temperature = Math.round(data.currently.temperature);
 
-            alexa.emit(':tell', 'Right now, it\'s ' + temperature + ' degrees outside.');
+            alexa.emit(':tell', 'Right now, it\'s ' + temperature + ' degrees.');
         });
     },
     'PRECIPITATION': function() {
@@ -133,14 +150,14 @@ var askHandler = Alexa.CreateStateHandler(states.FORECASTMODE, {
             var probability = Math.round(data.currently.precipProbability * 100);
             var type = data.currently.precipType ? data.currently.precipType : 'precipitation';
 
-            alexa.emit(':tell', 'Right now, there\'s a ' + probability + '% chance of ' + type + ' outside.');
+            alexa.emit(':tell', 'Right now, there\'s a ' + probability + '% chance of ' + type + '.');
         });
     },
     'WIND': function() {
         getForecast(this.attributes['LATITUDE'], this.attributes['LONGITUDE'], function (err, data) {
             var wind = Math.round(data.currently.windSpeed);
 
-            alexa.emit(':tell', 'Right now, there\'s a ' + wind + ' mph wind outside.');
+            alexa.emit(':tell', 'Right now, there\'s a ' + wind + ' mph wind.');
         });
     },
     'AMAZON.HelpIntent': function() {
@@ -160,21 +177,38 @@ var changeAddressHandler = Alexa.CreateStateHandler(states.CHANGEADDRESSMODE, {
     },
     'ADDRESS': function() {
         var street = this.event.request.intent.slots.street.value;
-        var city = this.event.request.intent.slots.city.value;
+        var city = this.event.request.intent.slots.city ? this.event.request.intent.slots.city.value : undefined;
+        var postal_code = this.event.request.intent.slots.postal_code ? this.event.request.intent.slots.postal_code.value : undefined;
         
-        var address = street + ', ' + city;
+        var address = street;
+
+        if (city) {
+            address += ', ' + city;
+        }
+        
+        if (postal_code) {
+            if (city) { 
+                address += ' ' + postal_code;
+            } else {
+                address += ', ' + postal_code
+            }
+        }
 
         // TODO: passing this.attributes should be unnecessary, but it does not seem to be accessible as alexa.attributes
         getGeocodeResult(this.attributes, address, function (attributes, err, data) {
-            var formatted_address = data.formatted_address;
-            var latitude = data.geometry.location.lat;
-            var longitude = data.geometry.location.lng;
+            if (data) {
+                var formatted_address = data.formatted_address;
+                var latitude = data.geometry.location.lat;
+                var longitude = data.geometry.location.lng;
 
-            attributes['FORMATTED_ADDRESS'] = formatted_address;
-            attributes['LATITUDE'] = latitude;
-            attributes['LONGITUDE'] = longitude;
+                attributes['FORMATTED_ADDRESS'] = formatted_address;
+                attributes['LATITUDE'] = latitude;
+                attributes['LONGITUDE'] = longitude;
 
-            alexa.emit(':ask', 'The address I found is ' + formatted_address + '. Is that right?', 'Is that address right?');
+                alexa.emit(':ask', 'The address I found is ' + formatted_address + '. Is that right?', 'Is that address right?');
+            } else {
+                alexa.emit(':ask', 'Hmm, I couldn\'t find the address that I heard. Please try again.', 'Please tell me your address.');
+            }
         });
     },
     'AMAZON.YesIntent': function() {
