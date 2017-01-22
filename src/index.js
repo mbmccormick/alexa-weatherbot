@@ -77,7 +77,7 @@ var setupHandler = Alexa.CreateStateHandler(states.SETUPMODE, {
         this.handler.state = states.FORECASTMODE;
         this.emit(':saveState', true);
 
-        this.emit(':ask', 'Great! Now you can ask me for current conditions, forecast, temperature, chance of precipitation, or wind speed.', 'You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.');
+        this.emit(':ask', 'Great! Now you can ask me for current conditions, forecast, temperature, chance of precipitation, wind speed, or change address.', 'You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..');
     },
     'AMAZON.NoIntent': function() {
         this.attributes['FORMATTED_ADDRESS'] = null;
@@ -161,13 +161,13 @@ var askHandler = Alexa.CreateStateHandler(states.FORECASTMODE, {
         });
     },
     'AMAZON.HelpIntent': function() {
-        this.emit(':ask', 'You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.', 'You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.');
+        this.emit(':ask', 'You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..', 'You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..');
     },
     'SessionEndedRequest': function () {
         this.emit(':tell', 'Goodbye!');
     },
     'Unhandled': function() {
-        this.emit(':tell', 'Sorry, I didn\'t catch that. You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.', 'You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.');
+        this.emit(':tell', 'Sorry, I didn\'t catch that. You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..', 'You can say current conditions, forecast, temperature, chance of precipitation, wind speed, or change address..');
     }
 });
 
