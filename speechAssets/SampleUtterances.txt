@@ -1,22 +1,21 @@
-ADDRESS my address is {street} {city} {postal_code}
-ADDRESS my address is {street} {city}
-ADDRESS my address is {street} {postal_code}
-ADDRESS the address is {street} {city} {postal_code}
-ADDRESS the address is {street} {city}
-ADDRESS the address is {street} {postal_code}
-ADDRESS {street} {city} {postal_code}
-ADDRESS {street} {city}
-ADDRESS {street} {postal_code}
+FORECASTNOW the weather is like
+FORECASTNOW the weather
+FORECASTNOW what it's like outside
+FORECASTNOW the current conditions outside
+FORECASTNOW the current conditions
+FORECASTNOW current conditions
 
-CONDITIONS what it's like outside
-CONDITIONS the current conditions outside
-CONDITIONS the current conditions
-CONDITIONS current conditions
+FORECASTTODAY the weather is like today
+FORECASTTODAY the weather for today
+FORECASTTODAY the forecast for today
+FORECASTTODAY the forecast
+FORECASTTODAY forecast
 
-FORECAST the weather is like this week
-FORECAST the forecast this week
-FORECAST the forecast
-FORECAST forecast
+FORECASTWEEK the weather is like this week
+FORECASTWEEK the weather for this week
+FORECASTWEEK the forecast for this week
+FORECASTWEEK the forecast this week
+FORECASTWEEK forecast this week
 
 TEMPERATURE how hot it is outside
 TEMPERATURE how hot it is
@@ -41,11 +40,3 @@ WIND how windy it is
 WIND the wind speed
 WIND wind speed
 WIND wind
-
-CHANGE_ADDRESS change my address
-CHANGE_ADDRESS change address
-CHANGE_ADDRESS update my address
-CHANGE_ADDRESS update address
-CHANGE_ADDRESS edit my address
-CHANGE_ADDRESS edit address
-CHANGE_ADDRESS address

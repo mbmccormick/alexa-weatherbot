@@ -1,27 +1,13 @@
 {
   "intents": [
     {
-      "intent": "ADDRESS",
-      "slots": [
-          {
-              "name": "street",
-              "type": "AMAZON.PostalAddress"
-          },
-          {
-              "name": "city",
-              "type": "AMAZON.US_CITY"
-          },
-          {
-              "name": "postal_code",
-              "type": "AMAZON.NUMBER"
-          }
-      ]
+      "intent": "FORECASTNOW"
     },
     {
-      "intent": "CONDITIONS"
+      "intent": "FORECASTTODAY"
     },
     {
-      "intent": "FORECAST"
+      "intent": "FORECASTWEEK"
     },
     {
       "intent": "TEMPERATURE"
@@ -33,19 +19,7 @@
       "intent": "WIND"
     },
     {
-      "intent": "CHANGE_ADDRESS"
-    },
-    {
-      "intent": "AMAZON.YesIntent"
-    },
-    {
-      "intent": "AMAZON.NoIntent"
-    },
-    {
       "intent": "AMAZON.HelpIntent"
-    },
-    {
-      "intent": "AMAZON.CancelIntent"
     }
   ]
 }
