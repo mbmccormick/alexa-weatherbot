@@ -29,6 +29,9 @@ TEMPERATURE the temperature outside
 TEMPERATURE the temperature
 TEMPERATURE temperature
 
+HUMIDITY the humidity
+HUMIDITY humidity
+
 PRECIPITATION if it's going to rain
 PRECIPITATION if it's going to snow
 PRECIPITATION the probability of precipitation
@@ -40,3 +43,9 @@ WIND how windy it is
 WIND the wind speed
 WIND wind speed
 WIND wind
+
+UVINDEX the UV index
+UVINDEX UV index
+
+VISIBILITY the visibility
+VISIBILITY visibility

@@ -87,6 +87,17 @@ var defaultHandler = {
             });
         });
     },
+    "HUMIDITY": function () {
+        var _alexa = this;
+
+        getDeviceAddress(this, function (err, latitude, longitude) {
+            getForecast(latitude, longitude, function (err, data) {
+                var humidity = Math.round(data.currently.humidity * 100);
+
+                _alexa.emit(":tell", "Right now, there's " + humidity + "% humidity." + getWeatherAlerts(data));
+            });
+        });
+    },
     "PRECIPITATION": function () {
         var _alexa = this;
 
@@ -115,11 +126,38 @@ var defaultHandler = {
             });
         });
     },
+    "UVINDEX": function () {
+        var _alexa = this;
+
+        getDeviceAddress(this, function (err, latitude, longitude) {
+            getForecast(latitude, longitude, function (err, data) {
+                var uvIndex = data.currently.uvIndex;
+
+                _alexa.emit(":tell", "Right now, the UV index is  " + uvIndex + "." + getWeatherAlerts(data));
+            });
+        });
+    },
+    "VISIBILITY": function () {
+        var _alexa = this;
+
+        getDeviceAddress(this, function (err, latitude, longitude) {
+            getForecast(latitude, longitude, function (err, data) {
+                var visibility = Math.round(data.currently.visibility);
+
+                if (visibility > 0) {
+                    _alexa.emit(":tell", "Right now, there's " + visibility + " mile visibility." + getWeatherAlerts(data));
+                }
+                else {
+                    _alexa.emit(":tell", "Right now, there's no visibility." + getWeatherAlerts(data));
+                }
+            });
+        });
+    },
     "AMAZON.HelpIntent": function () {
-        this.emit(":ask", "You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.", "You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.");
+        this.emit(":ask", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.");
     },
     "Unhandled": function () {
-        this.emit(":tell", "Sorry, I didn't catch that. You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.", "You can say current conditions, forecast, temperature, chance of precipitation, or wind speed.");
+        this.emitWithState("AMAZON.HelpIntent");
     }
 };
 
@@ -187,7 +225,8 @@ function getGeocodeResult(query, callback) {
 function getForecast(latitude, longitude, callback) {
     var options = {
         APIKey: process.env.DARKSKY_API_KEY,
-        timeout: 1000
+        timeout: 1000,
+        solar: 1
     };
 
     var darksky = new DarkSky(options);

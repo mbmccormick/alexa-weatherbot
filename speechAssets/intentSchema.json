@@ -13,10 +13,19 @@
       "intent": "TEMPERATURE"
     },
     {
+      "intent": "HUMIDITY"
+    },
+    {
       "intent": "PRECIPITATION"
     },
     {
       "intent": "WIND"
+    },
+    {
+      "intent": "UVINDEX"
+    },
+    {
+      "intent": "VISIBILITY"
     },
     {
       "intent": "AMAZON.HelpIntent"
