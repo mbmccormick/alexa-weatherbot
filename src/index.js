@@ -225,13 +225,12 @@ function getGeocodeResult(query, callback) {
 function getForecast(latitude, longitude, callback) {
     var options = {
         APIKey: process.env.DARKSKY_API_KEY,
-        timeout: 1000,
-        solar: 1
+        timeout: 1000
     };
 
     var darksky = new DarkSky(options);
 
-    darksky.get(latitude, longitude, function (err, res, data) {
+    darksky.get(latitude, longitude, { solar: 1 }, function (err, res, data) {
         callback(err, data);
     });
 }
