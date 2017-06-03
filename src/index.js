@@ -127,7 +127,7 @@ function getDeviceAddress(_alexa, callback) {
     const consentToken = _alexa.event.context.System.user.permissions.consentToken;
 
     if (!consentToken) {
-        __alexa.emit(":tellWithPermissionCard", "In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.", PERMISSIONS);
+        _alexa.emit(":tellWithPermissionCard", "In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.", PERMISSIONS);
         return;
     }
 
