@@ -20,152 +20,198 @@ const AlexaDeviceAddressClient = require("./AlexaDeviceAddressClient");
 
 var defaultHandler = {
     "LaunchRequest": function () {
+        printDebugInformation("defaultHandler:LaunchRequest");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var temperature = Math.round(data.currently.temperature);
-                var minutely_summary = data.minutely.summary;
-                var hourly_summary = data.hourly.summary;
-                var high = Math.round(data.daily.data[0].temperatureMax);
-                var low = Math.round(data.daily.data[0].temperatureMin);
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
+                    var minutely_summary = data.minutely.summary;
+                    var hourly_summary = data.hourly.summary;
+                    var high = Math.round(data.daily.data[0].temperatureMax);
+                    var low = Math.round(data.daily.data[0].temperatureMin);
 
-                _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "FORECASTNOW": function () {
+        printDebugInformation("defaultHandler:FORECASTNOW");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var temperature = Math.round(data.currently.temperature);
-                var summary = data.minutely.summary;
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
+                    var summary = data.minutely.summary;
 
-                _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "FORECASTTODAY": function () {
+        printDebugInformation("defaultHandler:FORECASTTODAY");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var summary = data.hourly.summary;
-                var high = Math.round(data.daily.data[0].temperatureMax);
-                var low = Math.round(data.daily.data[0].temperatureMin);
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var summary = data.hourly.summary;
+                    var high = Math.round(data.daily.data[0].temperatureMax);
+                    var low = Math.round(data.daily.data[0].temperatureMin);
 
-                summary = summary.replace("°F", " degrees");
-                summary = summary.replace("°C", " degrees");
+                    summary = summary.replace("°F", " degrees");
+                    summary = summary.replace("°C", " degrees");
 
-                _alexa.emit(":tell", summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "FORECASTWEEK": function () {
+        printDebugInformation("defaultHandler:FORECASTWEEK");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var summary = data.daily.summary;
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var summary = data.daily.summary;
 
-                summary = summary.replace("°F", " degrees");
-                summary = summary.replace("°C", " degrees");
+                    summary = summary.replace("°F", " degrees");
+                    summary = summary.replace("°C", " degrees");
 
-                _alexa.emit(":tell", summary + "." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", summary + "." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "TEMPERATURE": function () {
+        printDebugInformation("defaultHandler:TEMPERATURE");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var temperature = Math.round(data.currently.temperature);
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
 
-                _alexa.emit(":tell", "Right now, it's " + temperature + " degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "HUMIDITY": function () {
+        printDebugInformation("defaultHandler:HUMIDITY");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var humidity = Math.round(data.currently.humidity * 100);
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var humidity = Math.round(data.currently.humidity * 100);
 
-                _alexa.emit(":tell", "Right now, there's " + humidity + "% humidity." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "PRECIPITATION": function () {
+        printDebugInformation("defaultHandler:PRECIPITATION");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var probability = Math.round(data.currently.precipProbability * 100);
-                var type = data.currently.precipType ? data.currently.precipType : "precipitation";
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var probability = Math.round(data.currently.precipProbability * 100);
+                    var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
-                _alexa.emit(":tell", "Right now, there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "WIND": function () {
+        printDebugInformation("defaultHandler:WIND");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var wind = Math.round(data.currently.windSpeed);
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var wind = Math.round(data.currently.windSpeed);
 
-                if (wind > 0) {
-                    _alexa.emit(":tell", "Right now, there's a " + wind + " mile per hour wind." + getWeatherAlerts(data));
-                }
-                else {
-                    _alexa.emit(":tell", "Right now, there's no wind." + getWeatherAlerts(data));
-                }
+                    if (wind > 0) {
+                        _alexa.emit(":tell", "Right now, the wind speed is " + wind + " mph." + getWeatherAlerts(data));
+                    }
+                    else {
+                        _alexa.emit(":tell", "Right now, there's no wind." + getWeatherAlerts(data));
+                    }
+                });
             });
         });
     },
     "UVINDEX": function () {
+        printDebugInformation("defaultHandler:UVINDEX");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var uvIndex = data.currently.uvIndex;
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var uvIndex = data.currently.uvIndex;
 
-                _alexa.emit(":tell", "Right now, the UV index is  " + uvIndex + "." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, the UV index is  " + uvIndex + "." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "VISIBILITY": function () {
+        printDebugInformation("defaultHandler:VISIBILITY");
+
         var _alexa = this;
 
-        getDeviceAddress(this, function (err, latitude, longitude) {
-            getForecast(latitude, longitude, function (err, data) {
-                var visibility = Math.round(data.currently.visibility);
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var visibility = Math.round(data.currently.visibility);
 
-                if (visibility > 0) {
-                    _alexa.emit(":tell", "Right now, there's " + visibility + " mile visibility." + getWeatherAlerts(data));
-                }
-                else {
-                    _alexa.emit(":tell", "Right now, there's no visibility." + getWeatherAlerts(data));
-                }
+                    _alexa.emit(":tell", "Right now, the visibility is " + visibility + " mi." + getWeatherAlerts(data));
+                });
             });
         });
     },
     "AMAZON.HelpIntent": function () {
+        printDebugInformation("defaultHandler:AMAZON.HelpIntent");
+
         this.emit(":ask", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.");
     },
     "Unhandled": function () {
+        printDebugInformation("defaultHandler:Unhandled");
+
         this.emitWithState("AMAZON.HelpIntent");
     }
 };
+
+function printDebugInformation(message) {
+    if (process.env.DEBUG) {
+        console.log(message);
+    }
+}
 
 function getDeviceAddress(_alexa, callback) {
     const consentToken = _alexa.event.context.System.user.permissions.consentToken;
 
     if (!consentToken) {
         _alexa.emit(":tellWithPermissionCard", "In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.", PERMISSIONS);
+        
         return;
     }
 
@@ -181,48 +227,53 @@ function getDeviceAddress(_alexa, callback) {
                 // successfully got the address associated with this deviceId
                 var address = addressResponse.address['addressLine1'] + ", " + addressResponse.address['stateOrRegion'] + " " + addressResponse.address['postalCode'];
 
-                getGeocodeResult(address, function (err, data) {
-                    if (data) {
-                        var latitude = data.geometry.location.lat;
-                        var longitude = data.geometry.location.lng;
-
-                        callback(null, latitude, longitude);
-                    }
-                });
+                callback(address);
 
                 break;
             case 204:
                 // the query did not return any results
-                __alexa.emit(":tell", "It doesn't look like you've set up your address yet. Please enter your address in the Alexa app.");
+                _alexa.emit(":tell", "It doesn't look like you've set up your address yet. Please enter your address in the Alexa app.");
 
                 break;
             case 403:
                 // the authentication token is invalid or doesn’t have access to the resource
-                __alexa.emit(":tellWithPermissionCard", "It doesn't look like you've granted Weatherbot permission to access your location yet. Please enable location permissions in the Alexa app.", PERMISSIONS);
+                _alexa.emit(":tellWithPermissionCard", "It doesn't look like you've granted Weatherbot permission to access your location yet. Please enable location permissions in the Alexa app.", PERMISSIONS);
 
                 break;
             default:
                 // catch all other responses
-                this.emit(":tell", "There was an error finding your address. Please try again later.");
+                _alexa.emit(":tell", "There was a problem retrieving your address. Please try again later.");
 
                 break;
         }
     });
 
     deviceAddressRequest.catch(function (err) {
-        __alexa.emit(":tell", "Sorry, an error has occurred");
+        printDebugInformation("ERROR: deviceAddressRequest()");
+        printDebugInformation(err);
+
+        _alexa.emit(":tell", "There was a problem retrieving your address. Please try again later.");
     });
 }
 
-function getGeocodeResult(query, callback) {
+function getGeocodeResult(_alexa, query, callback) {
     Geocoder.geocode(query, function (err, data) {
-        var result = data.results[0];
+        if (err) {
+            printDebugInformation("ERROR: getGeocodeResult()");
+            printDebugInformation(err);
 
-        callback(err, result);
+            _alexa.emit(":tell", "There was a problem locating your address. Please try again later.");
+        }
+        else {
+            var latitude = data.results[0].geometry.location.lat;
+            var longitude = data.results[0].geometry.location.lng;
+
+            callback(latitude, longitude);
+        }
     });
 }
 
-function getForecast(latitude, longitude, callback) {
+function getForecast(_alexa, latitude, longitude, callback) {
     var options = {
         APIKey: process.env.DARKSKY_API_KEY,
         timeout: 1000
@@ -231,7 +282,15 @@ function getForecast(latitude, longitude, callback) {
     var darksky = new DarkSky(options);
 
     darksky.get(latitude, longitude, { solar: 1 }, function (err, res, data) {
-        callback(err, data);
+        if (err) {
+            printDebugInformation("ERROR: getForecast()");
+            printDebugInformation(err);
+
+            _alexa.emit(":tell", "There was a problem retrieving your forecast. Please try again later.");
+        }
+        else {
+            callback(data);
+        }
     });
 }
 
