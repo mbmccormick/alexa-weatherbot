@@ -3,6 +3,7 @@
 var Alexa = require("alexa-sdk");
 var Geocoder = require("geocoder");
 var DarkSky = require("forecast.io");
+var Windrose = require("windrose");
 var Moment = require("moment");
 
 var alexa;
@@ -147,10 +148,11 @@ var defaultHandler = {
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecast(_alexa, latitude, longitude, function (data) {
-                    var wind = Math.round(data.currently.windSpeed);
+                    var speed = Math.round(data.currently.windSpeed);
+                    var direction = Windrose.getPoint(data.currently.windBearing);
 
                     if (wind > 0) {
-                        _alexa.emit(":tell", "Right now, the wind speed is " + wind + " mph." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "Right now, the wind speed is " + speed + " mph out of the " + direction + "." + getWeatherAlerts(data));
                     }
                     else {
                         _alexa.emit(":tell", "Right now, there's no wind." + getWeatherAlerts(data));
