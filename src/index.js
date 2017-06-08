@@ -37,7 +37,7 @@ var defaultHandler = {
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + " Today, the forecast has " + daily_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + daily_summary + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + " Today, the forecast has " + daily_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
                 });
             });
         });
@@ -149,7 +149,7 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var speed = Math.round(data.currently.windSpeed);
-                    var direction = Windrose.getPoint(data.currently.windBearing);
+                    var direction = Windrose.getPoint(data.currently.windBearing).name;
 
                     if (speed > 0) {
                         _alexa.emit(":tell", "Right now, the wind speed is " + speed + " mph out of the " + direction + "." + getWeatherAlerts(data));
