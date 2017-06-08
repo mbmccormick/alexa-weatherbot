@@ -9,6 +9,8 @@ var alexa;
 
 exports.handler = function (event, context, callback) {
     alexa = Alexa.handler(event, context);
+    alexa.appId = "amzn1.ask.skill.45bd54a7-8512-438a-8191-ca2407990891";
+    alexa.dynamoDBTableName = "Weatherbot";
     alexa.registerHandlers(defaultHandler);
     alexa.execute();
 };
@@ -32,8 +34,12 @@ var defaultHandler = {
                     var hourly_summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
+                    var daily_summary = data.daily.summary;
 
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    daily_summary = daily_summary.replace("°F", " degrees");
+                    daily_summary = daily_summary.replace("°C", " degrees");
+
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + "degrees. " + daily_summary + getWeatherAlerts(data));
                 });
             });
         });
@@ -65,9 +71,6 @@ var defaultHandler = {
                     var summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
-
-                    summary = summary.replace("°F", " degrees");
-                    summary = summary.replace("°C", " degrees");
 
                     _alexa.emit(":tell", summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
                 });
@@ -211,7 +214,7 @@ function getDeviceAddress(_alexa, callback) {
 
     if (!consentToken) {
         _alexa.emit(":tellWithPermissionCard", "In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.", PERMISSIONS);
-        
+
         return;
     }
 
@@ -226,6 +229,13 @@ function getDeviceAddress(_alexa, callback) {
             case 200:
                 // successfully got the address associated with this deviceId
                 var address = addressResponse.address['addressLine1'] + ", " + addressResponse.address['stateOrRegion'] + " " + addressResponse.address['postalCode'];
+
+                if (_alexa.attributes['ADDRESS'] != address) {
+                    _alexa.attributes['LATITUDE'] = null;
+                    _alexa.attributes['LONGITUDE'] = null;
+                }
+
+                _alexa.attributes['ADDRESS'] = address;
 
                 callback(address);
 
@@ -257,20 +267,26 @@ function getDeviceAddress(_alexa, callback) {
 }
 
 function getGeocodeResult(_alexa, query, callback) {
-    Geocoder.geocode(query, function (err, data) {
-        if (err) {
-            printDebugInformation("ERROR: getGeocodeResult()");
-            printDebugInformation(err);
+    if (_alexa.attributes['LATITUDE'] &&
+        _alexa.attributes['LONGITUDE']) {
+        callback(_alexa.attributes['LATITUDE'], _alexa.attributes['LONGITUDE']);
+    }
+    else {
+        Geocoder.geocode(query, function (err, data) {
+            if (err) {
+                printDebugInformation("ERROR: getGeocodeResult()");
+                printDebugInformation(err);
 
-            _alexa.emit(":tell", "There was a problem locating your address. Please try again later.");
-        }
-        else {
-            var latitude = data.results[0].geometry.location.lat;
-            var longitude = data.results[0].geometry.location.lng;
+                _alexa.emit(":tell", "There was a problem locating your address. Please try again later.");
+            }
+            else {
+                var latitude = data.results[0].geometry.location.lat;
+                var longitude = data.results[0].geometry.location.lng;
 
-            callback(latitude, longitude);
-        }
-    });
+                callback(latitude, longitude);
+            }
+        });
+    }
 }
 
 function getForecast(_alexa, latitude, longitude, callback) {
