@@ -30,16 +30,13 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
+                    var currently_summary = data.currently.summary;
                     var minutely_summary = data.minutely.summary;
-                    var hourly_summary = data.hourly.summary;
+                    var daily_summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
-                    var daily_summary = data.daily.summary;
 
-                    daily_summary = daily_summary.replace("°F", " degrees");
-                    daily_summary = daily_summary.replace("°C", " degrees");
-
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + "degrees. " + daily_summary + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + " Today, the forecast has " + daily_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + daily_summary + getWeatherAlerts(data));
                 });
             });
         });
@@ -53,9 +50,10 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var summary = data.minutely.summary;
+                    var currently_summary = data.currently.summary;
+                    var minutely_summary = data.minutely.summary;
 
-                    _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getWeatherAlerts(data));
                 });
             });
         });
@@ -68,7 +66,7 @@ var defaultHandler = {
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecast(_alexa, latitude, longitude, function (data) {
-                    var summary = data.hourly.summary;
+                    var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
