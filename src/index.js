@@ -151,7 +151,7 @@ var defaultHandler = {
                     var speed = Math.round(data.currently.windSpeed);
                     var direction = Windrose.getPoint(data.currently.windBearing);
 
-                    if (wind > 0) {
+                    if (speed > 0) {
                         _alexa.emit(":tell", "Right now, the wind speed is " + speed + " mph out of the " + direction + "." + getWeatherAlerts(data));
                     }
                     else {
