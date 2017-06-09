@@ -1,5 +1,3 @@
-'use strict';
-
 var Alexa = require("alexa-sdk");
 var Geocoder = require("geocoder");
 var DarkSky = require("forecast.io");
@@ -16,10 +14,10 @@ exports.handler = function (event, context, callback) {
     alexa.execute();
 };
 
-const ALL_ADDRESS_PERMISSION = "read::alexa:device:all:address";
-const PERMISSIONS = [ALL_ADDRESS_PERMISSION];
+var ALL_ADDRESS_PERMISSION = "read::alexa:device:all:address";
+var PERMISSIONS = [ALL_ADDRESS_PERMISSION];
 
-const AlexaDeviceAddressClient = require("./AlexaDeviceAddressClient");
+var AlexaDeviceAddressClient = require("./AlexaDeviceAddressClient");
 
 var defaultHandler = {
     "LaunchRequest": function () {
@@ -194,7 +192,7 @@ var defaultHandler = {
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
-        this.emit(":ask", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.");
+        this.emit(":tell", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.");
     },
     "Unhandled": function () {
         printDebugInformation("defaultHandler:Unhandled");
@@ -210,7 +208,15 @@ function printDebugInformation(message) {
 }
 
 function getDeviceAddress(_alexa, callback) {
-    const consentToken = _alexa.event.context.System.user.permissions.consentToken;
+    var permissions = _alexa.event.context.System.user.permissions;
+
+    if (!permissions) {
+        _alexa.emit(":tell", "There was a problem accessing device permissions. Please try again later.");
+
+        return;
+    }
+    
+    var consentToken = _alexa.event.context.System.user.permissions.consentToken;
 
     if (!consentToken) {
         _alexa.emit(":tellWithPermissionCard", "In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.", PERMISSIONS);
@@ -218,10 +224,11 @@ function getDeviceAddress(_alexa, callback) {
         return;
     }
 
-    const deviceId = _alexa.event.context.System.device.deviceId;
-    const apiEndpoint = _alexa.event.context.System.apiEndpoint;
+    var deviceId = _alexa.event.context.System.device.deviceId;
+    var apiEndpoint = _alexa.event.context.System.apiEndpoint;
 
-    const alexaDeviceAddressClient = new AlexaDeviceAddressClient(apiEndpoint, deviceId, consentToken);
+    var alexaDeviceAddressClient = new AlexaDeviceAddressClient(apiEndpoint, deviceId, consentToken);
+
     let deviceAddressRequest = alexaDeviceAddressClient.getFullAddress();
 
     deviceAddressRequest.then(function (addressResponse) {
