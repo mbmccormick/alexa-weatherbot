@@ -104,15 +104,26 @@ var defaultHandler = {
         time = time.replace("EV", "18:00");
         time = time.replace("NI", "23:00");
 
-        var unixTime = Moment(time, "h:mm");
+        var unixTime = Moment(time, "h:mm").unix();
+
+        if (Moment(time, "h:mm").hour.minute() <= Moment().hour() &&
+            Moment(time, "h:mm").minute() < Moment().minute()) {
+            unixTime += (24 * 60 * 60);
+        }
 
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecastAtTime(_alexa, latitude, longitude, unixTime, function (data) {
+                    var timestamp = Moment(data.currently.time * 1000);
                     var temperature = Math.round(data.currently.temperature);
                     var currently_summary = data.currently.summary;
 
-                    _alexa.emit(":tell", "The forecast for " + Moment(unixTime).calendar() + " is " + temperature + " degrees and " + currently_summary + ".");
+                    if (timestamp > Moment()) {
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar() + " is " + temperature + " degrees and " + currently_summary + ".");
+                    }
+                    else {
+                        _alexa.emit(":tell", "The weather at " + timestamp.calendar() + " was " + temperature + " degrees and " + currently_summary + ".");
+                    }
                 });
             });
         });
@@ -124,16 +135,22 @@ var defaultHandler = {
 
         var date = this.event.request.intent.slots.Date.value;
 
-        var unixDate = Moment(date);
+        var unixDate = Moment(date).unix();
 
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecastAtTime(_alexa, latitude, longitude, unixDate, function (data) {
+                    var timestamp = Moment(data.currently.time * 1000);
                     var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", "The forecast for " + Moment(unixDate).calendar() + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    if (timestamp > Moment()) {
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar() + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    }
+                    else {
+                        _alexa.emit(":tell", "The weather on " + timestamp.calendar() + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    }
                 });
             });
         });
@@ -276,7 +293,7 @@ function getDeviceAddress(_alexa, callback) {
 
         return;
     }
-    
+
     var consentToken = _alexa.event.context.System.user.permissions.consentToken;
 
     if (!consentToken) {
