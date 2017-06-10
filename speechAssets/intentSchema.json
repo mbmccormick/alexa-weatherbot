@@ -4,22 +4,43 @@
       "intent": "FORECASTNOW"
     },
     {
-      "intent": "FORECASTTODAY"
+      "intent": "FORECASTDAY"
     },
     {
       "intent": "FORECASTWEEK"
     },
     {
-      "intent": "TEMPERATURE"
+      "intent": "FORECASTFUTURETIME",
+      "slots": [
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "HUMIDITY"
+      "intent": "FORECASTFUTUREDATE",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        }
+      ]
+    },
+    {
+      "intent": "TEMPERATURE"
     },
     {
       "intent": "PRECIPITATION"
     },
     {
       "intent": "WIND"
+    },
+    {
+      "intent": "HUMIDITY"
+    },
+    {
+      "intent": "DEWPOINT"
     },
     {
       "intent": "UVINDEX"

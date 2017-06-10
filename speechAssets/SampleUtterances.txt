@@ -1,51 +1,83 @@
-FORECASTNOW the weather is like
-FORECASTNOW the weather
+FORECASTNOW what it's like outside right now
+FORECASTNOW what it is like outside right now
 FORECASTNOW what it's like outside
-FORECASTNOW the current conditions outside
+FORECASTNOW what it is like outside
+FORECASTNOW what the weather is like right now
+FORECASTNOW what the weather is like
 FORECASTNOW the current conditions
 FORECASTNOW current conditions
+FORECASTNOW the current forecast
+FORECASTNOW current forecast
+FORECASTNOW the weather
+FORECASTNOW weather
 
-FORECASTTODAY the weather is like today
-FORECASTTODAY the weather for today
-FORECASTTODAY the forecast for today
-FORECASTTODAY the forecast
-FORECASTTODAY forecast
+FORECASTDAY what the weather is like for today
+FORECASTDAY what the weather is like today
+FORECASTDAY what the forecast is for today
+FORECASTDAY what the forecast is today
+FORECASTDAY the forecast for today
+FORECASTDAY today's forecast
 
-FORECASTWEEK the weather is like this week
-FORECASTWEEK the weather for this week
+FORECASTWEEK what the weather is like for this week
+FORECASTWEEK what the weather is like this week
+FORECASTWEEK what the forecast is for this week
+FORECASTWEEK what the forecast is this week
 FORECASTWEEK the forecast for this week
-FORECASTWEEK the forecast this week
-FORECASTWEEK forecast this week
+FORECASTWEEK this week's forecast
+
+FORECASTFUTURETIME what the weather will be like at {Time}
+FORECASTFUTURETIME what the weather is like at {Time}
+FORECASTFUTURETIME what the forecast is for {Time}
+FORECASTFUTURETIME the forecast for {Time}
+
+FORECASTFUTUREDATE what the weather will be like on {Date}
+FORECASTFUTUREDATE what the weather is like on {Date}
+FORECASTFUTUREDATE what the forecast is for {Date}
+FORECASTFUTUREDATE what the forecast is {Date}
+FORECASTFUTUREDATE the forecast for {Date}
+FORECASTFUTUREDATE {Date} forecast
 
 TEMPERATURE how hot it is outside
 TEMPERATURE how hot it is
 TEMPERATURE how cold it is outside
 TEMPERATURE how cold it is
-TEMPERATURE if it is hot outside
-TEMPERATURE if it is hot out
-TEMPERATURE if it is cold outside
-TEMPERATURE if it is cold out
-TEMPERATURE the temperature outside
+TEMPERATURE how humid it is
+TEMPERATURE what the temperature is
 TEMPERATURE the temperature
 TEMPERATURE temperature
 
+PRECIPITATION how rainy it is
+PRECIPITATION if it is going to rain
+PRECIPITATION if it's going to rain
+PRECIPITATION how snowy it is
+PRECIPITATION if it is going to snow
+PRECIPITATION if it's going to snow
+PRECIPITATION what the probability of precipitation is
+PRECIPITATION the probability of precipitation
+PRECIPITATION probability of precipitation
+PRECIPITATION the precipitation
+PRECIPITATION precipitation
+
+WIND how windy it is
+WIND what the wind speed is
+WIND the wind speed
+WIND wind speed
+WIND the wind
+WIND wind
+
+HUMIDITY how humid it is
+HUMIDITY what the humidity is
 HUMIDITY the humidity
 HUMIDITY humidity
 
-PRECIPITATION if it's going to rain
-PRECIPITATION if it's going to snow
-PRECIPITATION the probability of precipitation
-PRECIPITATION probability of precipitation
-PRECIPITATION precipitation
+DEWPOINT what the dew point is
+DEWPOINT the dew point
+DEWPOINT dew point
 
-WIND how windy it is outside
-WIND how windy it is
-WIND the wind speed
-WIND wind speed
-WIND wind
-
+UVINDEX what the UV index is
 UVINDEX the UV index
 UVINDEX UV index
 
+VISIBILITY what the visibility is
 VISIBILITY the visibility
 VISIBILITY visibility

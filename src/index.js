@@ -57,8 +57,8 @@ var defaultHandler = {
             });
         });
     },
-    "FORECASTTODAY": function () {
-        printDebugInformation("defaultHandler:FORECASTTODAY");
+    "FORECASTDAY": function () {
+        printDebugInformation("defaultHandler:FORECASTDAY");
 
         var _alexa = this;
 
@@ -92,6 +92,52 @@ var defaultHandler = {
             });
         });
     },
+    "FORECASTFUTURETIME": function () {
+        printDebugInformation("defaultHandler:FORECASTFUTURETIME");
+
+        var _alexa = this;
+
+        var time = this.event.request.intent.slots.Time.value;
+
+        time = time.replace("MO", "8:00");
+        time = time.replace("AF", "14:00");
+        time = time.replace("EV", "18:00");
+        time = time.replace("NI", "23:00");
+
+        var unixTime = Moment(time, "h:mm");
+
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecastAtTime(_alexa, latitude, longitude, unixTime, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
+                    var currently_summary = data.currently.summary;
+
+                    _alexa.emit(":tell", "The forecast for " + Moment(unixTime).calendar() + " is " + temperature + " degrees and " + currently_summary + ".");
+                });
+            });
+        });
+    },
+    "FORECASTFUTUREDATE": function () {
+        printDebugInformation("defaultHandler:FORECASTFUTUREDATE");
+
+        var _alexa = this;
+
+        var date = this.event.request.intent.slots.Date.value;
+
+        var unixDate = Moment(date);
+
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecastAtTime(_alexa, latitude, longitude, unixDate, function (data) {
+                    var summary = data.daily.data[0].summary;
+                    var high = Math.round(data.daily.data[0].temperatureMax);
+                    var low = Math.round(data.daily.data[0].temperatureMin);
+
+                    _alexa.emit(":tell", "The forecast for " + Moment(unixDate).calendar() + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                });
+            });
+        });
+    },
     "TEMPERATURE": function () {
         printDebugInformation("defaultHandler:TEMPERATURE");
 
@@ -103,21 +149,6 @@ var defaultHandler = {
                     var temperature = Math.round(data.currently.temperature);
 
                     _alexa.emit(":tell", "Right now, the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
-                });
-            });
-        });
-    },
-    "HUMIDITY": function () {
-        printDebugInformation("defaultHandler:HUMIDITY");
-
-        var _alexa = this;
-
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude) {
-                getForecast(_alexa, latitude, longitude, function (data) {
-                    var humidity = Math.round(data.currently.humidity * 100);
-
-                    _alexa.emit(":tell", "Right now, the humidity is " + humidity + "%." + getWeatherAlerts(data));
                 });
             });
         });
@@ -159,6 +190,36 @@ var defaultHandler = {
             });
         });
     },
+    "HUMIDITY": function () {
+        printDebugInformation("defaultHandler:HUMIDITY");
+
+        var _alexa = this;
+
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var humidity = Math.round(data.currently.humidity * 100);
+
+                    _alexa.emit(":tell", "Right now, the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                });
+            });
+        });
+    },
+    "DEWPOINT": function () {
+        printDebugInformation("defaultHandler:DEWPOINT");
+
+        var _alexa = this;
+
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var dewPoint = data.currently.dewPoint;
+
+                    _alexa.emit(":tell", "Right now, the dew point is  " + dewPoint + " degrees." + getWeatherAlerts(data));
+                });
+            });
+        });
+    },
     "UVINDEX": function () {
         printDebugInformation("defaultHandler:UVINDEX");
 
@@ -192,7 +253,7 @@ var defaultHandler = {
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
-        this.emit(":tell", "You can ask for things like current conditions, today's forecast, this week's forecast, temperature, humidity, precipitation, wind, UV index, and visibility.");
+        this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, the forecast for a specific time, the forecast on a specific day, temperature, precipitation, wind, humidity, dew point, UV index, and visibility.");
     },
     "Unhandled": function () {
         printDebugInformation("defaultHandler:Unhandled");
@@ -297,16 +358,31 @@ function getGeocodeResult(_alexa, query, callback) {
 }
 
 function getForecast(_alexa, latitude, longitude, callback) {
-    var options = {
-        APIKey: process.env.DARKSKY_API_KEY,
-        timeout: 1000
-    };
-
-    var darksky = new DarkSky(options);
+    var darksky = new DarkSky({
+        APIKey: process.env.DARKSKY_API_KEY
+    });
 
     darksky.get(latitude, longitude, { solar: 1 }, function (err, res, data) {
         if (err) {
             printDebugInformation("ERROR: getForecast()");
+            printDebugInformation(err);
+
+            _alexa.emit(":tell", "There was a problem retrieving your forecast. Please try again later.");
+        }
+        else {
+            callback(data);
+        }
+    });
+}
+
+function getForecastAtTime(_alexa, latitude, longitude, time, callback) {
+    var darksky = new DarkSky({
+        APIKey: process.env.DARKSKY_API_KEY
+    });
+
+    darksky.getAtTime(latitude, longitude, time, { solar: 1 }, function (err, res, data) {
+        if (err) {
+            printDebugInformation("ERROR: getForecastAtTime()");
             printDebugInformation(err);
 
             _alexa.emit(":tell", "There was a problem retrieving your forecast. Please try again later.");
