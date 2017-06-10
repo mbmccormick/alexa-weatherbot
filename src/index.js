@@ -106,7 +106,7 @@ var defaultHandler = {
 
         var unixTime = Moment(time, "h:mm").unix();
 
-        if (Moment(time, "h:mm").hour.minute() <= Moment().hour() &&
+        if (Moment(time, "h:mm").hour() <= Moment().hour() &&
             Moment(time, "h:mm").minute() < Moment().minute()) {
             unixTime += (24 * 60 * 60);
         }
@@ -145,11 +145,29 @@ var defaultHandler = {
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
+                    var calendarOptionsFuture = {
+                        sameDay: "[today]",
+                        nextDay: "[tomorrow]",
+                        nextWeek: "dddd",
+                        lastDay: "[yesterday]",
+                        lastWeek: "[last] dddd",
+                        sameElse: "DD/MM/YYYY"
+                    };
+
+                    var calendarOptionsPast = {
+                        sameDay: "[today]",
+                        nextDay: "[tomorrow]",
+                        nextWeek: "dddd",
+                        lastDay: "[yesterday]",
+                        lastWeek: "[last] dddd",
+                        sameElse: "[on] DD/MM/YYYY"
+                    };
+
                     if (timestamp > Moment()) {
-                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar() + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(null, calendarOptionsFuture) + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
                     }
                     else {
-                        _alexa.emit(":tell", "The weather on " + timestamp.calendar() + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The weather " + timestamp.calendar(null, calendarOptionsPast) + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
                     }
                 });
             });
