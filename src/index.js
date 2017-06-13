@@ -99,6 +99,12 @@ var defaultHandler = {
 
         var time = this.event.request.intent.slots.Time.value;
 
+        if (!time) {
+            this.emitWithState("Unhandled");
+
+            return;
+        }
+
         time = time.replace("MO", "8:00");
         time = time.replace("AF", "14:00");
         time = time.replace("EV", "18:00");
@@ -134,6 +140,12 @@ var defaultHandler = {
         var _alexa = this;
 
         var date = this.event.request.intent.slots.Date.value;
+
+        if (!date) {
+            this.emitWithState("Unhandled");
+
+            return;
+        }
 
         var unixDate = Moment(date).unix();
 
@@ -397,6 +409,8 @@ function getForecast(_alexa, latitude, longitude, callback) {
         APIKey: process.env.DARKSKY_API_KEY
     });
 
+    printDebugInformation("https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude);
+
     darksky.get(latitude, longitude, { solar: 1 }, function (err, res, data) {
         if (err) {
             printDebugInformation("ERROR: getForecast()");
@@ -414,6 +428,8 @@ function getForecastAtTime(_alexa, latitude, longitude, time, callback) {
     var darksky = new DarkSky({
         APIKey: process.env.DARKSKY_API_KEY
     });
+
+    printDebugInformation("https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "," + time);
 
     darksky.getAtTime(latitude, longitude, time, { solar: 1 }, function (err, res, data) {
         if (err) {
