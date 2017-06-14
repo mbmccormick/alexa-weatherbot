@@ -121,14 +121,17 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecastAtTime(_alexa, latitude, longitude, unixTime, function (data) {
                     var timestamp = Moment(data.currently.time * 1000);
+                    var offset = data.offset;
                     var temperature = Math.round(data.currently.temperature);
                     var currently_summary = data.currently.summary;
 
-                    if (timestamp > Moment()) {
-                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar() + " is " + temperature + " degrees and " + currently_summary + ".");
+                    var now = Moment().utc().add(offset, "hours");
+
+                    if (timestamp > now) {
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(now) + " is " + temperature + " degrees and " + currently_summary + ".");
                     }
                     else {
-                        _alexa.emit(":tell", "The weather at " + timestamp.calendar() + " was " + temperature + " degrees and " + currently_summary + ".");
+                        _alexa.emit(":tell", "The weather at " + timestamp.calendar(now) + " was " + temperature + " degrees and " + currently_summary + ".");
                     }
                 });
             });
@@ -153,9 +156,12 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude) {
                 getForecastAtTime(_alexa, latitude, longitude, unixDate, function (data) {
                     var timestamp = Moment(data.currently.time * 1000);
+                    var offset = data.offset;
                     var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
+
+                    var now = Moment().utc().add(offset, "hours");
 
                     var calendarOptionsFuture = {
                         sameDay: "[today]",
@@ -163,7 +169,7 @@ var defaultHandler = {
                         nextWeek: "dddd",
                         lastDay: "[yesterday]",
                         lastWeek: "[last] dddd",
-                        sameElse: "DD/MM/YYYY"
+                        sameElse: "MM/DD/YYYY"
                     };
 
                     var calendarOptionsPast = {
@@ -172,14 +178,14 @@ var defaultHandler = {
                         nextWeek: "dddd",
                         lastDay: "[yesterday]",
                         lastWeek: "[last] dddd",
-                        sameElse: "[on] DD/MM/YYYY"
+                        sameElse: "[on] MM/DD/YYYY"
                     };
 
-                    if (timestamp > Moment()) {
-                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(null, calendarOptionsFuture) + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    if (timestamp > now) {
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(now, calendarOptionsFuture) + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
                     }
                     else {
-                        _alexa.emit(":tell", "The weather " + timestamp.calendar(null, calendarOptionsPast) + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The weather " + timestamp.calendar(now, calendarOptionsPast) + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
                     }
                 });
             });
@@ -316,6 +322,14 @@ function printDebugInformation(message) {
 }
 
 function getDeviceAddress(_alexa, callback) {
+    var context = _alexa.event.context;
+
+    if (!context) {
+        _alexa.emit(":tell", "There was a problem accessing device permissions. Please try again later.");
+
+        return;
+    }
+
     var permissions = _alexa.event.context.System.user.permissions;
 
     if (!permissions) {
