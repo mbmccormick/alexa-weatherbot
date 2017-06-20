@@ -14,9 +14,8 @@
   "author": "Matt McCormick",
   "dependencies": {
     "alexa-sdk": "^1.0.10",
-    "geocoder": "^0.2.3",
-    "forecast.io": "^0.0.11",
-    "windrose": "^2.0.2",
-    "moment": "^2.18.1"
+    "request": "^2.81.0",
+    "moment": "^2.18.1",
+    "windrose": "^2.0.2"
   }
 }
