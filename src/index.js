@@ -309,6 +309,40 @@ var defaultHandler = {
         });
     },
 
+    "ALERTS": function () {
+        printDebugInformation("defaultHandler:ALERTS");
+
+        var _alexa = this;
+
+        getDeviceAddress(_alexa, function (address) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+                getForecast(_alexa, latitude, longitude, function (data) {
+                    var alerts = "";
+                    if (data.alerts != null) {
+                        for (var i = 0; i < data.alerts.length; i++) {
+                            var alert = data.alerts[i];
+
+                            if (alert.expires) {
+                                alerts += " A " + alert.title + " is in effect for your area until " + Moment(alert.expires * 1000).calendar() + ".";
+                            }
+                            else {
+                                alerts += " A " + alert.title + " is in effect for your area.";
+                            }
+
+                            alerts += " " + alert.description.replace("\\n", " ");
+                        }
+                    }
+
+                    if (alerts == "") {
+                        alerts += "There are no weather alerts in effect for your area at this time.";
+                    }
+
+                    _alexa.emit(":tell", alerts);
+                });
+            });
+        });
+    },
+
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
@@ -509,13 +543,15 @@ function getWeatherAlerts(data) {
             var alert = data.alerts[i];
 
             if (alert.expires) {
-                alerts += " A " + alert.title + " is in effect until " + Moment(alert.expires * 1000).calendar() + ".";
+                alerts += " A " + alert.title + " is in effect for your area until " + Moment(alert.expires * 1000).calendar() + ".";
             }
             else {
-                alerts += " A " + alert.title + " is in effect.";
+                alerts += " A " + alert.title + " is in effect for your area.";
             }
         }
     }
+
+    alerts += " If you'd like to know more, just ask me for your weather alerts."
 
     return alerts;
 }

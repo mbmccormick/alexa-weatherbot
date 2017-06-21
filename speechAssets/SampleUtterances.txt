@@ -81,3 +81,7 @@ UVINDEX UV index
 VISIBILITY what the visibility is
 VISIBILITY the visibility
 VISIBILITY visibility
+
+ALERTS read me my weather alerts
+ALERTS weather alerts
+ALERTS alerts
