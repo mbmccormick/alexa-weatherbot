@@ -19,6 +19,7 @@ var PERMISSIONS = [ALL_ADDRESS_PERMISSION];
 var AlexaDeviceAddressClient = require("./AlexaDeviceAddressClient");
 
 var defaultHandler = {
+
     "LaunchRequest": function () {
         printDebugInformation("defaultHandler:LaunchRequest");
 
@@ -28,17 +29,17 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary;
                     var minutely_summary = data.minutely.summary;
-                    var daily_summary = data.daily.data[0].summary;
+                    var hourly_summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + " Today, the forecast has " + daily_summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". Today, the forecast is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
                 });
             });
         });
     },
+
     "FORECASTNOW": function () {
         printDebugInformation("defaultHandler:FORECASTNOW");
 
@@ -48,14 +49,14 @@ var defaultHandler = {
             getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary;
-                    var minutely_summary = data.minutely.summary;
+                    var summary = data.minutely.summary;
 
-                    _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
                 });
             });
         });
     },
+
     "FORECASTDAY": function () {
         printDebugInformation("defaultHandler:FORECASTDAY");
 
@@ -64,7 +65,7 @@ var defaultHandler = {
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
                 getForecast(_alexa, latitude, longitude, function (data) {
-                    var summary = data.daily.data[0].summary;
+                    var summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
@@ -73,6 +74,7 @@ var defaultHandler = {
             });
         });
     },
+
     "FORECASTWEEK": function () {
         printDebugInformation("defaultHandler:FORECASTWEEK");
 
@@ -91,6 +93,7 @@ var defaultHandler = {
             });
         });
     },
+
     "FORECASTFUTURETIME": function () {
         printDebugInformation("defaultHandler:FORECASTFUTURETIME");
 
@@ -125,13 +128,14 @@ var defaultHandler = {
                 getForecastAtTime(_alexa, latitude, longitude, unixTime, function (data) {
                     var timestamp = Moment(data.currently.time * 1000);
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary;
+                    var summary = data.currently.summary;
 
-                    _alexa.emit(":tell", "The forecast for " + timestamp.calendar(now) + " is " + temperature + " degrees and " + currently_summary + ".");
+                    _alexa.emit(":tell", "The forecast for " + timestamp.calendar(now) + " is " + temperature + " degrees and " + summary + ".");
                 });
             });
         });
     },
+
     "FORECASTFUTUREDATE": function () {
         printDebugInformation("defaultHandler:FORECASTFUTUREDATE");
 
@@ -153,7 +157,7 @@ var defaultHandler = {
 
                 getForecastAtTime(_alexa, latitude, longitude, unixDate, function (data) {
                     var timestamp = Moment(data.currently.time * 1000);
-                    var summary = data.daily.data[0].summary;
+                    var summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
@@ -185,6 +189,7 @@ var defaultHandler = {
             });
         });
     },
+
     "TEMPERATURE": function () {
         printDebugInformation("defaultHandler:TEMPERATURE");
 
@@ -200,6 +205,7 @@ var defaultHandler = {
             });
         });
     },
+
     "PRECIPITATION": function () {
         printDebugInformation("defaultHandler:PRECIPITATION");
 
@@ -216,6 +222,7 @@ var defaultHandler = {
             });
         });
     },
+
     "WIND": function () {
         printDebugInformation("defaultHandler:WIND");
 
@@ -237,6 +244,7 @@ var defaultHandler = {
             });
         });
     },
+
     "HUMIDITY": function () {
         printDebugInformation("defaultHandler:HUMIDITY");
 
@@ -252,6 +260,7 @@ var defaultHandler = {
             });
         });
     },
+
     "DEWPOINT": function () {
         printDebugInformation("defaultHandler:DEWPOINT");
 
@@ -260,13 +269,14 @@ var defaultHandler = {
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
                 getForecast(_alexa, latitude, longitude, function (data) {
-                    var dewPoint = data.currently.dewPoint;
+                    var dewPoint = Math.round(data.currently.dewPoint);
 
                     _alexa.emit(":tell", "Right now, the dew point is  " + dewPoint + " degrees." + getWeatherAlerts(data));
                 });
             });
         });
     },
+
     "UVINDEX": function () {
         printDebugInformation("defaultHandler:UVINDEX");
 
@@ -282,6 +292,7 @@ var defaultHandler = {
             });
         });
     },
+
     "VISIBILITY": function () {
         printDebugInformation("defaultHandler:VISIBILITY");
 
@@ -297,16 +308,19 @@ var defaultHandler = {
             });
         });
     },
+
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
         this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, the forecast for a specific time, the forecast on a specific day, temperature, precipitation, wind, humidity, dew point, UV index, and visibility.");
     },
+
     "Unhandled": function () {
         printDebugInformation("defaultHandler:Unhandled");
 
         this.emitWithState("AMAZON.HelpIntent");
     }
+
 };
 
 function printDebugInformation(message) {
