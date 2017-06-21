@@ -453,6 +453,8 @@ function getGeocodeResult(_alexa, address, callback) {
                 address: address
             }
         }, function (err, response, body) {
+            printDebugInformation(response.url);
+
             if (err) {
                 printDebugInformation("ERROR: getGeocodeResult()");
                 printDebugInformation(err);
@@ -485,6 +487,8 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
             timestamp: Moment().unix()
         }
     }, function (err, response, body) {
+        printDebugInformation(response.url);
+
         if (err) {
             printDebugInformation("ERROR: getTimezoneResult()");
             printDebugInformation(err);
@@ -505,6 +509,8 @@ function getForecast(_alexa, latitude, longitude, callback) {
         uri: "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "/?solar=1",
         gzip: true
     }, function (err, response, body) {
+        printDebugInformation(response.url);
+
         if (err) {
             printDebugInformation("ERROR: getForecast()");
             printDebugInformation(err);
@@ -523,6 +529,8 @@ function getForecastAtTime(_alexa, latitude, longitude, timestamp, callback) {
         uri: "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "," + timestamp + "/?solar=1",
         gzip: true
     }, function (err, response, body) {
+        printDebugInformation(response.url);
+
         if (err) {
             printDebugInformation("ERROR: getForecastAtTime()");
             printDebugInformation(err);
@@ -551,7 +559,9 @@ function getWeatherAlerts(data) {
         }
     }
 
-    alerts += " If you'd like to know more, just ask me for your weather alerts."
+    if (alerts != "") {
+        alerts += " If you'd like to know more, just ask me for your weather alerts.";
+    }
 
     return alerts;
 }
