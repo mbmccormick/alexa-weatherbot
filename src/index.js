@@ -316,8 +316,6 @@ var defaultHandler = {
 
         getDeviceAddress(_alexa, function (address) {
             getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
-                var now = Moment().utc().add(offset, "seconds");
-
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var alerts = "";
                     if (data.alerts != null) {
@@ -325,7 +323,9 @@ var defaultHandler = {
                             var alert = data.alerts[i];
 
                             if (alert.expires) {
-                                alerts += " A " + alert.title + " is in effect for your area until " + Moment(alert.expires * 1000).calendar(now) + ".";
+                                var expires = Moment(alert.expires * 1000).add(offset, "seconds");
+
+                                alerts += " A " + alert.title + " is in effect for your area until " + expires.calendar() + ".";
                             }
                             else {
                                 alerts += " A " + alert.title + " is in effect for your area.";
@@ -500,7 +500,7 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
 
         var data = JSON.parse(body);
 
-        var offset = data.rawOffset;
+        var offset = data.rawOffset + data.dstOffset;
 
         callback(offset);
     });
