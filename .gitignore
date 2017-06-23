@@ -33,6 +33,9 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
+# AWS Lambda packages
+*.zip
+
 # =========================
 # Operating System Files
 # =========================

@@ -1,6 +1,6 @@
 var Alexa = require("alexa-sdk");
 var Request = require("request");
-var Moment = require("moment");
+var Moment = require("moment-timezone");
 var Windrose = require("windrose");
 
 var alexa;
@@ -26,7 +26,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var minutely_summary = data.minutely.summary;
@@ -46,7 +46,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.minutely.summary;
@@ -63,7 +63,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
@@ -81,7 +81,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var summary = data.daily.summary;
 
@@ -108,29 +108,47 @@ var defaultHandler = {
         }
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
-                var now = Moment().utc().add(offset, "seconds");
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
+                var now = Moment().tz(timezone);
 
-                time = time.replace("MO", "8:00");
-                time = time.replace("AF", "14:00");
-                time = time.replace("EV", "18:00");
-                time = time.replace("NI", "23:00");
+                var iso8601time = Moment.tz(
+                    time
+                        .replace("MO", "09:00")
+                        .replace("AF", "15:00")
+                        .replace("EV", "19:00")
+                        .replace("NI", "23:00"),
+                    "h:mm",
+                    timezone
+                );
 
-                var tmp = Moment(time, "h:mm");
+                iso8601time.year(now.year()).month(now.month()).date(now.date());
 
-                var unixTime = now.hour(tmp.hour()).minute(tmp.minute()).unix();
-
-                if (tmp.hour() <= now.hour() &&
-                    tmp.minute() < now.minute()) {
-                    unixTime += (24 * 60 * 60);
+                if (((iso8601time.hours() * 60) + iso8601time.minutes()) < ((now.hours() * 60) + now.minutes())) {
+                    iso8601time.add(1, "days");
                 }
 
+                var unixTime = iso8601time.unix();
+
                 getForecastAtTime(_alexa, latitude, longitude, unixTime, function (data) {
-                    var timestamp = Moment(data.currently.time * 1000);
+                    var timestamp = Moment.unix(data.currently.time).tz(timezone);
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.currently.summary;
 
-                    _alexa.emit(":tell", "The forecast for " + timestamp.calendar(now) + " is " + temperature + " degrees and " + summary + ".");
+                    if (time.contains("MO")) {
+                        _alexa.emit(":tell", "The forecast for this morning is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else if (time.contains("AF")) {
+                        _alexa.emit(":tell", "The forecast for this afternoon is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else if (time.contains("EV")) {
+                        _alexa.emit(":tell", "The forecast for this evening is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else if (time.contains("NI")) {
+                        _alexa.emit(":tell", "The forecast for tonight is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else {
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar() + " is " + temperature + " degrees and " + summary + ".");
+                    }
                 });
             });
         });
@@ -150,13 +168,13 @@ var defaultHandler = {
         }
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
-                var now = Moment().utc().add(offset, "seconds");
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
+                var now = Moment().tz(timezone);
 
-                var unixDate = Moment(date).unix();
+                var unixDate = Moment.tz(date, timezone).unix();
 
                 getForecastAtTime(_alexa, latitude, longitude, unixDate, function (data) {
-                    var timestamp = Moment(data.currently.time * 1000);
+                    var timestamp = Moment.unix(data.currently.time).tz(timezone);
                     var summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
@@ -180,10 +198,10 @@ var defaultHandler = {
                     };
 
                     if (timestamp > now) {
-                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(now, calendarOptionsFuture) + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(null, calendarOptionsFuture) + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
                     }
                     else {
-                        _alexa.emit(":tell", "The weather " + timestamp.calendar(now, calendarOptionsPast) + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The weather " + timestamp.calendar(null, calendarOptionsPast) + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
                     }
                 });
             });
@@ -196,7 +214,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var temperature = Math.round(data.currently.temperature);
 
@@ -212,7 +230,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var probability = Math.round(data.currently.precipProbability * 100);
                     var type = data.currently.precipType ? data.currently.precipType : "precipitation";
@@ -229,7 +247,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var speed = Math.round(data.currently.windSpeed);
                     var direction = Windrose.getPoint(data.currently.windBearing).name;
@@ -251,7 +269,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var humidity = Math.round(data.currently.humidity * 100);
 
@@ -267,7 +285,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var dewPoint = Math.round(data.currently.dewPoint);
 
@@ -283,7 +301,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var uvIndex = data.currently.uvIndex;
 
@@ -299,7 +317,7 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
                     var visibility = Math.round(data.currently.visibility);
 
@@ -315,31 +333,29 @@ var defaultHandler = {
         var _alexa = this;
 
         getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, offset) {
+            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
                 getForecast(_alexa, latitude, longitude, function (data) {
-                    var alerts = "";
                     if (data.alerts != null) {
+                        var response = "";
+
                         for (var i = 0; i < data.alerts.length; i++) {
                             var alert = data.alerts[i];
 
                             if (alert.expires) {
-                                var expires = Moment(alert.expires * 1000).add(offset, "seconds");
+                                var expires = Moment.unix(alert.expires).tz(timezone);
 
-                                alerts += " A " + alert.title + " is in effect for your area until " + expires.calendar() + ".";
+                                response += " A " + alert.title + " is in effect for your area until " + expires.calendar() + ". " + alert.description.replace("\\n", " ");
                             }
                             else {
-                                alerts += " A " + alert.title + " is in effect for your area.";
+                                response += " A " + alert.title + " is in effect for your area. " + alert.description.replace("\\n", " ");
                             }
-
-                            alerts += " " + alert.description.replace("\\n", " ");
                         }
-                    }
 
-                    if (alerts == "") {
-                        alerts += "There are no weather alerts in effect for your area at this time.";
+                        _alexa.emit(":tell", response);
                     }
-
-                    _alexa.emit(":tell", alerts);
+                    else {
+                        _alexa.emit(":tell", "There are no weather alerts in effect for your area at this time.");
+                    }
                 });
             });
         });
@@ -358,6 +374,23 @@ var defaultHandler = {
     }
 
 };
+
+function getWeatherAlerts(data) {
+    if (data.alerts != null) {
+        var response = "";
+
+        for (var i = 0; i < data.alerts.length; i++) {
+            var alert = data.alerts[i];
+
+            response += " A " + alert.title + " is in effect for your area.";
+        }
+
+        return response + " If you'd like to know more, just ask me for your weather alerts.";
+    }
+    else {
+        return " There are no weather alerts in effect for your area at this time.";
+    }
+}
 
 function printDebugInformation(message) {
     if (process.env.DEBUG) {
@@ -450,8 +483,8 @@ function getDeviceAddress(_alexa, callback) {
 function getGeocodeResult(_alexa, address, callback) {
     if (_alexa.attributes['LATITUDE'] &&
         _alexa.attributes['LONGITUDE'] &&
-        _alexa.attributes['OFFSET']) {
-        callback(_alexa.attributes['LATITUDE'], _alexa.attributes['LONGITUDE'], _alexa.attributes['OFFSET']);
+        _alexa.attributes['TIMEZONE']) {
+        callback(_alexa.attributes['LATITUDE'], _alexa.attributes['LONGITUDE'], _alexa.attributes['TIMEZONE']);
     }
     else {
         var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address);
@@ -474,12 +507,12 @@ function getGeocodeResult(_alexa, address, callback) {
             var latitude = data.results[0].geometry.location.lat;
             var longitude = data.results[0].geometry.location.lng;
 
-            getTimezoneResult(_alexa, latitude, longitude, function (offset) {
+            getTimezoneResult(_alexa, latitude, longitude, function (timezone) {
                 _alexa.attributes['LATITUDE'] = latitude;
                 _alexa.attributes['LONGITUDE'] = longitude;
-                _alexa.attributes['OFFSET'] = offset;
+                _alexa.attributes['TIMEZONE'] = timezone;
 
-                callback(latitude, longitude, offset);
+                callback(latitude, longitude, timezone);
             });
         });
     }
@@ -503,9 +536,9 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
 
         var data = JSON.parse(body);
 
-        var offset = data.rawOffset + data.dstOffset;
+        var timezone = data.timeZoneId;
 
-        callback(offset);
+        callback(timezone);
     });
 }
 
@@ -551,21 +584,4 @@ function getForecastAtTime(_alexa, latitude, longitude, timestamp, callback) {
 
         callback(data);
     });
-}
-
-function getWeatherAlerts(data) {
-    var alerts = "";
-    if (data.alerts != null) {
-        for (var i = 0; i < data.alerts.length; i++) {
-            var alert = data.alerts[i];
-
-            alerts += " A " + alert.title + " is in effect for your area.";
-        }
-    }
-
-    if (alerts != "") {
-        alerts += " If you'd like to know more, just ask me for your weather alerts.";
-    }
-
-    return alerts;
 }
