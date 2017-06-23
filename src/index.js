@@ -401,7 +401,14 @@ function getDeviceAddress(_alexa, callback) {
         switch (addressResponse.statusCode) {
             case 200:
                 // successfully got the address associated with this deviceId
-                var address = addressResponse.address['addressLine1'] + ", " + addressResponse.address['stateOrRegion'] + " " + addressResponse.address['postalCode'];
+                var address = "";
+                if (addressResponse.address['addressLine1'] &&
+                    addressResponse.address['stateOrRegion']) {
+                    address = addressResponse.address['addressLine1'] + ", " + addressResponse.address['stateOrRegion'] + " " + addressResponse.address['postalCode'];
+                }
+                else {
+                    address = addressResponse.address['postalCode'];
+                }
 
                 if (_alexa.attributes['ADDRESS'] != address) {
                     _alexa.attributes['LATITUDE'] = null;
@@ -447,15 +454,13 @@ function getGeocodeResult(_alexa, address, callback) {
         callback(_alexa.attributes['LATITUDE'], _alexa.attributes['LONGITUDE'], _alexa.attributes['OFFSET']);
     }
     else {
+        var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address);
+
         Request.get({
-            uri: "https://maps.googleapis.com/maps/api/geocode/json",
-            gzip: true,
-            qs: {
-                sensor: false,
-                address: address
-            }
+            uri: url,
+            gzip: true
         }, function (err, response, body) {
-            printDebugInformation(response.url);
+            printDebugInformation(url);
 
             if (err) {
                 printDebugInformation("ERROR: getGeocodeResult()");
@@ -481,15 +486,13 @@ function getGeocodeResult(_alexa, address, callback) {
 }
 
 function getTimezoneResult(_alexa, latitude, longitude, callback) {
+    var url = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude + "&timestamp=" + Moment().unix();
+
     Request.get({
-        uri: "https://maps.googleapis.com/maps/api/timezone/json",
-        gzip: true,
-        qs: {
-            location: latitude + "," + longitude,
-            timestamp: Moment().unix()
-        }
+        uri: url,
+        gzip: true
     }, function (err, response, body) {
-        printDebugInformation(response.url);
+        printDebugInformation(url);
 
         if (err) {
             printDebugInformation("ERROR: getTimezoneResult()");
@@ -507,11 +510,13 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
 }
 
 function getForecast(_alexa, latitude, longitude, callback) {
+    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "/?solar=1";
+
     Request.get({
-        uri: "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "/?solar=1",
+        uri: url,
         gzip: true
     }, function (err, response, body) {
-        printDebugInformation(response.url);
+        printDebugInformation(url);
 
         if (err) {
             printDebugInformation("ERROR: getForecast()");
@@ -527,11 +532,13 @@ function getForecast(_alexa, latitude, longitude, callback) {
 }
 
 function getForecastAtTime(_alexa, latitude, longitude, timestamp, callback) {
+    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "," + timestamp + "/?solar=1";
+
     Request.get({
-        uri: "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "," + timestamp + "/?solar=1",
+        uri: url,
         gzip: true
     }, function (err, response, body) {
-        printDebugInformation(response.url);
+        printDebugInformation(url);
 
         if (err) {
             printDebugInformation("ERROR: getForecastAtTime()");
