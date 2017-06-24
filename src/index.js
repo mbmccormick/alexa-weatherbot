@@ -134,16 +134,16 @@ var defaultHandler = {
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.currently.summary;
 
-                    if (time.contains("MO")) {
+                    if (time.indexOf("MO") > -1) {
                         _alexa.emit(":tell", "The forecast for this morning is " + temperature + " degrees and " + summary + ".");
                     }
-                    else if (time.contains("AF")) {
+                    else if (time.indexOf("AF") > -1) {
                         _alexa.emit(":tell", "The forecast for this afternoon is " + temperature + " degrees and " + summary + ".");
                     }
-                    else if (time.contains("EV")) {
+                    else if (time.indexOf("EV") > -1) {
                         _alexa.emit(":tell", "The forecast for this evening is " + temperature + " degrees and " + summary + ".");
                     }
-                    else if (time.contains("NI")) {
+                    else if (time.indexOf("NI") > -1) {
                         _alexa.emit(":tell", "The forecast for tonight is " + temperature + " degrees and " + summary + ".");
                     }
                     else {
