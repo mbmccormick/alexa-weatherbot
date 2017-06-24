@@ -134,21 +134,25 @@ var defaultHandler = {
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.currently.summary;
 
+                    var friendlyDate = "";
+
                     if (time.indexOf("MO") > -1) {
-                        _alexa.emit(":tell", "The forecast for this morning is " + temperature + " degrees and " + summary + ".");
+                        friendlyDate = timestamp.date() == now.date() ? "this morning" : "tomorrow morning";
                     }
                     else if (time.indexOf("AF") > -1) {
-                        _alexa.emit(":tell", "The forecast for this afternoon is " + temperature + " degrees and " + summary + ".");
+                        friendlyDate = timestamp.date() == now.date() ? "this afternoon" : "tomorrow afternoon";
                     }
                     else if (time.indexOf("EV") > -1) {
-                        _alexa.emit(":tell", "The forecast for this evening is " + temperature + " degrees and " + summary + ".");
+                        friendlyDate = timestamp.date() == now.date() ? "this evening" : "tomorrow evening";
                     }
                     else if (time.indexOf("NI") > -1) {
-                        _alexa.emit(":tell", "The forecast for tonight is " + temperature + " degrees and " + summary + ".");
+                        friendlyDate = timestamp.date() == now.date() ? "tonight" : "tomorrow night";
                     }
                     else {
-                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar() + " is " + temperature + " degrees and " + summary + ".");
+                        friendlyDate = timestamp.calendar();
                     }
+
+                    _alexa.emit(":tell", "The forecast for " + friendlyDate + " is " + temperature + " degrees and " + summary + ".");
                 });
             });
         });
