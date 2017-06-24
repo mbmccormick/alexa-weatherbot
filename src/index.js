@@ -69,7 +69,7 @@ var defaultHandler = {
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "The forecast for today is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
                 });
             });
         });
