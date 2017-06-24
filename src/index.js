@@ -6,10 +6,18 @@ var Windrose = require("windrose");
 var alexa;
 
 exports.handler = function (event, context, callback) {
+    if (event.source == "aws.events") {
+        printDebugInformation("Received keep alive request from " + event.resources[0] + ".");
+        
+        return callback(null, "Success");
+    }
+
     alexa = Alexa.handler(event, context);
     alexa.appId = "amzn1.ask.skill.45bd54a7-8512-438a-8191-ca2407990891";
     alexa.dynamoDBTableName = "Weatherbot";
+
     alexa.registerHandlers(defaultHandler);
+    
     alexa.execute();
 };
 
