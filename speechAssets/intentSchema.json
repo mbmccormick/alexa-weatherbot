@@ -4,14 +4,12 @@
       "intent": "FORECASTNOW"
     },
     {
-      "intent": "FORECASTDAY"
-    },
-    {
-      "intent": "FORECASTWEEK"
-    },
-    {
-      "intent": "FORECASTFUTURETIME",
+      "intent": "FORECASTTIME",
       "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
         {
           "name": "Time",
           "type": "AMAZON.Time"
@@ -19,7 +17,7 @@
       ]
     },
     {
-      "intent": "FORECASTFUTUREDATE",
+      "intent": "FORECASTDATE",
       "slots": [
         {
           "name": "Date",
@@ -28,28 +26,121 @@
       ]
     },
     {
-      "intent": "TEMPERATURE"
+      "intent": "FORECASTWEEK",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "PRECIPITATION"
+      "intent": "TEMPERATURE",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "WIND"
+      "intent": "PRECIPITATION",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "HUMIDITY"
+      "intent": "WIND",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "DEWPOINT"
+      "intent": "HUMIDITY",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "UVINDEX"
+      "intent": "DEWPOINT",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "ALERTS"
+      "intent": "UVINDEX",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
-      "intent": "VISIBILITY"
+      "intent": "VISIBILITY",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
+    },
+    {
+      "intent": "ALERTS",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        }
+      ]
     },
     {
       "intent": "AMAZON.HelpIntent"

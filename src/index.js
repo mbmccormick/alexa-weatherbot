@@ -8,7 +8,7 @@ var alexa;
 exports.handler = function (event, context, callback) {
     if (event.source == "aws.events") {
         printDebugInformation("Received keep alive request from " + event.resources[0] + ".");
-        
+
         return callback(null, "Success");
     }
 
@@ -17,7 +17,7 @@ exports.handler = function (event, context, callback) {
     alexa.dynamoDBTableName = "Weatherbot";
 
     alexa.registerHandlers(defaultHandler);
-    
+
     alexa.execute();
 };
 
@@ -33,9 +33,9 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var minutely_summary = data.minutely.summary;
                     var hourly_summary = data.hourly.summary;
@@ -53,9 +53,9 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.minutely.summary;
 
@@ -65,19 +65,52 @@ var defaultHandler = {
         });
     },
 
-    "FORECASTDAY": function () {
-        printDebugInformation("defaultHandler:FORECASTDAY");
+    "FORECASTTIME": function () {
+        printDebugInformation("defaultHandler:FORECASTTIME");
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
+                    var summary = data.minutely.summary;
+
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", "The weather on " + calendarTime + " was " + temperature + " degrees and " + summary + ".");
+                    }
+                });
+            });
+        });
+    },
+
+    "FORECASTDATE": function () {
+        printDebugInformation("defaultHandler:FORECASTDATE");
+
+        var _alexa = this;
+
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", "The forecast for today is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", "The weather on " + calendarTime + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    }
                 });
             });
         });
@@ -88,132 +121,22 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var summary = data.daily.summary;
 
                     summary = summary.replace("°F", " degrees");
                     summary = summary.replace("°C", " degrees");
 
-                    _alexa.emit(":tell", summary + "." + getWeatherAlerts(data));
-                });
-            });
-        });
-    },
-
-    "FORECASTFUTURETIME": function () {
-        printDebugInformation("defaultHandler:FORECASTFUTURETIME");
-
-        var _alexa = this;
-
-        var time = this.event.request.intent.slots.Time.value;
-
-        if (!time) {
-            this.emitWithState("Unhandled");
-
-            return;
-        }
-
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                var now = Moment().tz(timezone);
-
-                var iso8601time = Moment.tz(
-                    time
-                        .replace("MO", "09:00")
-                        .replace("AF", "15:00")
-                        .replace("EV", "19:00")
-                        .replace("NI", "23:00"),
-                    "h:mm",
-                    timezone
-                );
-
-                iso8601time.year(now.year()).month(now.month()).date(now.date());
-
-                if (((iso8601time.hours() * 60) + iso8601time.minutes()) < ((now.hours() * 60) + now.minutes())) {
-                    iso8601time.add(1, "days");
-                }
-
-                var unixTime = iso8601time.unix();
-
-                getForecastAtTime(_alexa, latitude, longitude, unixTime, function (data) {
-                    var timestamp = Moment.unix(data.currently.time).tz(timezone);
-                    var temperature = Math.round(data.currently.temperature);
-                    var summary = data.currently.summary;
-
-                    var friendlyDate = "";
-
-                    if (time.indexOf("MO") > -1) {
-                        friendlyDate = timestamp.date() == now.date() ? "this morning" : "tomorrow morning";
+                    if (difference == 0) {
+                        _alexa.emit(":tell", summary + "." + getWeatherAlerts(data));
                     }
-                    else if (time.indexOf("AF") > -1) {
-                        friendlyDate = timestamp.date() == now.date() ? "this afternoon" : "tomorrow afternoon";
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", "Sorry, weekly forecasts are not available for past dates or times.");
                     }
-                    else if (time.indexOf("EV") > -1) {
-                        friendlyDate = timestamp.date() == now.date() ? "this evening" : "tomorrow evening";
-                    }
-                    else if (time.indexOf("NI") > -1) {
-                        friendlyDate = timestamp.date() == now.date() ? "tonight" : "tomorrow night";
-                    }
-                    else {
-                        friendlyDate = timestamp.calendar();
-                    }
-
-                    _alexa.emit(":tell", "The forecast for " + friendlyDate + " is " + temperature + " degrees and " + summary + ".");
-                });
-            });
-        });
-    },
-
-    "FORECASTFUTUREDATE": function () {
-        printDebugInformation("defaultHandler:FORECASTFUTUREDATE");
-
-        var _alexa = this;
-
-        var date = this.event.request.intent.slots.Date.value;
-
-        if (!date) {
-            this.emitWithState("Unhandled");
-
-            return;
-        }
-
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                var now = Moment().tz(timezone);
-
-                var unixDate = Moment.tz(date, timezone).unix();
-
-                getForecastAtTime(_alexa, latitude, longitude, unixDate, function (data) {
-                    var timestamp = Moment.unix(data.currently.time).tz(timezone);
-                    var summary = data.hourly.summary;
-                    var high = Math.round(data.daily.data[0].temperatureMax);
-                    var low = Math.round(data.daily.data[0].temperatureMin);
-
-                    var calendarOptionsFuture = {
-                        sameDay: "[today]",
-                        nextDay: "[tomorrow]",
-                        nextWeek: "dddd",
-                        lastDay: "[yesterday]",
-                        lastWeek: "[last] dddd",
-                        sameElse: "MM/DD/YYYY"
-                    };
-
-                    var calendarOptionsPast = {
-                        sameDay: "[today]",
-                        nextDay: "[tomorrow]",
-                        nextWeek: "dddd",
-                        lastDay: "[yesterday]",
-                        lastWeek: "[last] dddd",
-                        sameElse: "[on] MM/DD/YYYY"
-                    };
-
-                    if (timestamp > now) {
-                        _alexa.emit(":tell", "The forecast for " + timestamp.calendar(null, calendarOptionsFuture) + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
-                    }
-                    else {
-                        _alexa.emit(":tell", "The weather " + timestamp.calendar(null, calendarOptionsPast) + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", "Sorry, weekly forecasts are not available for past dates or times.");
                     }
                 });
             });
@@ -225,12 +148,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
 
-                    _alexa.emit(":tell", "Right now, the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + ", the forecasted temperature is " + temperature + " degrees.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + ", the temperature was " + temperature + " degrees.");
+                    }
                 });
             });
         });
@@ -241,13 +172,21 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var probability = Math.round(data.currently.precipProbability * 100);
                     var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
-                    _alexa.emit(":tell", "Right now, there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + ", there's a " + probability + "% chance of " + type + ".");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + ", there was a " + probability + "% chance of " + type + ".");
+                    }
                 });
             });
         });
@@ -258,17 +197,35 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var speed = Math.round(data.currently.windSpeed);
                     var direction = Windrose.getPoint(data.currently.windBearing).name;
 
-                    if (speed > 0) {
-                        _alexa.emit(":tell", "Right now, the wind speed is " + speed + " mph out of the " + direction + "." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        if (speed > 0) {
+                            _alexa.emit(":tell", calendarTime + ", there's a " + speed + " mph wind out of the " + direction + "." + getWeatherAlerts(data));
+                        }
+                        else {
+                            _alexa.emit(":tell", calendarTime + ", there's no wind." + getWeatherAlerts(data));
+                        }
                     }
-                    else {
-                        _alexa.emit(":tell", "Right now, there's no wind." + getWeatherAlerts(data));
+                    else if (difference > 0) {
+                        if (speed > 0) {
+                            _alexa.emit(":tell", calendarTime + ", there's a forecasted " + speed + " mph wind out of the " + direction + ".");
+                        }
+                        else {
+                            _alexa.emit(":tell", calendarTime + ", there's no wind forecasted.");
+                        }
+                    }
+                    else if (difference < 0) {
+                        if (speed > 0) {
+                            _alexa.emit(":tell", calendarTime + ", there was a " + speed + " mph wind out of the " + direction + ".");
+                        }
+                        else {
+                            _alexa.emit(":tell", calendarTime + ", there was no wind.");
+                        }
                     }
                 });
             });
@@ -280,12 +237,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var humidity = Math.round(data.currently.humidity * 100);
 
-                    _alexa.emit(":tell", "Right now, the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + ", the forecasted humidity is " + humidity + "%.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + ", the humidity was " + humidity + "%.");
+                    }
                 });
             });
         });
@@ -296,12 +261,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var dewPoint = Math.round(data.currently.dewPoint);
 
-                    _alexa.emit(":tell", "Right now, the dew point is  " + dewPoint + " degrees." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", the dew point is " + dewPoint + " degrees." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + ", the forecasted dew point is " + dewPoint + " degrees.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + ", the dew point was " + dewPoint + " degrees.");
+                    }
                 });
             });
         });
@@ -312,12 +285,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var uvIndex = data.currently.uvIndex;
 
-                    _alexa.emit(":tell", "Right now, the UV index is  " + uvIndex + "." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", the UV index is " + uvIndex + "." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + ", the forecasted UV index is " + uvIndex + ".");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + ", the UV index was " + uvIndex + ".");
+                    }
                 });
             });
         });
@@ -328,12 +309,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var visibility = Math.round(data.currently.visibility);
 
-                    _alexa.emit(":tell", "Right now, the visibility is " + visibility + " mi." + getWeatherAlerts(data));
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + ", the visibility is " + visibility + " mi." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + ", the forecasted visibility is " + visibility + " mi.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + ", the visibility was " + visibility + " mi.");
+                    }
                 });
             });
         });
@@ -344,12 +333,12 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getDeviceAddress(_alexa, function (address) {
-            getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-                getForecast(_alexa, latitude, longitude, function (data) {
+        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                    var response = "";
+                    
                     if (data.alerts != null) {
-                        var response = "";
-
                         for (var i = 0; i < data.alerts.length; i++) {
                             var alert = data.alerts[i];
 
@@ -362,11 +351,19 @@ var defaultHandler = {
                                 response += " A " + alert.title + " is in effect for your area. " + alert.description.replace("\\n", " ");
                             }
                         }
-
-                        _alexa.emit(":tell", response);
                     }
                     else {
-                        _alexa.emit(":tell", "There are no weather alerts in effect for your area at this time.");
+                        response = "There are no weather alerts in effect for your area at this time.";
+                    }
+
+                    if (difference == 0) {
+                        _alexa.emit(":tell", response);
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", "Sorry, weather alerts are not available for future dates or times.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", "Sorry, weather alerts are not available for past dates or times.");
                     }
                 });
             });
@@ -386,6 +383,63 @@ var defaultHandler = {
     }
 
 };
+
+function getRequestedLocation(_alexa, callback) {
+    getDeviceAddress(_alexa, function (address) {
+        getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
+            callback(latitude, longitude, timezone);
+        });
+    });
+}
+
+function getRequestedDateTime(_alexa, timezone, callback) {
+    var now = Moment().tz(timezone);
+    var dateTime = now;
+
+    if (_alexa.event.request.intent.slots.Date) {
+        var input = _alexa.event.request.intent.slots.Date.value;
+
+        var parse = Moment.tz(input, timezone);
+
+        dateTime.year(parse.year()).month(parse.month()).date(parse.date());
+    }
+
+    if (_alexa.event.request.intent.slots.Time) {
+        var input = _alexa.event.request.intent.slots.Time.value;
+
+        var parse = Moment.tz(input, "h:mm", timezone);
+
+        if (((parse.hours() * 60) + parse.minutes()) < ((now.hours() * 60) + now.minutes())) {
+            parse.add(1, "days");
+        }
+
+        dateTime.hour(parse.hour()).minute(parse.minute());
+    }
+
+    var timestamp = dateTime.unix();
+
+    var difference = now.diff(dateTime, "hours");
+
+    var calendarOptions = null;
+
+    if (_alexa.event.request.intent.slots.Time === undefined) {
+        calendarOptions = {
+            sameDay: "[today]",
+            nextDay: "[tomorrow]",
+            nextWeek: "dddd",
+            lastDay: "[yesterday]",
+            lastWeek: "[last] dddd",
+            sameElse: "[on] MM/DD/YYYY"
+        };
+    }
+    
+    var calendarTime = dateTime.calendar(null, calendarOptions);
+    if (difference == 0) {
+        calendarTime = "right now";
+    }
+
+    callback(timestamp, difference, calendarTime);
+}
 
 function getWeatherAlerts(data) {
     if (data.alerts != null) {
@@ -554,8 +608,8 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
     });
 }
 
-function getForecast(_alexa, latitude, longitude, callback) {
-    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "/?solar=1";
+function getForecast(_alexa, latitude, longitude, timestamp, callback) {
+    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null ? "," + timestamp : "") + "/?solar=1";
 
     Request.get({
         uri: url,
@@ -565,28 +619,6 @@ function getForecast(_alexa, latitude, longitude, callback) {
 
         if (err) {
             printDebugInformation("ERROR: getForecast()");
-            printDebugInformation(err);
-
-            _alexa.emit(":tell", "There was a problem retrieving your forecast. Please try again later.");
-        }
-
-        var data = JSON.parse(body);
-
-        callback(data);
-    });
-}
-
-function getForecastAtTime(_alexa, latitude, longitude, timestamp, callback) {
-    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + "," + timestamp + "/?solar=1";
-
-    Request.get({
-        uri: url,
-        gzip: true
-    }, function (err, response, body) {
-        printDebugInformation(url);
-
-        if (err) {
-            printDebugInformation("ERROR: getForecastAtTime()");
             printDebugInformation(err);
 
             _alexa.emit(":tell", "There was a problem retrieving your forecast. Please try again later.");
