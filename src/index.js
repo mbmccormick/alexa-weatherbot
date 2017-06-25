@@ -344,7 +344,7 @@ var defaultHandler = {
 
                             var title = alert.title;
                             var description = alert.description;
-                            
+
                             description = description.replace(/\n/g, " ");
 
                             if (alert.expires) {
