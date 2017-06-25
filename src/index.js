@@ -343,20 +343,22 @@ var defaultHandler = {
                             var alert = data.alerts[i];
 
                             var title = alert.title;
-                            var description = alert.description.replace("\n", " ").replace("\\n", " ");
+                            var description = alert.description;
+                            
+                            description = description.replace(/\n/g, " ");
 
                             if (alert.expires) {
                                 var expires = Moment.unix(alert.expires).tz(timezone);
 
-                                response += " A " + title + " is in effect for your area until " + expires.calendar() + ". " + description;
+                                response += " A " + title + " is in effect for the " + location + " area until " + expires.calendar() + ". " + description;
                             }
                             else {
-                                response += " A " + title + " is in effect for your area. " + description;
+                                response += " A " + title + " is in effect for the " + location + " area. " + description;
                             }
                         }
                     }
                     else {
-                        response = "There are no weather alerts in effect for your area at this time.";
+                        response = "There are no weather alerts in effect for the " + location + " area at this time.";
                     }
 
                     if (difference == 0) {

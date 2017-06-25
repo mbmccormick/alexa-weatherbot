@@ -1,419 +1,306 @@
-FORECASTNOW the weather
-FORECASTNOW the weather in {Location}
-FORECASTNOW the forecast
-FORECASTNOW the forecast in {Location}
-FORECASTNOW the current forecast
-FORECASTNOW the current forecast in {Location}
 FORECASTNOW the current conditions
 FORECASTNOW the current conditions in {Location}
+FORECASTNOW the current forecast
+FORECASTNOW the current forecast in {Location}
+FORECASTNOW the forecast
+FORECASTNOW the forecast in {Location}
+FORECASTNOW the weather
+FORECASTNOW the weather in {Location}
 FORECASTNOW what the weather is like
 FORECASTNOW what the weather is like in {Location}
-
-FORECASTTIME the {Time} forecast
-FORECASTTIME the {Time} forecast in {Location}
-FORECASTTIME the {Date} at {Time} forecast
-FORECASTTIME the {Date} at {Time} forecast in {Location}
-FORECASTTIME the {Time} on {Date} forecast
-FORECASTTIME the {Time} on {Date} forecast in {Location}
-FORECASTTIME the forecast at {Time}
 FORECASTTIME the forecast at {Time} in {Location}
-FORECASTTIME the forecast on {Date} at {Time}
-FORECASTTIME the forecast on {Date} at {Time} in {Location}
-FORECASTTIME the forecast at {Time} on {Date}
 FORECASTTIME the forecast at {Time} on {Date} in {Location}
-FORECASTTIME the forecast at {Time}
-FORECASTTIME the forecast at {Time} in {Location}
-FORECASTTIME the forecast on {Date} at {Time}
-FORECASTTIME the forecast on {Date} at {Time} in {Location}
-FORECASTTIME the forecast at {Time} on {Date}
-FORECASTTIME the forecast at {Time} on {Date} in {Location}
-FORECASTTIME the weather is like at {Time}
+FORECASTTIME the forecast in {Location} at {Time}
+FORECASTTIME the forecast in {Location} at {Time} on {Date}
+FORECASTTIME the forecast in {Location} on {Date} at {Time}
+FORECASTTIME the forecast on {Date} at {Time} in {Location} 
 FORECASTTIME the weather is like at {Time} in {Location}
-FORECASTTIME the weather is like on {Date} at {Time}
-FORECASTTIME the weather is like on {Date} at {Time} in {Location}
-FORECASTTIME the weather is like at {Time} on {Date}
 FORECASTTIME the weather is like at {Time} on {Date} in {Location}
-FORECASTTIME the weather will be like at {Time}
-FORECASTTIME the weather will be like at {Time} in {Location}
-FORECASTTIME the weather will be like on {Date} at {Time}
-FORECASTTIME the weather will be like on {Date} at {Time} in {Location}
-FORECASTTIME the weather will be like at {Time} on {Date}
-FORECASTTIME the weather will be like at {Time} on {Date} in {Location}
-FORECASTTIME the weather was like at {Time}
+FORECASTTIME the weather is like in {Location} at {Time}
+FORECASTTIME the weather is like in {Location} at {Time} on {Date}
+FORECASTTIME the weather is like in {Location} on {Date} at {Time}
+FORECASTTIME the weather is like on {Date} at {Time} in {Location} 
 FORECASTTIME the weather was like at {Time} in {Location}
-FORECASTTIME the weather was like on {Date} at {Time}
-FORECASTTIME the weather was like on {Date} at {Time} in {Location}
-FORECASTTIME the weather was like at {Time} on {Date}
 FORECASTTIME the weather was like at {Time} on {Date} in {Location}
-
-FORECASTDATE {Date} forecast
+FORECASTTIME the weather was like in {Location} at {Time}
+FORECASTTIME the weather was like in {Location} at {Time} on {Date}
+FORECASTTIME the weather was like in {Location} on {Date} at {Time}
+FORECASTTIME the weather was like on {Date} at {Time} in {Location} 
+FORECASTTIME the weather will be like at {Time} in {Location}
+FORECASTTIME the weather will be like at {Time} on {Date} in {Location}
+FORECASTTIME the weather will be like in {Location} at {Time}
+FORECASTTIME the weather will be like in {Location} at {Time} on {Date}
+FORECASTTIME the weather will be like in {Location} on {Date} at {Time}
+FORECASTTIME the weather will be like on {Date} at {Time} in {Location} 
 FORECASTDATE {Date} forecast in {Location}
-FORECASTDATE the {Date} forecast
 FORECASTDATE the {Date} forecast in {Location}
-FORECASTDATE the forecast on {Date}
-FORECASTDATE the forecast on {Date} in {Location}
-FORECASTDATE the forecast on {Date}
-FORECASTDATE the forecast on {Date} in {Location}
-FORECASTDATE the weather is like on {Date}
-FORECASTDATE the weather is like on {Date} in {Location}
-FORECASTDATE the weather will be like on {Date}
-FORECASTDATE the weather will be like on {Date} in {Location}
-FORECASTDATE the weather was like on {Date}
-FORECASTDATE the weather was like on {Date} in {Location}
-
-FORECASTWEEK this week's forecast
-FORECASTWEEK this week's forecast in {Location}
-FORECASTWEEK the weekly forecast
-FORECASTWEEK the weekly forecast in {Location}
-FORECASTWEEK the forecast this week
-FORECASTWEEK the forecast this week in {Location}
-FORECASTWEEK the forecast for this week
+FORECASTDATE the forecast in {Location} on {Date}
+FORECASTDATE the forecast on {Date} in {Location} 
+FORECASTDATE the weather is like in {Location} on {Date}
+FORECASTDATE the weather is like on {Date} in {Location} 
+FORECASTDATE the weather was like in {Location} on {Date}
+FORECASTDATE the weather was like on {Date} in {Location} 
+FORECASTDATE the weather will be like in {Location} on {Date}
+FORECASTDATE the weather will be like on {Date} in {Location} 
 FORECASTWEEK the forecast for this week in {Location}
-FORECASTWEEK the weather is like this week
+FORECASTWEEK the forecast this week in {Location}
 FORECASTWEEK the weather is like this week in {Location}
-FORECASTWEEK the weather will be like this week
 FORECASTWEEK the weather will be like this week in {Location}
-
-TEMPERATURE the temperature
-TEMPERATURE the temperature in {Location}
-TEMPERATURE the temperature on {Date}
-TEMPERATURE the temperature on {Date} in {Location}
-TEMPERATURE the temperature at {Time}
+FORECASTWEEK the weekly forecast in {Location}
+FORECASTWEEK this week's forecast in {Location}
 TEMPERATURE the temperature at {Time} in {Location}
-TEMPERATURE the temperature on {Date} at {Time}
-TEMPERATURE the temperature on {Date} at {Time} in {Location}
-TEMPERATURE the temperature at {Time} on {Date}
 TEMPERATURE the temperature at {Time} on {Date} in {Location}
-TEMPERATURE the temperature on {Date}
-TEMPERATURE the temperature on {Date} in {Location}
-TEMPERATURE the temperature at {Time}
-TEMPERATURE the temperature at {Time} in {Location}
-TEMPERATURE the temperature on {Date} at {Time}
-TEMPERATURE the temperature on {Date} at {Time} in {Location}
-TEMPERATURE the temperature at {Time} on {Date}
-TEMPERATURE the temperature at {Time} on {Date} in {Location}
-TEMPERATURE the temperature is like on {Date}
-TEMPERATURE the temperature is like on {Date} in {Location}
-TEMPERATURE the temperature is like at {Time}
+TEMPERATURE the temperature in {Location} at {Time}
+TEMPERATURE the temperature in {Location} at {Time} on {Date}
+TEMPERATURE the temperature in {Location} on {Date}
+TEMPERATURE the temperature in {Location} on {Date} at {Time}
 TEMPERATURE the temperature is like at {Time} in {Location}
-TEMPERATURE the temperature is like on {Date} at {Time}
-TEMPERATURE the temperature is like on {Date} at {Time} in {Location}
-TEMPERATURE the temperature is like at {Time} on {Date}
 TEMPERATURE the temperature is like at {Time} on {Date} in {Location}
-TEMPERATURE the temperature will be like on {Date}
-TEMPERATURE the temperature will be like on {Date} in {Location}
-TEMPERATURE the temperature will be like at {Time}
-TEMPERATURE the temperature will be like at {Time} in {Location}
-TEMPERATURE the temperature will be like on {Date} at {Time}
-TEMPERATURE the temperature will be like on {Date} at {Time} in {Location}
-TEMPERATURE the temperature will be like at {Time} on {Date}
-TEMPERATURE the temperature will be like at {Time} on {Date} in {Location}
-TEMPERATURE the temperature was like on {Date}
-TEMPERATURE the temperature was like on {Date} in {Location}
-TEMPERATURE the temperature was like at {Time}
+TEMPERATURE the temperature is like in {Location} at {Time}
+TEMPERATURE the temperature is like in {Location} at {Time} on {Date}
+TEMPERATURE the temperature is like in {Location} on {Date}
+TEMPERATURE the temperature is like in {Location} on {Date} at {Time}
+TEMPERATURE the temperature is like on {Date} at {Time} in {Location} 
+TEMPERATURE the temperature is like on {Date} in {Location} 
+TEMPERATURE the temperature on {Date} at {Time} in {Location} 
+TEMPERATURE the temperature on {Date} in {Location} 
 TEMPERATURE the temperature was like at {Time} in {Location}
-TEMPERATURE the temperature was like on {Date} at {Time}
-TEMPERATURE the temperature was like on {Date} at {Time} in {Location}
-TEMPERATURE the temperature was like at {Time} on {Date}
 TEMPERATURE the temperature was like at {Time} on {Date} in {Location}
-
-PRECIPITATION the weather alerts
-PRECIPITATION the precipitation in {Location}
-PRECIPITATION the precipitation on {Date}
-PRECIPITATION the precipitation on {Date} in {Location}
-PRECIPITATION the precipitation at {Time}
+TEMPERATURE the temperature was like in {Location} at {Time}
+TEMPERATURE the temperature was like in {Location} at {Time} on {Date}
+TEMPERATURE the temperature was like in {Location} on {Date}
+TEMPERATURE the temperature was like in {Location} on {Date} at {Time}
+TEMPERATURE the temperature was like on {Date} at {Time} in {Location} 
+TEMPERATURE the temperature was like on {Date} in {Location} 
+TEMPERATURE the temperature will be like at {Time} in {Location}
+TEMPERATURE the temperature will be like at {Time} on {Date} in {Location}
+TEMPERATURE the temperature will be like in {Location} at {Time}
+TEMPERATURE the temperature will be like in {Location} at {Time} on {Date}
+TEMPERATURE the temperature will be like in {Location} on {Date}
+TEMPERATURE the temperature will be like in {Location} on {Date} at {Time}
+TEMPERATURE the temperature will be like on {Date} at {Time} in {Location} 
+TEMPERATURE the temperature will be like on {Date} in {Location} 
 PRECIPITATION the precipitation at {Time} in {Location}
-PRECIPITATION the precipitation on {Date} at {Time}
-PRECIPITATION the precipitation on {Date} at {Time} in {Location}
-PRECIPITATION the precipitation at {Time} on {Date}
 PRECIPITATION the precipitation at {Time} on {Date} in {Location}
-PRECIPITATION the precipitation on {Date}
-PRECIPITATION the precipitation on {Date} in {Location}
-PRECIPITATION the precipitation at {Time}
-PRECIPITATION the precipitation at {Time} in {Location}
-PRECIPITATION the precipitation on {Date} at {Time}
-PRECIPITATION the precipitation on {Date} at {Time} in {Location}
-PRECIPITATION the precipitation at {Time} on {Date}
-PRECIPITATION the precipitation at {Time} on {Date} in {Location}
-PRECIPITATION the precipitation is like on {Date}
-PRECIPITATION the precipitation is like on {Date} in {Location}
-PRECIPITATION the precipitation is like at {Time}
+PRECIPITATION the precipitation in {Location} at {Time}
+PRECIPITATION the precipitation in {Location} at {Time} on {Date}
+PRECIPITATION the precipitation in {Location} on {Date}
+PRECIPITATION the precipitation in {Location} on {Date} at {Time}
 PRECIPITATION the precipitation is like at {Time} in {Location}
-PRECIPITATION the precipitation is like on {Date} at {Time}
-PRECIPITATION the precipitation is like on {Date} at {Time} in {Location}
-PRECIPITATION the precipitation is like at {Time} on {Date}
 PRECIPITATION the precipitation is like at {Time} on {Date} in {Location}
-PRECIPITATION the precipitation will be like on {Date}
-PRECIPITATION the precipitation will be like on {Date} in {Location}
-PRECIPITATION the precipitation will be like at {Time}
-PRECIPITATION the precipitation will be like at {Time} in {Location}
-PRECIPITATION the precipitation will be like on {Date} at {Time}
-PRECIPITATION the precipitation will be like on {Date} at {Time} in {Location}
-PRECIPITATION the precipitation will be like at {Time} on {Date}
-PRECIPITATION the precipitation will be like at {Time} on {Date} in {Location}
-PRECIPITATION the precipitation was like on {Date}
-PRECIPITATION the precipitation was like on {Date} in {Location}
-PRECIPITATION the precipitation was like at {Time}
+PRECIPITATION the precipitation is like in {Location} at {Time}
+PRECIPITATION the precipitation is like in {Location} at {Time} on {Date}
+PRECIPITATION the precipitation is like in {Location} on {Date}
+PRECIPITATION the precipitation is like in {Location} on {Date} at {Time}
+PRECIPITATION the precipitation is like on {Date} at {Time} in {Location} 
+PRECIPITATION the precipitation is like on {Date} in {Location} 
+PRECIPITATION the precipitation on {Date} at {Time} in {Location} 
+PRECIPITATION the precipitation on {Date} in {Location} 
 PRECIPITATION the precipitation was like at {Time} in {Location}
-PRECIPITATION the precipitation was like on {Date} at {Time}
-PRECIPITATION the precipitation was like on {Date} at {Time} in {Location}
-PRECIPITATION the precipitation was like at {Time} on {Date}
 PRECIPITATION the precipitation was like at {Time} on {Date} in {Location}
-
-WIND the wind
-WIND the wind in {Location}
-WIND the wind on {Date}
-WIND the wind on {Date} in {Location}
-WIND the wind at {Time}
+PRECIPITATION the precipitation was like in {Location} at {Time}
+PRECIPITATION the precipitation was like in {Location} at {Time} on {Date}
+PRECIPITATION the precipitation was like in {Location} on {Date}
+PRECIPITATION the precipitation was like in {Location} on {Date} at {Time}
+PRECIPITATION the precipitation was like on {Date} at {Time} in {Location} 
+PRECIPITATION the precipitation was like on {Date} in {Location} 
+PRECIPITATION the precipitation will be like at {Time} in {Location}
+PRECIPITATION the precipitation will be like at {Time} on {Date} in {Location}
+PRECIPITATION the precipitation will be like in {Location} at {Time}
+PRECIPITATION the precipitation will be like in {Location} at {Time} on {Date}
+PRECIPITATION the precipitation will be like in {Location} on {Date}
+PRECIPITATION the precipitation will be like in {Location} on {Date} at {Time}
+PRECIPITATION the precipitation will be like on {Date} at {Time} in {Location} 
+PRECIPITATION the precipitation will be like on {Date} in {Location} 
 WIND the wind at {Time} in {Location}
-WIND the wind on {Date} at {Time}
-WIND the wind on {Date} at {Time} in {Location}
-WIND the wind at {Time} on {Date}
 WIND the wind at {Time} on {Date} in {Location}
-WIND the wind on {Date}
-WIND the wind on {Date} in {Location}
-WIND the wind at {Time}
-WIND the wind at {Time} in {Location}
-WIND the wind on {Date} at {Time}
-WIND the wind on {Date} at {Time} in {Location}
-WIND the wind at {Time} on {Date}
-WIND the wind at {Time} on {Date} in {Location}
-WIND the wind is like on {Date}
-WIND the wind is like on {Date} in {Location}
-WIND the wind is like at {Time}
+WIND the wind in {Location} at {Time}
+WIND the wind in {Location} at {Time} on {Date}
+WIND the wind in {Location} on {Date}
+WIND the wind in {Location} on {Date} at {Time}
 WIND the wind is like at {Time} in {Location}
-WIND the wind is like on {Date} at {Time}
-WIND the wind is like on {Date} at {Time} in {Location}
-WIND the wind is like at {Time} on {Date}
 WIND the wind is like at {Time} on {Date} in {Location}
-WIND the wind will be like on {Date}
-WIND the wind will be like on {Date} in {Location}
-WIND the wind will be like at {Time}
-WIND the wind will be like at {Time} in {Location}
-WIND the wind will be like on {Date} at {Time}
-WIND the wind will be like on {Date} at {Time} in {Location}
-WIND the wind will be like at {Time} on {Date}
-WIND the wind will be like at {Time} on {Date} in {Location}
-WIND the wind was like on {Date}
-WIND the wind was like on {Date} in {Location}
-WIND the wind was like at {Time}
+WIND the wind is like in {Location} at {Time}
+WIND the wind is like in {Location} at {Time} on {Date}
+WIND the wind is like in {Location} on {Date}
+WIND the wind is like in {Location} on {Date} at {Time}
+WIND the wind is like on {Date} at {Time} in {Location} 
+WIND the wind is like on {Date} in {Location} 
+WIND the wind on {Date} at {Time} in {Location} 
+WIND the wind on {Date} in {Location} 
 WIND the wind was like at {Time} in {Location}
-WIND the wind was like on {Date} at {Time}
-WIND the wind was like on {Date} at {Time} in {Location}
-WIND the wind was like at {Time} on {Date}
 WIND the wind was like at {Time} on {Date} in {Location}
-
-HUMIDITY the humidity
-HUMIDITY the humidity in {Location}
-HUMIDITY the humidity on {Date}
-HUMIDITY the humidity on {Date} in {Location}
-HUMIDITY the humidity at {Time}
+WIND the wind was like in {Location} at {Time}
+WIND the wind was like in {Location} at {Time} on {Date}
+WIND the wind was like in {Location} on {Date}
+WIND the wind was like in {Location} on {Date} at {Time}
+WIND the wind was like on {Date} at {Time} in {Location} 
+WIND the wind was like on {Date} in {Location} 
+WIND the wind will be like at {Time} in {Location}
+WIND the wind will be like at {Time} on {Date} in {Location}
+WIND the wind will be like in {Location} at {Time}
+WIND the wind will be like in {Location} at {Time} on {Date}
+WIND the wind will be like in {Location} on {Date}
+WIND the wind will be like in {Location} on {Date} at {Time}
+WIND the wind will be like on {Date} at {Time} in {Location} 
+WIND the wind will be like on {Date} in {Location} 
 HUMIDITY the humidity at {Time} in {Location}
-HUMIDITY the humidity on {Date} at {Time}
-HUMIDITY the humidity on {Date} at {Time} in {Location}
-HUMIDITY the humidity at {Time} on {Date}
 HUMIDITY the humidity at {Time} on {Date} in {Location}
-HUMIDITY the humidity on {Date}
-HUMIDITY the humidity on {Date} in {Location}
-HUMIDITY the humidity at {Time}
-HUMIDITY the humidity at {Time} in {Location}
-HUMIDITY the humidity on {Date} at {Time}
-HUMIDITY the humidity on {Date} at {Time} in {Location}
-HUMIDITY the humidity at {Time} on {Date}
-HUMIDITY the humidity at {Time} on {Date} in {Location}
-HUMIDITY the humidity is like on {Date}
-HUMIDITY the humidity is like on {Date} in {Location}
-HUMIDITY the humidity is like at {Time}
+HUMIDITY the humidity in {Location} at {Time}
+HUMIDITY the humidity in {Location} at {Time} on {Date}
+HUMIDITY the humidity in {Location} on {Date}
+HUMIDITY the humidity in {Location} on {Date} at {Time}
 HUMIDITY the humidity is like at {Time} in {Location}
-HUMIDITY the humidity is like on {Date} at {Time}
-HUMIDITY the humidity is like on {Date} at {Time} in {Location}
-HUMIDITY the humidity is like at {Time} on {Date}
 HUMIDITY the humidity is like at {Time} on {Date} in {Location}
-HUMIDITY the humidity will be like on {Date}
-HUMIDITY the humidity will be like on {Date} in {Location}
-HUMIDITY the humidity will be like at {Time}
-HUMIDITY the humidity will be like at {Time} in {Location}
-HUMIDITY the humidity will be like on {Date} at {Time}
-HUMIDITY the humidity will be like on {Date} at {Time} in {Location}
-HUMIDITY the humidity will be like at {Time} on {Date}
-HUMIDITY the humidity will be like at {Time} on {Date} in {Location}
-HUMIDITY the humidity was like on {Date}
-HUMIDITY the humidity was like on {Date} in {Location}
-HUMIDITY the humidity was like at {Time}
+HUMIDITY the humidity is like in {Location} at {Time}
+HUMIDITY the humidity is like in {Location} at {Time} on {Date}
+HUMIDITY the humidity is like in {Location} on {Date}
+HUMIDITY the humidity is like in {Location} on {Date} at {Time}
+HUMIDITY the humidity is like on {Date} at {Time} in {Location} 
+HUMIDITY the humidity is like on {Date} in {Location} 
+HUMIDITY the humidity on {Date} at {Time} in {Location} 
+HUMIDITY the humidity on {Date} in {Location} 
 HUMIDITY the humidity was like at {Time} in {Location}
-HUMIDITY the humidity was like on {Date} at {Time}
-HUMIDITY the humidity was like on {Date} at {Time} in {Location}
-HUMIDITY the humidity was like at {Time} on {Date}
 HUMIDITY the humidity was like at {Time} on {Date} in {Location}
-
-DEWPOINT the dew point
-DEWPOINT the dew point in {Location}
-DEWPOINT the dew point on {Date}
-DEWPOINT the dew point on {Date} in {Location}
-DEWPOINT the dew point at {Time}
+HUMIDITY the humidity was like in {Location} at {Time}
+HUMIDITY the humidity was like in {Location} at {Time} on {Date}
+HUMIDITY the humidity was like in {Location} on {Date}
+HUMIDITY the humidity was like in {Location} on {Date} at {Time}
+HUMIDITY the humidity was like on {Date} at {Time} in {Location} 
+HUMIDITY the humidity was like on {Date} in {Location} 
+HUMIDITY the humidity will be like at {Time} in {Location}
+HUMIDITY the humidity will be like at {Time} on {Date} in {Location}
+HUMIDITY the humidity will be like in {Location} at {Time}
+HUMIDITY the humidity will be like in {Location} at {Time} on {Date}
+HUMIDITY the humidity will be like in {Location} on {Date}
+HUMIDITY the humidity will be like in {Location} on {Date} at {Time}
+HUMIDITY the humidity will be like on {Date} at {Time} in {Location} 
+HUMIDITY the humidity will be like on {Date} in {Location} 
 DEWPOINT the dew point at {Time} in {Location}
-DEWPOINT the dew point on {Date} at {Time}
-DEWPOINT the dew point on {Date} at {Time} in {Location}
-DEWPOINT the dew point at {Time} on {Date}
 DEWPOINT the dew point at {Time} on {Date} in {Location}
-DEWPOINT the dew point on {Date}
-DEWPOINT the dew point on {Date} in {Location}
-DEWPOINT the dew point at {Time}
-DEWPOINT the dew point at {Time} in {Location}
-DEWPOINT the dew point on {Date} at {Time}
-DEWPOINT the dew point on {Date} at {Time} in {Location}
-DEWPOINT the dew point at {Time} on {Date}
-DEWPOINT the dew point at {Time} on {Date} in {Location}
-DEWPOINT the dew point is like on {Date}
-DEWPOINT the dew point is like on {Date} in {Location}
-DEWPOINT the dew point is like at {Time}
+DEWPOINT the dew point in {Location} at {Time}
+DEWPOINT the dew point in {Location} at {Time} on {Date}
+DEWPOINT the dew point in {Location} on {Date}
+DEWPOINT the dew point in {Location} on {Date} at {Time}
 DEWPOINT the dew point is like at {Time} in {Location}
-DEWPOINT the dew point is like on {Date} at {Time}
-DEWPOINT the dew point is like on {Date} at {Time} in {Location}
-DEWPOINT the dew point is like at {Time} on {Date}
 DEWPOINT the dew point is like at {Time} on {Date} in {Location}
-DEWPOINT the dew point will be like on {Date}
-DEWPOINT the dew point will be like on {Date} in {Location}
-DEWPOINT the dew point will be like at {Time}
-DEWPOINT the dew point will be like at {Time} in {Location}
-DEWPOINT the dew point will be like on {Date} at {Time}
-DEWPOINT the dew point will be like on {Date} at {Time} in {Location}
-DEWPOINT the dew point will be like at {Time} on {Date}
-DEWPOINT the dew point will be like at {Time} on {Date} in {Location}
-DEWPOINT the dew point was like on {Date}
-DEWPOINT the dew point was like on {Date} in {Location}
-DEWPOINT the dew point was like at {Time}
+DEWPOINT the dew point is like in {Location} at {Time}
+DEWPOINT the dew point is like in {Location} at {Time} on {Date}
+DEWPOINT the dew point is like in {Location} on {Date}
+DEWPOINT the dew point is like in {Location} on {Date} at {Time}
+DEWPOINT the dew point is like on {Date} at {Time} in {Location} 
+DEWPOINT the dew point is like on {Date} in {Location} 
+DEWPOINT the dew point on {Date} at {Time} in {Location} 
+DEWPOINT the dew point on {Date} in {Location} 
 DEWPOINT the dew point was like at {Time} in {Location}
-DEWPOINT the dew point was like on {Date} at {Time}
-DEWPOINT the dew point was like on {Date} at {Time} in {Location}
-DEWPOINT the dew point was like at {Time} on {Date}
 DEWPOINT the dew point was like at {Time} on {Date} in {Location}
-
-UVINDEX the UV index
-UVINDEX the UV index in {Location}
-UVINDEX the UV index on {Date}
-UVINDEX the UV index on {Date} in {Location}
-UVINDEX the UV index at {Time}
+DEWPOINT the dew point was like in {Location} at {Time}
+DEWPOINT the dew point was like in {Location} at {Time} on {Date}
+DEWPOINT the dew point was like in {Location} on {Date}
+DEWPOINT the dew point was like in {Location} on {Date} at {Time}
+DEWPOINT the dew point was like on {Date} at {Time} in {Location} 
+DEWPOINT the dew point was like on {Date} in {Location} 
+DEWPOINT the dew point will be like at {Time} in {Location}
+DEWPOINT the dew point will be like at {Time} on {Date} in {Location}
+DEWPOINT the dew point will be like in {Location} at {Time}
+DEWPOINT the dew point will be like in {Location} at {Time} on {Date}
+DEWPOINT the dew point will be like in {Location} on {Date}
+DEWPOINT the dew point will be like in {Location} on {Date} at {Time}
+DEWPOINT the dew point will be like on {Date} at {Time} in {Location} 
+DEWPOINT the dew point will be like on {Date} in {Location} 
 UVINDEX the UV index at {Time} in {Location}
-UVINDEX the UV index on {Date} at {Time}
-UVINDEX the UV index on {Date} at {Time} in {Location}
-UVINDEX the UV index at {Time} on {Date}
 UVINDEX the UV index at {Time} on {Date} in {Location}
-UVINDEX the UV index on {Date}
-UVINDEX the UV index on {Date} in {Location}
-UVINDEX the UV index at {Time}
-UVINDEX the UV index at {Time} in {Location}
-UVINDEX the UV index on {Date} at {Time}
-UVINDEX the UV index on {Date} at {Time} in {Location}
-UVINDEX the UV index at {Time} on {Date}
-UVINDEX the UV index at {Time} on {Date} in {Location}
-UVINDEX the UV index is like on {Date}
-UVINDEX the UV index is like on {Date} in {Location}
-UVINDEX the UV index is like at {Time}
+UVINDEX the UV index in {Location} at {Time}
+UVINDEX the UV index in {Location} at {Time} on {Date}
+UVINDEX the UV index in {Location} on {Date}
+UVINDEX the UV index in {Location} on {Date} at {Time}
 UVINDEX the UV index is like at {Time} in {Location}
-UVINDEX the UV index is like on {Date} at {Time}
-UVINDEX the UV index is like on {Date} at {Time} in {Location}
-UVINDEX the UV index is like at {Time} on {Date}
 UVINDEX the UV index is like at {Time} on {Date} in {Location}
-UVINDEX the UV index will be like on {Date}
-UVINDEX the UV index will be like on {Date} in {Location}
-UVINDEX the UV index will be like at {Time}
-UVINDEX the UV index will be like at {Time} in {Location}
-UVINDEX the UV index will be like on {Date} at {Time}
-UVINDEX the UV index will be like on {Date} at {Time} in {Location}
-UVINDEX the UV index will be like at {Time} on {Date}
-UVINDEX the UV index will be like at {Time} on {Date} in {Location}
-UVINDEX the UV index was like on {Date}
-UVINDEX the UV index was like on {Date} in {Location}
-UVINDEX the UV index was like at {Time}
+UVINDEX the UV index is like in {Location} at {Time}
+UVINDEX the UV index is like in {Location} at {Time} on {Date}
+UVINDEX the UV index is like in {Location} on {Date}
+UVINDEX the UV index is like in {Location} on {Date} at {Time}
+UVINDEX the UV index is like on {Date} at {Time} in {Location} 
+UVINDEX the UV index is like on {Date} in {Location} 
+UVINDEX the UV index on {Date} at {Time} in {Location} 
+UVINDEX the UV index on {Date} in {Location} 
 UVINDEX the UV index was like at {Time} in {Location}
-UVINDEX the UV index was like on {Date} at {Time}
-UVINDEX the UV index was like on {Date} at {Time} in {Location}
-UVINDEX the UV index was like at {Time} on {Date}
 UVINDEX the UV index was like at {Time} on {Date} in {Location}
-
-VISIBILITY the visibility
-VISIBILITY the visibility in {Location}
-VISIBILITY the visibility on {Date}
-VISIBILITY the visibility on {Date} in {Location}
-VISIBILITY the visibility at {Time}
+UVINDEX the UV index was like in {Location} at {Time}
+UVINDEX the UV index was like in {Location} at {Time} on {Date}
+UVINDEX the UV index was like in {Location} on {Date}
+UVINDEX the UV index was like in {Location} on {Date} at {Time}
+UVINDEX the UV index was like on {Date} at {Time} in {Location} 
+UVINDEX the UV index was like on {Date} in {Location} 
+UVINDEX the UV index will be like at {Time} in {Location}
+UVINDEX the UV index will be like at {Time} on {Date} in {Location}
+UVINDEX the UV index will be like in {Location} at {Time}
+UVINDEX the UV index will be like in {Location} at {Time} on {Date}
+UVINDEX the UV index will be like in {Location} on {Date}
+UVINDEX the UV index will be like in {Location} on {Date} at {Time}
+UVINDEX the UV index will be like on {Date} at {Time} in {Location} 
+UVINDEX the UV index will be like on {Date} in {Location} 
 VISIBILITY the visibility at {Time} in {Location}
-VISIBILITY the visibility on {Date} at {Time}
-VISIBILITY the visibility on {Date} at {Time} in {Location}
-VISIBILITY the visibility at {Time} on {Date}
 VISIBILITY the visibility at {Time} on {Date} in {Location}
-VISIBILITY the visibility on {Date}
-VISIBILITY the visibility on {Date} in {Location}
-VISIBILITY the visibility at {Time}
-VISIBILITY the visibility at {Time} in {Location}
-VISIBILITY the visibility on {Date} at {Time}
-VISIBILITY the visibility on {Date} at {Time} in {Location}
-VISIBILITY the visibility at {Time} on {Date}
-VISIBILITY the visibility at {Time} on {Date} in {Location}
-VISIBILITY the visibility is like on {Date}
-VISIBILITY the visibility is like on {Date} in {Location}
-VISIBILITY the visibility is like at {Time}
+VISIBILITY the visibility in {Location} at {Time}
+VISIBILITY the visibility in {Location} at {Time} on {Date}
+VISIBILITY the visibility in {Location} on {Date}
+VISIBILITY the visibility in {Location} on {Date} at {Time}
 VISIBILITY the visibility is like at {Time} in {Location}
-VISIBILITY the visibility is like on {Date} at {Time}
-VISIBILITY the visibility is like on {Date} at {Time} in {Location}
-VISIBILITY the visibility is like at {Time} on {Date}
 VISIBILITY the visibility is like at {Time} on {Date} in {Location}
-VISIBILITY the visibility will be like on {Date}
-VISIBILITY the visibility will be like on {Date} in {Location}
-VISIBILITY the visibility will be like at {Time}
-VISIBILITY the visibility will be like at {Time} in {Location}
-VISIBILITY the visibility will be like on {Date} at {Time}
-VISIBILITY the visibility will be like on {Date} at {Time} in {Location}
-VISIBILITY the visibility will be like at {Time} on {Date}
-VISIBILITY the visibility will be like at {Time} on {Date} in {Location}
-VISIBILITY the visibility was like on {Date}
-VISIBILITY the visibility was like on {Date} in {Location}
-VISIBILITY the visibility was like at {Time}
+VISIBILITY the visibility is like in {Location} at {Time}
+VISIBILITY the visibility is like in {Location} at {Time} on {Date}
+VISIBILITY the visibility is like in {Location} on {Date}
+VISIBILITY the visibility is like in {Location} on {Date} at {Time}
+VISIBILITY the visibility is like on {Date} at {Time} in {Location} 
+VISIBILITY the visibility is like on {Date} in {Location} 
+VISIBILITY the visibility on {Date} at {Time} in {Location} 
+VISIBILITY the visibility on {Date} in {Location} 
 VISIBILITY the visibility was like at {Time} in {Location}
-VISIBILITY the visibility was like on {Date} at {Time}
-VISIBILITY the visibility was like on {Date} at {Time} in {Location}
-VISIBILITY the visibility was like at {Time} on {Date}
 VISIBILITY the visibility was like at {Time} on {Date} in {Location}
-
-ALERTS the weather alerts
-ALERTS the weather alerts in {Location}
-ALERTS the weather alerts on {Date}
-ALERTS the weather alerts on {Date} in {Location}
-ALERTS the weather alerts at {Time}
+VISIBILITY the visibility was like in {Location} at {Time}
+VISIBILITY the visibility was like in {Location} at {Time} on {Date}
+VISIBILITY the visibility was like in {Location} on {Date}
+VISIBILITY the visibility was like in {Location} on {Date} at {Time}
+VISIBILITY the visibility was like on {Date} at {Time} in {Location} 
+VISIBILITY the visibility was like on {Date} in {Location} 
+VISIBILITY the visibility will be like at {Time} in {Location}
+VISIBILITY the visibility will be like at {Time} on {Date} in {Location}
+VISIBILITY the visibility will be like in {Location} at {Time}
+VISIBILITY the visibility will be like in {Location} at {Time} on {Date}
+VISIBILITY the visibility will be like in {Location} on {Date}
+VISIBILITY the visibility will be like in {Location} on {Date} at {Time}
+VISIBILITY the visibility will be like on {Date} at {Time} in {Location} 
+VISIBILITY the visibility will be like on {Date} in {Location} 
 ALERTS the weather alerts at {Time} in {Location}
-ALERTS the weather alerts on {Date} at {Time}
-ALERTS the weather alerts on {Date} at {Time} in {Location}
-ALERTS the weather alerts at {Time} on {Date}
 ALERTS the weather alerts at {Time} on {Date} in {Location}
-ALERTS the weather alerts on {Date}
-ALERTS the weather alerts on {Date} in {Location}
-ALERTS the weather alerts at {Time}
-ALERTS the weather alerts at {Time} in {Location}
-ALERTS the weather alerts on {Date} at {Time}
-ALERTS the weather alerts on {Date} at {Time} in {Location}
-ALERTS the weather alerts at {Time} on {Date}
-ALERTS the weather alerts at {Time} on {Date} in {Location}
-ALERTS the weather alerts is like on {Date}
-ALERTS the weather alerts is like on {Date} in {Location}
-ALERTS the weather alerts is like at {Time}
+ALERTS the weather alerts in {Location} at {Time}
+ALERTS the weather alerts in {Location} at {Time} on {Date}
+ALERTS the weather alerts in {Location} on {Date}
+ALERTS the weather alerts in {Location} on {Date} at {Time}
 ALERTS the weather alerts is like at {Time} in {Location}
-ALERTS the weather alerts is like on {Date} at {Time}
-ALERTS the weather alerts is like on {Date} at {Time} in {Location}
-ALERTS the weather alerts is like at {Time} on {Date}
 ALERTS the weather alerts is like at {Time} on {Date} in {Location}
-ALERTS the weather alerts will be like on {Date}
-ALERTS the weather alerts will be like on {Date} in {Location}
-ALERTS the weather alerts will be like at {Time}
-ALERTS the weather alerts will be like at {Time} in {Location}
-ALERTS the weather alerts will be like on {Date} at {Time}
-ALERTS the weather alerts will be like on {Date} at {Time} in {Location}
-ALERTS the weather alerts will be like at {Time} on {Date}
-ALERTS the weather alerts will be like at {Time} on {Date} in {Location}
-ALERTS the weather alerts was like on {Date}
-ALERTS the weather alerts was like on {Date} in {Location}
-ALERTS the weather alerts was like at {Time}
+ALERTS the weather alerts is like in {Location} at {Time}
+ALERTS the weather alerts is like in {Location} at {Time} on {Date}
+ALERTS the weather alerts is like in {Location} on {Date}
+ALERTS the weather alerts is like in {Location} on {Date} at {Time}
+ALERTS the weather alerts is like on {Date} at {Time} in {Location} 
+ALERTS the weather alerts is like on {Date} in {Location} 
+ALERTS the weather alerts on {Date} at {Time} in {Location} 
+ALERTS the weather alerts on {Date} in {Location} 
 ALERTS the weather alerts was like at {Time} in {Location}
-ALERTS the weather alerts was like on {Date} at {Time}
-ALERTS the weather alerts was like on {Date} at {Time} in {Location}
-ALERTS the weather alerts was like at {Time} on {Date}
 ALERTS the weather alerts was like at {Time} on {Date} in {Location}
+ALERTS the weather alerts was like in {Location} at {Time}
+ALERTS the weather alerts was like in {Location} at {Time} on {Date}
+ALERTS the weather alerts was like in {Location} on {Date}
+ALERTS the weather alerts was like in {Location} on {Date} at {Time}
+ALERTS the weather alerts was like on {Date} at {Time} in {Location} 
+ALERTS the weather alerts was like on {Date} in {Location} 
+ALERTS the weather alerts will be like at {Time} in {Location}
+ALERTS the weather alerts will be like at {Time} on {Date} in {Location}
+ALERTS the weather alerts will be like in {Location} at {Time}
+ALERTS the weather alerts will be like in {Location} at {Time} on {Date}
+ALERTS the weather alerts will be like in {Location} on {Date}
+ALERTS the weather alerts will be like in {Location} on {Date} at {Time}
+ALERTS the weather alerts will be like on {Date} at {Time} in {Location} 
+ALERTS the weather alerts will be like on {Date} in {Location} 
