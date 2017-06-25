@@ -1,7 +1,21 @@
 {
   "intents": [
     {
-      "intent": "FORECASTNOW"
+      "intent": "FORECASTNOW",
+      "slots": [
+        {
+          "name": "Date",
+          "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
+        }
+      ]
     },
     {
       "intent": "FORECASTTIME",
@@ -13,6 +27,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -22,6 +40,14 @@
         {
           "name": "Date",
           "type": "AMAZON.Date"
+        },
+        {
+          "name": "Time",
+          "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -35,6 +61,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -48,6 +78,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -61,6 +95,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -74,6 +112,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -87,6 +129,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -100,6 +146,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -113,6 +163,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -126,6 +180,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },
@@ -139,6 +197,10 @@
         {
           "name": "Time",
           "type": "AMAZON.Time"
+        },
+        {
+          "name": "Location",
+          "type": "AMAZON.US_CITY"
         }
       ]
     },

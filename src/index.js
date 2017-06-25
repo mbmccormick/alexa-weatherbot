@@ -33,7 +33,7 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
@@ -42,7 +42,7 @@ var defaultHandler = {
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now, it's " + temperature + " degrees and " + minutely_summary + ". Today, the forecast is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + minutely_summary + ". Today, the forecast is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                 });
             });
         });
@@ -53,13 +53,13 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.minutely.summary;
 
-                    _alexa.emit(":tell", "Right now, it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
                 });
             });
         });
@@ -70,20 +70,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var summary = data.minutely.summary;
+                    var summary = data.currently.summary;
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " is " + temperature + " degrees and " + summary + ".");
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + temperature + " degrees and " + summary + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", "The weather on " + calendarTime + " was " + temperature + " degrees and " + summary + ".");
+                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + temperature + " degrees and " + summary + ".");
                     }
                 });
             });
@@ -95,7 +95,7 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var summary = data.hourly.summary;
@@ -103,13 +103,13 @@ var defaultHandler = {
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " is " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", "The weather on " + calendarTime + " was " + summary + " with a high of " + high + " degrees and a low of " + low + "degrees.");
+                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                 });
             });
@@ -121,7 +121,7 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var summary = data.daily.summary;
@@ -130,7 +130,7 @@ var defaultHandler = {
                     summary = summary.replace("°C", " degrees");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", summary + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "In " + location + ", " + summary + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.emit(":tell", "Sorry, weekly forecasts are not available for past dates or times.");
@@ -148,19 +148,19 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + ", the forecasted temperature is " + temperature + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted temperature is " + temperature + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", the temperature was " + temperature + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the temperature was " + temperature + " degrees.");
                     }
                 });
             });
@@ -172,20 +172,20 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var probability = Math.round(data.currently.precipProbability * 100);
                     var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + ", there's a " + probability + "% chance of " + type + ".");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + probability + "% chance of " + type + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", there was a " + probability + "% chance of " + type + ".");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", there was a " + probability + "% chance of " + type + ".");
                     }
                 });
             });
@@ -197,7 +197,7 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var speed = Math.round(data.currently.windSpeed);
@@ -205,26 +205,26 @@ var defaultHandler = {
 
                     if (difference == 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + ", there's a " + speed + " mph wind out of the " + direction + "." + getWeatherAlerts(data));
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + speed + " mph wind out of the " + direction + "." + getWeatherAlerts(data));
                         }
                         else {
-                            _alexa.emit(":tell", calendarTime + ", there's no wind." + getWeatherAlerts(data));
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's no wind." + getWeatherAlerts(data));
                         }
                     }
                     else if (difference > 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + ", there's a forecasted " + speed + " mph wind out of the " + direction + ".");
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a forecasted " + speed + " mph wind out of the " + direction + ".");
                         }
                         else {
-                            _alexa.emit(":tell", calendarTime + ", there's no wind forecasted.");
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's no wind forecasted.");
                         }
                     }
                     else if (difference < 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + ", there was a " + speed + " mph wind out of the " + direction + ".");
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there was a " + speed + " mph wind out of the " + direction + ".");
                         }
                         else {
-                            _alexa.emit(":tell", calendarTime + ", there was no wind.");
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there was no wind.");
                         }
                     }
                 });
@@ -237,19 +237,19 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var humidity = Math.round(data.currently.humidity * 100);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the humidity is " + humidity + "%." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + ", the forecasted humidity is " + humidity + "%.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted humidity is " + humidity + "%.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", the humidity was " + humidity + "%.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the humidity was " + humidity + "%.");
                     }
                 });
             });
@@ -261,19 +261,19 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var dewPoint = Math.round(data.currently.dewPoint);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", the dew point is " + dewPoint + " degrees." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the dew point is " + dewPoint + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + ", the forecasted dew point is " + dewPoint + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted dew point is " + dewPoint + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", the dew point was " + dewPoint + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the dew point was " + dewPoint + " degrees.");
                     }
                 });
             });
@@ -285,19 +285,19 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var uvIndex = data.currently.uvIndex;
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", the UV index is " + uvIndex + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the UV index is " + uvIndex + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + ", the forecasted UV index is " + uvIndex + ".");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted UV index is " + uvIndex + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", the UV index was " + uvIndex + ".");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the UV index was " + uvIndex + ".");
                     }
                 });
             });
@@ -309,19 +309,19 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var visibility = Math.round(data.currently.visibility);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + ", the visibility is " + visibility + " mi." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility is " + visibility + " mi." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + ", the forecasted visibility is " + visibility + " mi.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted visibility is " + visibility + " mi.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", the visibility was " + visibility + " mi.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility was " + visibility + " mi.");
                     }
                 });
             });
@@ -333,22 +333,25 @@ var defaultHandler = {
 
         var _alexa = this;
 
-        getRequestedLocation(_alexa, function (latitude, longitude, timezone) {
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var response = "";
-                    
+
                     if (data.alerts != null) {
                         for (var i = 0; i < data.alerts.length; i++) {
                             var alert = data.alerts[i];
 
+                            var title = alert.title;
+                            var description = alert.description.replace("\n", " ").replace("\\n", " ");
+
                             if (alert.expires) {
                                 var expires = Moment.unix(alert.expires).tz(timezone);
 
-                                response += " A " + alert.title + " is in effect for your area until " + expires.calendar() + ". " + alert.description.replace("\\n", " ");
+                                response += " A " + title + " is in effect for your area until " + expires.calendar() + ". " + description;
                             }
                             else {
-                                response += " A " + alert.title + " is in effect for your area. " + alert.description.replace("\\n", " ");
+                                response += " A " + title + " is in effect for your area. " + description;
                             }
                         }
                     }
@@ -384,27 +387,53 @@ var defaultHandler = {
 
 };
 
+function printDebugInformation(message) {
+    if (process.env.DEBUG) {
+        console.log(message);
+    }
+}
+
 function getRequestedLocation(_alexa, callback) {
-    getDeviceAddress(_alexa, function (address) {
-        getGeocodeResult(_alexa, address, function (latitude, longitude, timezone) {
-            callback(latitude, longitude, timezone);
+    if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots.Location.value) {
+        var input = _alexa.event.request.intent.slots.Location.value;
+
+        getGeocodeResult(_alexa, input, function (latitude, longitude, location, timezone) {
+            callback(latitude, longitude, location, timezone);
         });
-    });
+    }
+    else {
+        getDeviceAddress(_alexa, function (address) {
+            if (_alexa.attributes["LATITUDE"] &&
+                _alexa.attributes["LONGITUDE"] &&
+                _alexa.attributes["LOCATION"] &&
+                _alexa.attributes["TIMEZONE"]) {
+                callback(_alexa.attributes["LATITUDE"], _alexa.attributes["LONGITUDE"], _alexa.attributes["LOCATION"], _alexa.attributes["TIMEZONE"]);
+            }
+            else {
+                getGeocodeResult(_alexa, address, function (latitude, longitude, location, timezone) {
+                    callback(latitude, longitude, location, timezone);
+                });
+            }
+        });
+    }
 }
 
 function getRequestedDateTime(_alexa, timezone, callback) {
     var now = Moment().tz(timezone);
-    var dateTime = now;
+    var dateTime = null;
 
-    if (_alexa.event.request.intent.slots.Date) {
+    if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots.Date.value) {
         var input = _alexa.event.request.intent.slots.Date.value;
 
         var parse = Moment.tz(input, timezone);
 
-        dateTime.year(parse.year()).month(parse.month()).date(parse.date());
+        dateTime = parse;
     }
 
-    if (_alexa.event.request.intent.slots.Time) {
+    if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots.Time.value) {
         var input = _alexa.event.request.intent.slots.Time.value;
 
         var parse = Moment.tz(input, "h:mm", timezone);
@@ -413,55 +442,43 @@ function getRequestedDateTime(_alexa, timezone, callback) {
             parse.add(1, "days");
         }
 
-        dateTime.hour(parse.hour()).minute(parse.minute());
+        if (dateTime) {
+            dateTime.hour(parse.hour()).minute(parse.minute());
+        }
+        else {
+            dateTime = parse;
+        }
     }
 
-    var timestamp = dateTime.unix();
-
-    var difference = now.diff(dateTime, "hours");
+    if (dateTime == null) {
+        dateTime = now;
+    }
 
     var calendarOptions = null;
 
-    if (_alexa.event.request.intent.slots.Time === undefined) {
+    if (_alexa.event.request.intent === undefined ||
+        _alexa.event.request.intent.slots.Time.value === undefined) {
         calendarOptions = {
             sameDay: "[today]",
             nextDay: "[tomorrow]",
             nextWeek: "dddd",
             lastDay: "[yesterday]",
             lastWeek: "[last] dddd",
-            sameElse: "[on] MM/DD/YYYY"
+            sameElse: "MM/DD/YYYY"
         };
     }
-    
+
     var calendarTime = dateTime.calendar(null, calendarOptions);
+
+    var difference = dateTime.diff(now, "hours");
+
     if (difference == 0) {
         calendarTime = "right now";
     }
 
+    var timestamp = dateTime.unix();
+
     callback(timestamp, difference, calendarTime);
-}
-
-function getWeatherAlerts(data) {
-    if (data.alerts != null) {
-        var response = "";
-
-        for (var i = 0; i < data.alerts.length; i++) {
-            var alert = data.alerts[i];
-
-            response += " A " + alert.title + " is in effect for your area.";
-        }
-
-        return response + " If you'd like to know more, just ask me for your weather alerts.";
-    }
-    else {
-        return " There are no weather alerts in effect for your area at this time.";
-    }
-}
-
-function printDebugInformation(message) {
-    if (process.env.DEBUG) {
-        console.log(message);
-    }
 }
 
 function getDeviceAddress(_alexa, callback) {
@@ -501,21 +518,22 @@ function getDeviceAddress(_alexa, callback) {
             case 200:
                 // successfully got the address associated with this deviceId
                 var address = "";
-                if (addressResponse.address['addressLine1'] &&
-                    addressResponse.address['stateOrRegion']) {
-                    address = addressResponse.address['addressLine1'] + ", " + addressResponse.address['stateOrRegion'] + " " + addressResponse.address['postalCode'];
+                if (addressResponse.address["addressLine1"] &&
+                    addressResponse.address["stateOrRegion"]) {
+                    address = addressResponse.address["addressLine1"] + ", " + addressResponse.address["stateOrRegion"] + " " + addressResponse.address["postalCode"];
                 }
                 else {
-                    address = addressResponse.address['postalCode'];
+                    address = addressResponse.address["postalCode"];
                 }
 
-                if (_alexa.attributes['ADDRESS'] != address) {
-                    _alexa.attributes['LATITUDE'] = null;
-                    _alexa.attributes['LONGITUDE'] = null;
-                    _alexa.attributes['OFFSET'] = null;
+                if (_alexa.attributes["ADDRESS"] != address) {
+                    _alexa.attributes["LATITUDE"] = null;
+                    _alexa.attributes["LONGITUDE"] = null;
+                    _alexa.attributes["LOCATION"] = null;
+                    _alexa.attributes["TIMEZONE"] = null;
                 }
 
-                _alexa.attributes['ADDRESS'] = address;
+                _alexa.attributes["ADDRESS"] = address;
 
                 callback(address);
 
@@ -547,41 +565,46 @@ function getDeviceAddress(_alexa, callback) {
 }
 
 function getGeocodeResult(_alexa, address, callback) {
-    if (_alexa.attributes['LATITUDE'] &&
-        _alexa.attributes['LONGITUDE'] &&
-        _alexa.attributes['TIMEZONE']) {
-        callback(_alexa.attributes['LATITUDE'], _alexa.attributes['LONGITUDE'], _alexa.attributes['TIMEZONE']);
-    }
-    else {
-        var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address);
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address);
 
-        Request.get({
-            uri: url,
-            gzip: true
-        }, function (err, response, body) {
-            printDebugInformation(url);
+    Request.get({
+        uri: url,
+        gzip: true
+    }, function (err, response, body) {
+        printDebugInformation(url);
 
-            if (err) {
-                printDebugInformation("ERROR: getGeocodeResult()");
-                printDebugInformation(err);
+        if (err) {
+            printDebugInformation("ERROR: getGeocodeResult()");
+            printDebugInformation(err);
 
-                _alexa.emit(":tell", "There was a problem locating your address. Please try again later.");
-            }
+            _alexa.emit(":tell", "There was a problem locating your address. Please try again later.");
+        }
 
-            var data = JSON.parse(body);
+        var data = JSON.parse(body);
 
-            var latitude = data.results[0].geometry.location.lat;
-            var longitude = data.results[0].geometry.location.lng;
+        var latitude = data.results[0].geometry.location.lat;
+        var longitude = data.results[0].geometry.location.lng;
+        var location = "that location";
 
-            getTimezoneResult(_alexa, latitude, longitude, function (timezone) {
-                _alexa.attributes['LATITUDE'] = latitude;
-                _alexa.attributes['LONGITUDE'] = longitude;
-                _alexa.attributes['TIMEZONE'] = timezone;
+        var locality = data.results[0].address_components.find(z => z.types.find(y => y == "locality"));
+        var neighborhood = data.results[0].address_components.find(z => z.types.find(y => y == "neighborhood"));
 
-                callback(latitude, longitude, timezone);
-            });
+        if (locality) {
+            location = locality.long_name;
+        }
+        else if (neighborhood) {
+            location = neighborhood.long_name;
+        }
+
+        getTimezoneResult(_alexa, latitude, longitude, function (timezone) {
+            _alexa.attributes["LATITUDE"] = latitude;
+            _alexa.attributes["LONGITUDE"] = longitude;
+            _alexa.attributes["LOCATION"] = location;
+            _alexa.attributes["TIMEZONE"] = timezone;
+
+            callback(latitude, longitude, location, timezone);
         });
-    }
+    });
 }
 
 function getTimezoneResult(_alexa, latitude, longitude, callback) {
@@ -628,4 +651,23 @@ function getForecast(_alexa, latitude, longitude, timestamp, callback) {
 
         callback(data);
     });
+}
+
+function getWeatherAlerts(data) {
+    if (data.alerts != null) {
+        var response = "";
+
+        for (var i = 0; i < data.alerts.length; i++) {
+            var alert = data.alerts[i];
+
+            var title = alert.title;
+
+            response += " A " + title + " is in effect for your area.";
+        }
+
+        return response + " If you'd like to know more, just ask me for your weather alerts.";
+    }
+    else {
+        return "";
+    }
 }
