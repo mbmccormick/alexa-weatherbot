@@ -376,7 +376,7 @@ var defaultHandler = {
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
-        this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, the forecast for a specific time, the forecast on a specific day, temperature, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts.");
+        this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
     },
 
     "Unhandled": function () {
