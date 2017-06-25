@@ -398,7 +398,7 @@ function getRequestedLocation(_alexa, callback) {
         _alexa.event.request.intent.slots.Location.value) {
         var input = _alexa.event.request.intent.slots.Location.value;
 
-        getGeocodeResult(_alexa, input, function (latitude, longitude, location, timezone) {
+        getGeocodeResult(_alexa, input, false, function (latitude, longitude, location, timezone) {
             callback(latitude, longitude, location, timezone);
         });
     }
@@ -411,7 +411,7 @@ function getRequestedLocation(_alexa, callback) {
                 callback(_alexa.attributes["LATITUDE"], _alexa.attributes["LONGITUDE"], _alexa.attributes["LOCATION"], _alexa.attributes["TIMEZONE"]);
             }
             else {
-                getGeocodeResult(_alexa, address, function (latitude, longitude, location, timezone) {
+                getGeocodeResult(_alexa, address, true, function (latitude, longitude, location, timezone) {
                     callback(latitude, longitude, location, timezone);
                 });
             }
@@ -564,7 +564,7 @@ function getDeviceAddress(_alexa, callback) {
     });
 }
 
-function getGeocodeResult(_alexa, address, callback) {
+function getGeocodeResult(_alexa, address, cache, callback) {
     var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address);
 
     Request.get({
@@ -597,10 +597,12 @@ function getGeocodeResult(_alexa, address, callback) {
         }
 
         getTimezoneResult(_alexa, latitude, longitude, function (timezone) {
-            _alexa.attributes["LATITUDE"] = latitude;
-            _alexa.attributes["LONGITUDE"] = longitude;
-            _alexa.attributes["LOCATION"] = location;
-            _alexa.attributes["TIMEZONE"] = timezone;
+            if (cache) {
+                _alexa.attributes["LATITUDE"] = latitude;
+                _alexa.attributes["LONGITUDE"] = longitude;
+                _alexa.attributes["LOCATION"] = location;
+                _alexa.attributes["TIMEZONE"] = timezone;
+            }
 
             callback(latitude, longitude, location, timezone);
         });
