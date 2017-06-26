@@ -77,6 +77,7 @@ TEMPERATURE the temperature at {Time}
 TEMPERATURE the temperature at {Time} in {Location}
 TEMPERATURE the temperature at {Time} on {Date}
 TEMPERATURE the temperature at {Time} on {Date} in {Location}
+TEMPERATURE the temperature in {Location}
 TEMPERATURE the temperature in {Location} at {Time}
 TEMPERATURE the temperature in {Location} at {Time} on {Date}
 TEMPERATURE the temperature in {Location} on {Date}
@@ -126,6 +127,7 @@ PRECIPITATION the precipitation at {Time}
 PRECIPITATION the precipitation at {Time} in {Location}
 PRECIPITATION the precipitation at {Time} on {Date}
 PRECIPITATION the precipitation at {Time} on {Date} in {Location}
+PRECIPITATION the precipitation in {Location}
 PRECIPITATION the precipitation in {Location} at {Time}
 PRECIPITATION the precipitation in {Location} at {Time} on {Date}
 PRECIPITATION the precipitation in {Location} on {Date}
@@ -175,6 +177,7 @@ WIND the wind at {Time}
 WIND the wind at {Time} in {Location}
 WIND the wind at {Time} on {Date}
 WIND the wind at {Time} on {Date} in {Location}
+WIND the wind in {Location}
 WIND the wind in {Location} at {Time}
 WIND the wind in {Location} at {Time} on {Date}
 WIND the wind in {Location} on {Date}
@@ -224,6 +227,7 @@ HUMIDITY the humidity at {Time}
 HUMIDITY the humidity at {Time} in {Location}
 HUMIDITY the humidity at {Time} on {Date}
 HUMIDITY the humidity at {Time} on {Date} in {Location}
+HUMIDITY the humidity in {Location}
 HUMIDITY the humidity in {Location} at {Time}
 HUMIDITY the humidity in {Location} at {Time} on {Date}
 HUMIDITY the humidity in {Location} on {Date}
@@ -273,6 +277,7 @@ DEWPOINT the dew point at {Time}
 DEWPOINT the dew point at {Time} in {Location}
 DEWPOINT the dew point at {Time} on {Date}
 DEWPOINT the dew point at {Time} on {Date} in {Location}
+DEWPOINT the dew point in {Location}
 DEWPOINT the dew point in {Location} at {Time}
 DEWPOINT the dew point in {Location} at {Time} on {Date}
 DEWPOINT the dew point in {Location} on {Date}
@@ -322,6 +327,7 @@ UVINDEX the UV index at {Time}
 UVINDEX the UV index at {Time} in {Location}
 UVINDEX the UV index at {Time} on {Date}
 UVINDEX the UV index at {Time} on {Date} in {Location}
+UVINDEX the UV index in {Location}
 UVINDEX the UV index in {Location} at {Time}
 UVINDEX the UV index in {Location} at {Time} on {Date}
 UVINDEX the UV index in {Location} on {Date}
