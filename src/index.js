@@ -397,6 +397,7 @@ function printDebugInformation(message) {
 
 function getRequestedLocation(_alexa, callback) {
     if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Location.value) {
         var input = _alexa.event.request.intent.slots.Location.value;
 
@@ -426,6 +427,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
     var dateTime = null;
 
     if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Date.value) {
         var input = _alexa.event.request.intent.slots.Date.value;
 
@@ -435,6 +437,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
     }
 
     if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Time.value) {
         var input = _alexa.event.request.intent.slots.Time.value;
 
@@ -459,6 +462,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
     var calendarOptions = null;
 
     if (_alexa.event.request.intent === undefined ||
+        _alexa.event.request.intent.slots === undefined ||
         _alexa.event.request.intent.slots.Time.value === undefined) {
         calendarOptions = {
             sameDay: "[today]",
