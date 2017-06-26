@@ -666,7 +666,7 @@ function getWeatherAlerts(data) {
 
             var title = alert.title;
 
-            response += " A " + title + " is in effect for your area.";
+            response += " A " + title + " is in effect for the area.";
         }
 
         return response + " If you'd like to know more, just ask me for your weather alerts.";
