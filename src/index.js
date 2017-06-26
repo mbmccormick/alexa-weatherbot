@@ -37,12 +37,12 @@ var defaultHandler = {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var minutely_summary = data.minutely.summary;
+                    var currently_summary = data.currently.summary;
                     var hourly_summary = data.hourly.summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + minutely_summary + ". Today, the forecast is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". Today, the forecast is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                 });
             });
         });
@@ -57,7 +57,7 @@ var defaultHandler = {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var summary = data.minutely.summary;
+                    var summary = data.currently.summary;
 
                     _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
                 });
