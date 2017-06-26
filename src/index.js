@@ -65,31 +65,6 @@ var defaultHandler = {
         });
     },
 
-    "FORECASTTIME": function () {
-        printDebugInformation("defaultHandler:FORECASTTIME");
-
-        var _alexa = this;
-
-        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
-            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var temperature = Math.round(data.currently.temperature);
-                    var summary = data.currently.summary;
-
-                    if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
-                    }
-                    else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + temperature + " degrees and " + summary + ".");
-                    }
-                    else if (difference < 0) {
-                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + temperature + " degrees and " + summary + ".");
-                    }
-                });
-            });
-        });
-    },
-
     "FORECASTDATE": function () {
         printDebugInformation("defaultHandler:FORECASTDATE");
 
@@ -110,6 +85,31 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                    }
+                });
+            });
+        });
+    },
+
+    "FORECASTDATETIME": function () {
+        printDebugInformation("defaultHandler:FORECASTDATETIME");
+
+        var _alexa = this;
+
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
+                    var summary = data.currently.summary;
+
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + temperature + " degrees and " + summary + ".");
                     }
                 });
             });

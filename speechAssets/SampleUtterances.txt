@@ -8,42 +8,6 @@ FORECASTNOW the weather
 FORECASTNOW the weather in {Location}
 FORECASTNOW what the weather is like
 FORECASTNOW what the weather is like in {Location}
-FORECASTTIME the forecast at {Time}
-FORECASTTIME the forecast at {Time} in {Location}
-FORECASTTIME the forecast at {Time} on {Date}
-FORECASTTIME the forecast at {Time} on {Date} in {Location}
-FORECASTTIME the forecast in {Location} at {Time}
-FORECASTTIME the forecast in {Location} at {Time} on {Date}
-FORECASTTIME the forecast in {Location} on {Date} at {Time}
-FORECASTTIME the forecast on {Date} at {Time}
-FORECASTTIME the forecast on {Date} at {Time} in {Location}
-FORECASTTIME the weather is like at {Time}
-FORECASTTIME the weather is like at {Time} in {Location}
-FORECASTTIME the weather is like at {Time} on {Date}
-FORECASTTIME the weather is like at {Time} on {Date} in {Location}
-FORECASTTIME the weather is like in {Location} at {Time}
-FORECASTTIME the weather is like in {Location} at {Time} on {Date}
-FORECASTTIME the weather is like in {Location} on {Date} at {Time}
-FORECASTTIME the weather is like on {Date} at {Time}
-FORECASTTIME the weather is like on {Date} at {Time} in {Location}
-FORECASTTIME the weather was like at {Time}
-FORECASTTIME the weather was like at {Time} in {Location}
-FORECASTTIME the weather was like at {Time} on {Date}
-FORECASTTIME the weather was like at {Time} on {Date} in {Location}
-FORECASTTIME the weather was like in {Location} at {Time}
-FORECASTTIME the weather was like in {Location} at {Time} on {Date}
-FORECASTTIME the weather was like in {Location} on {Date} at {Time}
-FORECASTTIME the weather was like on {Date} at {Time}
-FORECASTTIME the weather was like on {Date} at {Time} in {Location}
-FORECASTTIME the weather will be like at {Time}
-FORECASTTIME the weather will be like at {Time} in {Location}
-FORECASTTIME the weather will be like at {Time} on {Date}
-FORECASTTIME the weather will be like at {Time} on {Date} in {Location}
-FORECASTTIME the weather will be like in {Location} at {Time}
-FORECASTTIME the weather will be like in {Location} at {Time} on {Date}
-FORECASTTIME the weather will be like in {Location} on {Date} at {Time}
-FORECASTTIME the weather will be like on {Date} at {Time}
-FORECASTTIME the weather will be like on {Date} at {Time} in {Location}
 FORECASTDATE {Date} forecast
 FORECASTDATE {Date} forecast in {Location}
 FORECASTDATE the {Date} forecast
@@ -60,6 +24,42 @@ FORECASTDATE the weather was like on {Date} in {Location}
 FORECASTDATE the weather will be like in {Location} on {Date}
 FORECASTDATE the weather will be like on {Date}
 FORECASTDATE the weather will be like on {Date} in {Location}
+FORECASTDATETIME the forecast at {Time}
+FORECASTDATETIME the forecast at {Time} in {Location}
+FORECASTDATETIME the forecast at {Time} on {Date}
+FORECASTDATETIME the forecast at {Time} on {Date} in {Location}
+FORECASTDATETIME the forecast in {Location} at {Time}
+FORECASTDATETIME the forecast in {Location} at {Time} on {Date}
+FORECASTDATETIME the forecast in {Location} on {Date} at {Time}
+FORECASTDATETIME the forecast on {Date} at {Time}
+FORECASTDATETIME the forecast on {Date} at {Time} in {Location}
+FORECASTDATETIME the weather is like at {Time}
+FORECASTDATETIME the weather is like at {Time} in {Location}
+FORECASTDATETIME the weather is like at {Time} on {Date}
+FORECASTDATETIME the weather is like at {Time} on {Date} in {Location}
+FORECASTDATETIME the weather is like in {Location} at {Time}
+FORECASTDATETIME the weather is like in {Location} at {Time} on {Date}
+FORECASTDATETIME the weather is like in {Location} on {Date} at {Time}
+FORECASTDATETIME the weather is like on {Date} at {Time}
+FORECASTDATETIME the weather is like on {Date} at {Time} in {Location}
+FORECASTDATETIME the weather was like at {Time}
+FORECASTDATETIME the weather was like at {Time} in {Location}
+FORECASTDATETIME the weather was like at {Time} on {Date}
+FORECASTDATETIME the weather was like at {Time} on {Date} in {Location}
+FORECASTDATETIME the weather was like in {Location} at {Time}
+FORECASTDATETIME the weather was like in {Location} at {Time} on {Date}
+FORECASTDATETIME the weather was like in {Location} on {Date} at {Time}
+FORECASTDATETIME the weather was like on {Date} at {Time}
+FORECASTDATETIME the weather was like on {Date} at {Time} in {Location}
+FORECASTDATETIME the weather will be like at {Time}
+FORECASTDATETIME the weather will be like at {Time} in {Location}
+FORECASTDATETIME the weather will be like at {Time} on {Date}
+FORECASTDATETIME the weather will be like at {Time} on {Date} in {Location}
+FORECASTDATETIME the weather will be like in {Location} at {Time}
+FORECASTDATETIME the weather will be like in {Location} at {Time} on {Date}
+FORECASTDATETIME the weather will be like in {Location} on {Date} at {Time}
+FORECASTDATETIME the weather will be like on {Date} at {Time}
+FORECASTDATETIME the weather will be like on {Date} at {Time} in {Location}
 FORECASTWEEK the forecast for this week
 FORECASTWEEK the forecast for this week in {Location}
 FORECASTWEEK the forecast this week
