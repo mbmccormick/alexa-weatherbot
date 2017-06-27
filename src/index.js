@@ -167,6 +167,54 @@ var defaultHandler = {
         });
     },
 
+    "HIGH": function () {
+        printDebugInformation("defaultHandler:HIGH");
+
+        var _alexa = this;
+
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                    var high = Math.round(data.daily.data[0].temperatureMax);
+
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the high is " + high + " degrees." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted high is " + high + " degrees.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the high was " + high + " degrees.");
+                    }
+                });
+            });
+        });
+    },
+
+    "LOW": function () {
+        printDebugInformation("defaultHandler:LOW");
+
+        var _alexa = this;
+
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                    var low = Math.round(data.daily.data[0].temperatureMin);
+
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the low is " + low + " degrees." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted low is " + low + " degrees.");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the low was " + low + " degrees.");
+                    }
+                });
+            });
+        });
+    },
+
     "PRECIPITATION": function () {
         printDebugInformation("defaultHandler:PRECIPITATION");
 
@@ -402,7 +450,7 @@ var defaultHandler = {
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
-        this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
     },
 
     "Unhandled": function () {
