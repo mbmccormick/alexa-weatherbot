@@ -664,7 +664,7 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
 }
 
 function getForecast(_alexa, latitude, longitude, timestamp, callback) {
-    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null && isNaN(timestamp) == false ? "," + timestamp : "") + "/?solar=1";
+    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null && isNaN(timestamp) == false ? "," + timestamp : "") + "/?units=auto&solar=1";
 
     Request.get({
         uri: url,
