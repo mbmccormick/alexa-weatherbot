@@ -203,9 +203,21 @@ var defaultHandler = {
                     var speed = Math.round(data.currently.windSpeed);
                     var direction = Windrose.getPoint(data.currently.windBearing).name;
 
+                    var units = "miles per hour";
+
+                    if (data.flags.units == "ca") {
+                        units = "kilometers per hour";
+                    }
+                    else if (data.flags.units == "uk2") {
+                        units = "miles per hour";
+                    }
+                    else if (data.flags.units == "si") {
+                        units = "meters per second";
+                    }
+
                     if (difference == 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + speed + " mph wind out of the " + direction + "." + getWeatherAlerts(data));
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + speed + " " + units + " wind out of the " + direction + "." + getWeatherAlerts(data));
                         }
                         else {
                             _alexa.emit(":tell", calendarTime + " in " + location + ", there's no wind." + getWeatherAlerts(data));
@@ -213,7 +225,7 @@ var defaultHandler = {
                     }
                     else if (difference > 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a forecasted " + speed + " mph wind out of the " + direction + ".");
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a forecasted " + speed + " " + units + " wind out of the " + direction + ".");
                         }
                         else {
                             _alexa.emit(":tell", calendarTime + " in " + location + ", there's no wind forecasted.");
@@ -221,7 +233,7 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there was a " + speed + " mph wind out of the " + direction + ".");
+                            _alexa.emit(":tell", calendarTime + " in " + location + ", there was a " + speed + " " + units + " wind out of the " + direction + ".");
                         }
                         else {
                             _alexa.emit(":tell", calendarTime + " in " + location + ", there was no wind.");
@@ -314,14 +326,26 @@ var defaultHandler = {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var visibility = Math.round(data.currently.visibility);
 
+                    var units = "miles";
+
+                    if (data.flags.units == "ca") {
+                        units = "kilometers";
+                    }
+                    else if (data.flags.units == "uk2") {
+                        units = "miles";
+                    }
+                    else if (data.flags.units == "si") {
+                        units = "kilometers";
+                    }
+
                     if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility is " + visibility + " mi." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility is " + visibility + " " + units + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted visibility is " + visibility + " mi.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted visibility is " + visibility + " " + units + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility was " + visibility + " mi.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility was " + visibility + " " + units + ".");
                     }
                 });
             });
