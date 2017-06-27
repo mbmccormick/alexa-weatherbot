@@ -65,31 +65,6 @@ var defaultHandler = {
         });
     },
 
-    "FORECASTTIME": function () {
-        printDebugInformation("defaultHandler:FORECASTTIME");
-
-        var _alexa = this;
-
-        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
-            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var temperature = Math.round(data.currently.temperature);
-                    var summary = data.currently.summary;
-
-                    if (difference == 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
-                    }
-                    else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + temperature + " degrees and " + summary + ".");
-                    }
-                    else if (difference < 0) {
-                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + temperature + " degrees and " + summary + ".");
-                    }
-                });
-            });
-        });
-    },
-
     "FORECASTDATE": function () {
         printDebugInformation("defaultHandler:FORECASTDATE");
 
@@ -110,6 +85,31 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                    }
+                });
+            });
+        });
+    },
+
+    "FORECASTDATETIME": function () {
+        printDebugInformation("defaultHandler:FORECASTDATETIME");
+
+        var _alexa = this;
+
+        getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
+            getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
+                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                    var temperature = Math.round(data.currently.temperature);
+                    var summary = data.currently.summary;
+
+                    if (difference == 0) {
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                    }
+                    else if (difference > 0) {
+                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + temperature + " degrees and " + summary + ".");
+                    }
+                    else if (difference < 0) {
+                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + temperature + " degrees and " + summary + ".");
                     }
                 });
             });
@@ -397,6 +397,7 @@ function printDebugInformation(message) {
 
 function getRequestedLocation(_alexa, callback) {
     if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Location.value) {
         var input = _alexa.event.request.intent.slots.Location.value;
 
@@ -426,6 +427,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
     var dateTime = null;
 
     if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Date.value) {
         var input = _alexa.event.request.intent.slots.Date.value;
 
@@ -435,6 +437,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
     }
 
     if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Time.value) {
         var input = _alexa.event.request.intent.slots.Time.value;
 
@@ -459,6 +462,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
     var calendarOptions = null;
 
     if (_alexa.event.request.intent === undefined ||
+        _alexa.event.request.intent.slots === undefined ||
         _alexa.event.request.intent.slots.Time.value === undefined) {
         calendarOptions = {
             sameDay: "[today]",
@@ -636,7 +640,7 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
 }
 
 function getForecast(_alexa, latitude, longitude, timestamp, callback) {
-    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null ? "," + timestamp : "") + "/?solar=1";
+    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null && isNaN(timestamp) == false ? "," + timestamp : "") + "/?solar=1";
 
     Request.get({
         uri: url,

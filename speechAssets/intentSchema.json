@@ -18,7 +18,7 @@
       ]
     },
     {
-      "intent": "FORECASTTIME",
+      "intent": "FORECASTDATE",
       "slots": [
         {
           "name": "Date",
@@ -35,7 +35,7 @@
       ]
     },
     {
-      "intent": "FORECASTDATE",
+      "intent": "FORECASTDATETIME",
       "slots": [
         {
           "name": "Date",
