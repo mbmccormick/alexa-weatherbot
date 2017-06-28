@@ -176,6 +176,9 @@ var defaultHandler = {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var high = Math.round(data.daily.data[0].temperatureMax);
+                    var timestamp = Moment.unix(data.daily.data[0].temperatureMaxTime).tz(timezone);
+
+                    var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
                         _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " has a high of " + high + " degrees." + getWeatherAlerts(data));
@@ -200,6 +203,9 @@ var defaultHandler = {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var low = Math.round(data.daily.data[0].temperatureMin);
+                    var timestamp = Moment.unix(data.daily.data[0].temperatureMinTime).tz(timezone);
+
+                    var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
                         _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " has a low of " + low + " degrees." + getWeatherAlerts(data));
@@ -514,10 +520,6 @@ function getRequestedDateTime(_alexa, timezone, callback) {
         var input = _alexa.event.request.intent.slots.Time.value;
 
         var parse = Moment.tz(input, "h:mm", timezone);
-
-        if (((parse.hours() * 60) + parse.minutes()) < ((now.hours() * 60) + now.minutes())) {
-            parse.add(1, "days");
-        }
 
         if (dateTime) {
             dateTime.hour(parse.hour()).minute(parse.minute());
