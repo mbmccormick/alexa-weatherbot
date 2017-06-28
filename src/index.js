@@ -552,7 +552,8 @@ function getRequestedDateTime(_alexa, timezone, callback) {
 
     var difference = dateTime.diff(now, "hours");
 
-    if (difference == 0) {
+    if (difference == 0 &&
+        calendarTime.indexOf(" at ") > -1) {
         calendarTime = "right now";
     }
 
