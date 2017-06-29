@@ -81,10 +81,10 @@ var defaultHandler = {
                         _alexa.emit(":tell", "The forecast for Today in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecast is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the weather was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                 });
             });
@@ -106,10 +106,10 @@ var defaultHandler = {
                         _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " is " + temperature + " degrees and " + summary + ".");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecast is " + temperature + " degrees and " + summary + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", "The weather on " + calendarTime + " in " + location + " was " + temperature + " degrees and " + summary + ".");
+                        _alexa.emit(":tell", calendarTime + ", in " + location + ", the weather was " + temperature + " degrees and " + summary + ".");
                     }
                 });
             });
@@ -184,7 +184,7 @@ var defaultHandler = {
                         _alexa.emit(":tell", "The forecast for Today in " + location + " has a high of " + high + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " has a high of " + high + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted high is " + high + " degrees.");
                     }
                     else if (difference < 0) {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", the high was " + high + " degrees.");
@@ -211,7 +211,7 @@ var defaultHandler = {
                         _alexa.emit(":tell", "The forecast for Today in " + location + " has a low of " + low + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "The forecast for " + calendarTime + " in " + location + " has a low of " + low + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted low is " + low + " degrees.");
                     }
                     else if (difference < 0) {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", the low was " + low + " degrees.");
@@ -544,7 +544,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
             nextWeek: "dddd",
             lastDay: "[Yesterday]",
             lastWeek: "[Last] dddd",
-            sameElse: "MM/DD/YYYY"
+            sameElse: "[On] MM/DD/YYYY"
         };
     }
 
