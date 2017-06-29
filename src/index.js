@@ -547,16 +547,26 @@ function getRequestedDateTime(_alexa, timezone, callback) {
 
     var calendarOptions = null;
 
-    if (_alexa.event.request.intent === undefined ||
-        _alexa.event.request.intent.slots === undefined ||
-        _alexa.event.request.intent.slots.Time.value === undefined) {
+    if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
+        _alexa.event.request.intent.slots.Time.value) {
+        calendarOptions = {
+            sameDay: "[Today] [at] h:mma",
+            nextDay: "[Tomorrow] [at] h:mma",
+            nextWeek: "dddd [at] h:mma",
+            lastDay: "[Yesterday] [at] h:mma",
+            lastWeek: "[Last] dddd [at] h:mma",
+            sameElse: "[On] MMMM Do, YYYY [at] h:mma"
+        };
+    }
+    else {
         calendarOptions = {
             sameDay: "[Today]",
             nextDay: "[Tomorrow]",
             nextWeek: "dddd",
             lastDay: "[Yesterday]",
             lastWeek: "[Last] dddd",
-            sameElse: "[On] MM/DD/YYYY"
+            sameElse: "[On] MMMM Do, YYYY"
         };
     }
 
