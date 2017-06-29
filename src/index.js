@@ -73,7 +73,7 @@ var defaultHandler = {
         getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.hourly.summary;
+                    var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
