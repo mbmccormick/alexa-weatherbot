@@ -73,7 +73,7 @@ var defaultHandler = {
         getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.hourly.summary;
+                    var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureMax);
                     var low = Math.round(data.daily.data[0].temperatureMin);
 
@@ -109,7 +109,7 @@ var defaultHandler = {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", the forecast is " + temperature + " degrees and " + summary + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + ", in " + location + ", the weather was " + temperature + " degrees and " + summary + ".");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the weather was " + temperature + " degrees and " + summary + ".");
                     }
                 });
             });
@@ -522,10 +522,22 @@ function getRequestedDateTime(_alexa, timezone, callback) {
         var parse = Moment.tz(input, "h:mm", timezone);
 
         if (dateTime) {
-            dateTime.hour(parse.hour()).minute(parse.minute());
+            dateTime.set({
+                "hour": parse.hour(),
+                "minute": parse.minute(),
+                "second": 0
+            });
         }
         else {
             dateTime = parse;
+        }
+
+        if (_alexa.event.request.intent === undefined ||
+            _alexa.event.request.intent.slots === undefined ||
+            _alexa.event.request.intent.slots.Date.value === undefined) {
+            if (((dateTime.hours() * 60) + dateTime.minutes()) < ((now.hours() * 60) + now.minutes())) {
+                dateTime.add(1, "days");
+            }
         }
     }
 
@@ -535,22 +547,32 @@ function getRequestedDateTime(_alexa, timezone, callback) {
 
     var calendarOptions = null;
 
-    if (_alexa.event.request.intent === undefined ||
-        _alexa.event.request.intent.slots === undefined ||
-        _alexa.event.request.intent.slots.Time.value === undefined) {
+    if (_alexa.event.request.intent &&
+        _alexa.event.request.intent.slots &&
+        _alexa.event.request.intent.slots.Time.value) {
+        calendarOptions = {
+            sameDay: "[Today] [at] h:mma",
+            nextDay: "[Tomorrow] [at] h:mma",
+            nextWeek: "dddd [at] h:mma",
+            lastDay: "[Yesterday] [at] h:mma",
+            lastWeek: "[Last] dddd [at] h:mma",
+            sameElse: "[On] MMMM Do, YYYY [at] h:mma"
+        };
+    }
+    else {
         calendarOptions = {
             sameDay: "[Today]",
             nextDay: "[Tomorrow]",
             nextWeek: "dddd",
             lastDay: "[Yesterday]",
             lastWeek: "[Last] dddd",
-            sameElse: "[On] MM/DD/YYYY"
+            sameElse: "[On] MMMM Do, YYYY"
         };
     }
 
-    var calendarTime = dateTime.calendar(null, calendarOptions);
+    var calendarTime = dateTime.calendar(now, calendarOptions);
 
-    var difference = dateTime.diff(now, "hours");
+    var difference = Math.floor((dateTime.unix() - now.unix()) / 60 / 60);
 
     var timestamp = dateTime.unix();
 
