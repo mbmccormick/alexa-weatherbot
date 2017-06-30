@@ -101,6 +101,10 @@ FORECASTDATE the weather will be like on {Date}
 FORECASTDATE the weather will be like on {Date} in {Location}
 FORECASTDATE the weather will be on {Date}
 FORECASTDATE the weather will be on {Date} in {Location}
+FORECASTDATE {Date} forecast
+FORECASTDATE {Date} forecast in {Location}
+FORECASTDATE {Date} weather
+FORECASTDATE {Date} weather in {Location}
 FORECASTDATETIME the forecast {Date} at {Time}
 FORECASTDATETIME the forecast {Date} at {Time} in {Location}
 FORECASTDATETIME the forecast at {Time}
@@ -445,6 +449,8 @@ TEMPERATURE the temperature will be on {Date}
 TEMPERATURE the temperature will be on {Date} at {Time}
 TEMPERATURE the temperature will be on {Date} at {Time} in {Location}
 TEMPERATURE the temperature will be on {Date} in {Location}
+TEMPERATURE {Date} temperature
+TEMPERATURE {Date} temperature in {Location}
 HIGH the high
 HIGH the high {Date}
 HIGH the high {Date} in {Location}
@@ -495,6 +501,8 @@ HIGH the high will be like on {Date}
 HIGH the high will be like on {Date} in {Location}
 HIGH the high will be on {Date}
 HIGH the high will be on {Date} in {Location}
+HIGH {Date} high
+HIGH {Date} high in {Location}
 LOW the low
 LOW the low {Date}
 LOW the low {Date} in {Location}
@@ -545,6 +553,8 @@ LOW the low will be like on {Date}
 LOW the low will be like on {Date} in {Location}
 LOW the low will be on {Date}
 LOW the low will be on {Date} in {Location}
+LOW {Date} low
+LOW {Date} low in {Location}
 PRECIPITATION the precipitation
 PRECIPITATION the precipitation {Date}
 PRECIPITATION the precipitation {Date} at {Time}
@@ -685,6 +695,8 @@ PRECIPITATION the precipitation will be on {Date}
 PRECIPITATION the precipitation will be on {Date} at {Time}
 PRECIPITATION the precipitation will be on {Date} at {Time} in {Location}
 PRECIPITATION the precipitation will be on {Date} in {Location}
+PRECIPITATION {Date} precipitation
+PRECIPITATION {Date} precipitation in {Location}
 WIND the wind
 WIND the wind {Date}
 WIND the wind {Date} at {Time}
@@ -825,6 +837,8 @@ WIND the wind will be on {Date}
 WIND the wind will be on {Date} at {Time}
 WIND the wind will be on {Date} at {Time} in {Location}
 WIND the wind will be on {Date} in {Location}
+WIND {Date} wind
+WIND {Date} wind in {Location}
 HUMIDITY the humidity
 HUMIDITY the humidity {Date}
 HUMIDITY the humidity {Date} at {Time}
@@ -965,6 +979,8 @@ HUMIDITY the humidity will be on {Date}
 HUMIDITY the humidity will be on {Date} at {Time}
 HUMIDITY the humidity will be on {Date} at {Time} in {Location}
 HUMIDITY the humidity will be on {Date} in {Location}
+HUMIDITY {Date} humidity
+HUMIDITY {Date} humidity in {Location}
 DEWPOINT the dew point
 DEWPOINT the dew point {Date}
 DEWPOINT the dew point {Date} at {Time}
@@ -1105,6 +1121,8 @@ DEWPOINT the dew point will be on {Date}
 DEWPOINT the dew point will be on {Date} at {Time}
 DEWPOINT the dew point will be on {Date} at {Time} in {Location}
 DEWPOINT the dew point will be on {Date} in {Location}
+DEWPOINT {Date} dew point
+DEWPOINT {Date} dew point in {Location}
 UVINDEX the UV index
 UVINDEX the UV index {Date}
 UVINDEX the UV index {Date} at {Time}
@@ -1245,6 +1263,8 @@ UVINDEX the UV index will be on {Date}
 UVINDEX the UV index will be on {Date} at {Time}
 UVINDEX the UV index will be on {Date} at {Time} in {Location}
 UVINDEX the UV index will be on {Date} in {Location}
+UVINDEX {Date} UV index
+UVINDEX {Date} UV index in {Location}
 VISIBILITY the visibility
 VISIBILITY the visibility {Date}
 VISIBILITY the visibility {Date} at {Time}
@@ -1385,6 +1405,8 @@ VISIBILITY the visibility will be on {Date}
 VISIBILITY the visibility will be on {Date} at {Time}
 VISIBILITY the visibility will be on {Date} at {Time} in {Location}
 VISIBILITY the visibility will be on {Date} in {Location}
+VISIBILITY {Date} visibility
+VISIBILITY {Date} visibility in {Location}
 ALERTS the weather alerts
 ALERTS the weather alerts {Date}
 ALERTS the weather alerts {Date} at {Time}
@@ -1414,3 +1436,5 @@ ALERTS the weather alerts on {Date}
 ALERTS the weather alerts on {Date} at {Time}
 ALERTS the weather alerts on {Date} at {Time} in {Location}
 ALERTS the weather alerts on {Date} in {Location}
+ALERTS {Date} alerts
+ALERTS {Date} alerts in {Location}
