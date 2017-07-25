@@ -170,6 +170,9 @@ var defaultHandler = {
     "HIGH": function () {
         printDebugInformation("defaultHandler:HIGH");
 
+        // time is irrelevant for high forecasts
+        this.event.request.intent.slots.Time.value = null;
+
         var _alexa = this;
 
         getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
@@ -181,13 +184,13 @@ var defaultHandler = {
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for Today in " + location + " has a high of " + high + " degrees." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "The forecast for Today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted high is " + high + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted high is " + high + " degrees at " + timestamp.format("h:mma") + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the high was " + high + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the high was " + high + " degrees at " + timestamp.format("h:mma") + ".");
                     }
                 });
             });
@@ -196,6 +199,9 @@ var defaultHandler = {
 
     "LOW": function () {
         printDebugInformation("defaultHandler:LOW");
+
+        // time is irrelevant for low forecasts
+        this.event.request.intent.slots.Time.value = null;
 
         var _alexa = this;
 
@@ -208,13 +214,13 @@ var defaultHandler = {
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for Today in " + location + " has a low of " + low + " degrees." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "The forecast for Today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted low is " + low + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted low is " + low + " degrees at " + timestamp.format("h:mma") + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the low was " + low + " degrees.");
+                        _alexa.emit(":tell", calendarTime + " in " + location + ", the low was " + low + " degrees at " + timestamp.format("h:mma") + ".");
                     }
                 });
             });
@@ -462,7 +468,7 @@ var defaultHandler = {
     "Unhandled": function () {
         printDebugInformation("defaultHandler:Unhandled");
 
-        this.emitWithState("AMAZON.HelpIntent");
+        this.emit(":tell", "Sorry, I didn't understand that. You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
     }
 
 };
@@ -536,7 +542,7 @@ function getRequestedDateTime(_alexa, timezone, callback) {
             _alexa.event.request.intent.slots === undefined ||
             _alexa.event.request.intent.slots.Date.value === undefined) {
             if (((dateTime.hours() * 60) + dateTime.minutes()) < ((now.hours() * 60) + now.minutes())) {
-                dateTime.add(1, "days");
+                dateTime.add(12, "hours");
             }
         }
     }
