@@ -13,7 +13,7 @@ exports.handler = function (event, context, callback) {
     }
 
     alexa = Alexa.handler(event, context);
-    alexa.appId = process.env.DEBUG ? alexa.appId : "amzn1.ask.skill.45bd54a7-8512-438a-8191-ca2407990891";
+    alexa.appId = "amzn1.ask.skill.45bd54a7-8512-438a-8191-ca2407990891";
     alexa.dynamoDBTableName = "Weatherbot";
 
     alexa.registerHandlers(defaultHandler);
