@@ -26,6 +26,8 @@ var PERMISSIONS = [ALL_ADDRESS_PERMISSION];
 
 var AlexaDeviceAddressClient = require("./AlexaDeviceAddressClient");
 
+var vowels = ['a', 'e', 'i', 'o', 'u', 'y'];
+
 var defaultHandler = {
 
     "LaunchRequest": function () {
@@ -431,13 +433,18 @@ var defaultHandler = {
 
                             description = description.replace(/\n/g, " ");
 
+                            var prefix = "A";
+                            if (vowels.indexOf(title[0].toLowerCase()) > -1) {
+                                prefix = "An";
+                            }
+
                             if (alert.expires) {
                                 var expires = Moment.unix(alert.expires).tz(timezone);
 
-                                response += " A " + title + " is in effect for the " + location + " area until " + expires.calendar() + ". " + description;
+                                response += " " + prefix + " " + title + " is in effect for the " + location + " area until " + expires.calendar() + ". " + description;
                             }
                             else {
-                                response += " A " + title + " is in effect for the " + location + " area. " + description;
+                                response += " " + prefix + " " + title + " is in effect for the " + location + " area. " + description;
                             }
                         }
                     }
@@ -763,12 +770,11 @@ function getWeatherAlerts(data) {
     if (data.alerts != null) {
         var response = "";
 
-        for (var i = 0; i < data.alerts.length; i++) {
-            var alert = data.alerts[i];
-
-            var title = alert.title;
-
-            response += " A " + title + " is in effect for the area.";
+        if (data.alerts.length > 1) {
+            response += " Weather alerts are in effect for this area.";
+        }
+        else {
+            response += " A weather alert is in effect for this area.";
         }
 
         return response + " If you'd like to know more, just ask me for your weather alerts.";
