@@ -74,6 +74,10 @@ exports.getRequestedDateTime = function(_alexa, timezone, callback) {
 
     var difference = Math.floor((dateTime.unix() - now.unix()) / 60 / 60);
 
+    if (calendarTime == "Today") {
+        difference = 0;
+    }
+
     var timestamp = dateTime.unix();
 
     callback(timestamp, difference, calendarTime);
