@@ -41,11 +41,12 @@ var defaultHandler = {
                     var temperature = Math.round(data.currently.temperature);
                     var currently_summary = data.currently.summary;
                     var minutely_summary = data.minutely.summary;
+
                     var hourly_summary = data.hourly.summary;
                     var high = timestamp <= data.daily.data[0].temperatureHighTime ? Math.round(data.daily.data[0].temperatureHigh) : Math.round(data.daily.data[1].temperatureHigh);
                     var low = timestamp <= data.daily.data[0].temperatureLowTime ? Math.round(data.daily.data[0].temperatureLow) : Math.round(data.daily.data[1].temperatureLow);
-
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + " The forecast for the next 24 hours is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                 });
             });
         });
@@ -63,7 +64,7 @@ var defaultHandler = {
                     var currently_summary = data.currently.summary;
                     var minutely_summary = data.minutely.summary;
 
-                    _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
                 });
             });
         });
@@ -766,6 +767,36 @@ function getForecast(_alexa, latitude, longitude, timestamp, callback) {
 
         callback(data);
     });
+}
+
+function getPrecipitation(data) {
+    if (data.currently.nearestStormDistance > 0 &&
+        data.currently.nearestStormDistance < 100) {
+        var distance = data.currently.nearestStormDistance;
+        var direction = Windrose.getPoint(data.currently.nearestStormBearing, { depth: 1 }).name;
+
+        var units = "miles";
+        
+        if (data.flags.units == "ca") {
+            units = "kilometers";
+        }
+        else if (data.flags.units == "uk2") {
+            units = "miles";
+        }
+        else if (data.flags.units == "si") {
+            units = "kilometers";
+        }
+        
+        return " Nearest precipitation is " + distance + " " + units + " to the " + direction + ".";
+    }
+    else {
+        if (data.currently.precipIntensity > 0) {
+            return "";
+        }
+        else {
+            return " No precipitation anywhere in the area.";
+        }
+    }
 }
 
 function getWeatherAlerts(data) {
