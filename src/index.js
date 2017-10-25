@@ -242,7 +242,7 @@ var defaultHandler = {
                     var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", there's a " + probability + "% chance of " + type + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "Right now in " + location + ", there's a " + probability + "% chance of " + type + "." + getPrecipitation(data) + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + probability + "% chance of " + type + ".");
