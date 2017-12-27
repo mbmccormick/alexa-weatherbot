@@ -44,6 +44,9 @@ function getDeviceAddress(_alexa, callback) {
     var context = _alexa.event.context;
 
     if (!context) {
+        printDebugInformation("ERROR: _alexa.event.context");
+        printDebugInformation(_alexa.event);
+        
         _alexa.emit(":tell", "There was a problem accessing device permissions. Please try again later.");
 
         return;
@@ -52,6 +55,9 @@ function getDeviceAddress(_alexa, callback) {
     var permissions = _alexa.event.context.System.user.permissions;
 
     if (!permissions) {
+        printDebugInformation("ERROR: _alexa.event.context.System.user.permissions");
+        printDebugInformation(_alexa.event.context.System.user);
+        
         _alexa.emit(":tell", "There was a problem accessing device permissions. Please try again later.");
 
         return;
