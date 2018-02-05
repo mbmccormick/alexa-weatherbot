@@ -44,7 +44,7 @@ var defaultHandler = {
                     var high = timestamp <= data.daily.data[0].temperatureHighTime ? Math.round(data.daily.data[0].temperatureHigh) : Math.round(data.daily.data[1].temperatureHigh);
                     var low = timestamp <= data.daily.data[0].temperatureLowTime ? Math.round(data.daily.data[0].temperatureLow) : Math.round(data.daily.data[1].temperatureLow);
                     
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                 });
             });
         });
