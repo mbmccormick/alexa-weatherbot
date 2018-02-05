@@ -15,7 +15,7 @@
   "dependencies": {
     "alexa-sdk": "^1.0.15",
     "request": "^2.83.0",
-    "moment-timezone": "^0.5.13",
+    "moment-timezone": "^0.5.14",
     "windrose": "^2.0.2"
   }
 }
