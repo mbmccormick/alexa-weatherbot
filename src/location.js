@@ -48,6 +48,7 @@ function getDeviceAddress(_alexa, callback) {
         printDebugInformation(_alexa.event);
         
         _alexa.response.speak("There was a problem accessing device permissions. Please try again later.");
+        
         _alexa.emit(":responseReady");
 
         return;
@@ -60,6 +61,7 @@ function getDeviceAddress(_alexa, callback) {
         printDebugInformation(_alexa.event.context.System.user);
         
         _alexa.response.speak("There was a problem accessing device permissions. Please try again later.");
+        
         _alexa.emit(":responseReady");
 
         return;
@@ -70,6 +72,7 @@ function getDeviceAddress(_alexa, callback) {
     if (!consentToken) {
         _alexa.response.speak("In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.")
             .askForPermissionsConsentCard(PERMISSIONS);
+        
         _alexa.emit(":responseReady");
 
         return;
@@ -111,6 +114,7 @@ function getDeviceAddress(_alexa, callback) {
             case 204:
                 // the query did not return any results
                 _alexa.response.speak("It doesn't look like you've set up your address yet. Please enter your address in the Alexa app.");
+                
                 _alexa.emit(":responseReady");
 
                 break;
@@ -118,12 +122,14 @@ function getDeviceAddress(_alexa, callback) {
                 // the authentication token is invalid or doesn’t have access to the resource
                 _alexa.response.speak("It doesn't look like you've granted Weatherbot permission to access your location yet. Please enable location permissions in the Alexa app.")
                     .askForPermissionsConsentCard(PERMISSIONS);
+                
                 _alexa.emit(":responseReady");
 
                 break;
             default:
                 // catch all other responses
                 _alexa.response.speak("There was a problem retrieving your address. Please try again later.");
+                
                 _alexa.emit(":responseReady");
 
                 break;
@@ -135,6 +141,7 @@ function getDeviceAddress(_alexa, callback) {
         printDebugInformation(err);
 
         _alexa.response.speak("There was a problem retrieving your address. Please try again later.");
+        
         _alexa.emit(":responseReady");
     });
 }
@@ -153,6 +160,7 @@ function getGeocodeResult(_alexa, address, cache, callback) {
             printDebugInformation(err);
 
             _alexa.response.speak("There was a problem locating your address. Please try again later.");
+            
             _alexa.emit(":responseReady");
         }
 
@@ -199,6 +207,7 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
             printDebugInformation(err);
 
             _alexa.response.speak("There was a problem detecting your timezone. Please try again later.");
+            
             _alexa.emit(":responseReady");
         }
 

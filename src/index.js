@@ -37,14 +37,32 @@ var defaultHandler = {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary.toLowerCase();
-                    var minutely_summary = data.minutely.summary.toLowerCase().replace(/.$/,",");
+                    var currently_summary = data.currently.summary;
+                    var minutely_summary = data.minutely.summary;
 
                     var hourly_summary = data.hourly.summary.toLowerCase().replace(/.$/,",");
                     var high = timestamp <= data.daily.data[0].temperatureHighTime ? Math.round(data.daily.data[0].temperatureHigh) : Math.round(data.daily.data[1].temperatureHigh);
                     var low = timestamp <= data.daily.data[0].temperatureLowTime ? Math.round(data.daily.data[0].temperatureLow) : Math.round(data.daily.data[1].temperatureLow);
                     
-                    _alexa.response.speak("Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    _alexa.response.speak("Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary.toLowerCase() + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle("Current Weather in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='5'>" + temperature + "° " + currently_summary + "</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + minutely_summary + getPrecipitation(data) + "</font>" +
+                                "<br/>" +
+                                "<br/>" +
+                                "<font size='3'>" + "The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + "</font>"
+                            ))
+                            .build();
+                        
+                        _alexa.response.renderTemplate(template);
+                    }
+
                     _alexa.emit(":responseReady");
                 });
             });
@@ -60,10 +78,25 @@ var defaultHandler = {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary.toLowerCase();
-                    var minutely_summary = data.minutely.summary.toLowerCase().replace(/.$/,",");
+                    var currently_summary = data.currently.summary;
+                    var minutely_summary = data.minutely.summary;
 
-                    _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
+                    _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary.toLowerCase() + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle("Current Weather in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='5'>" + temperature + "° " + currently_summary + "</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + minutely_summary + getPrecipitation(data) + "</font>"
+                            ))
+                            .build();
+                        
+                        _alexa.response.renderTemplate(template);
+                    }
+
                     _alexa.emit(":responseReady");
                 });
             });
@@ -78,18 +111,32 @@ var defaultHandler = {
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.daily.data[0].summary.toLowerCase().replace(/.$/,",");
+                    var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureHigh);
                     var low = Math.round(data.daily.data[0].temperatureLow);
 
                     if (difference == 0) {
-                        _alexa.response.speak("The forecast for today in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " is " + summary.toLowerCase().replace(/.$/,",") + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + summary.toLowerCase().replace(/.$/,",") + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + summary.toLowerCase().replace(/.$/,",") + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                    }
+
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Forecast in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='5'>" + high + "° / " + low + "°</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + summary + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
                     }
 
                     _alexa.emit(":responseReady");
@@ -119,6 +166,18 @@ var defaultHandler = {
                         _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + temperature + " degrees and " + summary + ".");
                     }
 
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Forecast in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='5'>" + temperature + "° " + summary + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
+                    }
+
                     _alexa.emit(":responseReady");
                 });
             });
@@ -133,13 +192,25 @@ var defaultHandler = {
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.daily.summary.toLowerCase().replace(/.$/,",");
+                    var summary = data.daily.summary.toLowerCase();
 
                     summary = summary.replace("°F", " degrees");
                     summary = summary.replace("°C", " degrees");
 
                     if (difference == 0) {
-                        _alexa.response.speak("In " + location + ", " + summary + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("In " + location + ", " + summary + getWeatherAlerts(data));
+                        
+                        if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                            var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                            
+                            var template = builder.setTitle("Weekly Forecast in " + location)
+                                .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                    "<font size='5'>" + summary + "</font>"
+                                ))
+                                .build();
+                        
+                            _alexa.response.renderTemplate(template);
+                        }
                     }
                     else if (difference > 0) {
                         _alexa.response.speak("Sorry, weekly forecasts are not available for past dates or times.");
@@ -173,6 +244,18 @@ var defaultHandler = {
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the temperature was " + temperature + " degrees.");
                     }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Temperature in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + temperature + "°" + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
+                    }
 
                     _alexa.emit(":responseReady");
                 });
@@ -204,6 +287,20 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the high was " + high + " degrees at " + timestamp.format("h:mma") + ".");
+                    }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s High in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + high + "°" + "</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + timestamp.format("h:mma") + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
                     }
 
                     _alexa.emit(":responseReady");
@@ -238,6 +335,20 @@ var defaultHandler = {
                         _alexa.response.speak(calendarTime + " in " + location + ", the low was " + low + " degrees at " + timestamp.format("h:mma") + ".");
                     }
 
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Low in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + low + "°" + "</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + timestamp.format("h:mma") + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
+                    }
+
                     _alexa.emit(":responseReady");
                 });
             });
@@ -263,6 +374,20 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", there was a " + probability + "% chance of " + type + ".");
+                    }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Precipitation in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + probability + "%" + "</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + type + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
                     }
 
                     _alexa.emit(":responseReady");
@@ -344,6 +469,18 @@ var defaultHandler = {
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the humidity was " + humidity + "%.");
                     }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Humidity in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + humidity + "%" + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
+                    }
 
                     _alexa.emit(":responseReady");
                 });
@@ -370,6 +507,18 @@ var defaultHandler = {
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the dew point was " + dewPoint + " degrees.");
                     }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Dew Point in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + dewPoint + "°" + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
+                    }
 
                     _alexa.emit(":responseReady");
                 });
@@ -395,6 +544,18 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the UV index was " + uvIndex + ".");
+                    }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s UV Index in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + uvIndex + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
                     }
 
                     _alexa.emit(":responseReady");
@@ -433,6 +594,20 @@ var defaultHandler = {
                     }
                     else if (difference < 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the visibility was " + visibility + " " + units + ".");
+                    }
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + "'s Visibility in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + visibility + "</font>" +
+                                "<br/>" +
+                                "<font size='3'>" + units + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
                     }
 
                     _alexa.emit(":responseReady");
@@ -501,6 +676,7 @@ var defaultHandler = {
         var _alexa = this;
         
         _alexa.response.speak("You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        
         _alexa.emit(":responseReady");
     },
 
@@ -510,6 +686,7 @@ var defaultHandler = {
         var _alexa = this;
         
         _alexa.response.speak("Sorry, I didn't understand that. You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        
         _alexa.emit(":responseReady");
     }
 
@@ -535,6 +712,7 @@ function getForecast(_alexa, latitude, longitude, timestamp, callback) {
             printDebugInformation(err);
 
             _alexa.response.speak("There was a problem retrieving your forecast. Please try again later.");
+            
             _alexa.emit(":responseReady");
         }
 
