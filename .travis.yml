@@ -8,6 +8,9 @@ before_install:
 install:
   - npm install
 
+script:
+  - 
+
 deploy:
   provider: lambda
   access_key_id:
@@ -19,4 +22,4 @@ deploy:
   role: "arn:aws:iam::138911770317:role/AlexaCustomSkill"
   runtime: "nodejs6.10"
   handler_name: "index.handler"
-  zip: /src
+  zip: ${TRAVIS_BUILD_DIR}/src
