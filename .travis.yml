@@ -21,5 +21,5 @@ deploy:
   function_name: "Weatherbot"
   role: "arn:aws:iam::138911770317:role/AlexaCustomSkill"
   runtime: "nodejs6.10"
-  handler_name: "index.handler"
+  handler_name: "handler"
   zip: ${TRAVIS_BUILD_DIR}/src
