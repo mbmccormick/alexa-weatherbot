@@ -131,7 +131,7 @@ function getDeviceAddress(_alexa, callback) {
 }
 
 function getGeocodeResult(_alexa, address, cache, callback) {
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address);
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=" + encodeURI(address) + "&key=" + process.env.GOOGLE_MAPS_API_KEY;
 
     Request.get({
         uri: url,
@@ -176,7 +176,7 @@ function getGeocodeResult(_alexa, address, cache, callback) {
 }
 
 function getTimezoneResult(_alexa, latitude, longitude, callback) {
-    var url = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude + "&timestamp=" + Moment().unix();
+    var url = "https://maps.googleapis.com/maps/api/timezone/json?location=" + latitude + "," + longitude + "&timestamp=" + Moment().unix() + "&key=" + process.env.GOOGLE_MAPS_API_KEY;
 
     Request.get({
         uri: url,
