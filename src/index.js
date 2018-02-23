@@ -37,10 +37,10 @@ var defaultHandler = {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary;
-                    var minutely_summary = data.minutely.summary;
+                    var currently_summary = data.currently.summary.toLowerCase();
+                    var minutely_summary = data.minutely.summary.toLowerCase().replace(/.$/,",");
 
-                    var hourly_summary = data.hourly.summary;
+                    var hourly_summary = data.hourly.summary.toLowerCase().replace(/.$/,",");
                     var high = timestamp <= data.daily.data[0].temperatureHighTime ? Math.round(data.daily.data[0].temperatureHigh) : Math.round(data.daily.data[1].temperatureHigh);
                     var low = timestamp <= data.daily.data[0].temperatureLowTime ? Math.round(data.daily.data[0].temperatureLow) : Math.round(data.daily.data[1].temperatureLow);
                     
@@ -59,8 +59,8 @@ var defaultHandler = {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var currently_summary = data.currently.summary;
-                    var minutely_summary = data.minutely.summary;
+                    var currently_summary = data.currently.summary.toLowerCase();
+                    var minutely_summary = data.minutely.summary.toLowerCase().replace(/.$/,",");
 
                     _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
                 });
@@ -76,12 +76,12 @@ var defaultHandler = {
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.daily.data[0].summary;
+                    var summary = data.daily.data[0].summary.toLowerCase().replace(/.$/,",");
                     var high = Math.round(data.daily.data[0].temperatureHigh);
                     var low = Math.round(data.daily.data[0].temperatureLow);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for Today in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "The forecast for today in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", the forecast is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
@@ -103,7 +103,7 @@ var defaultHandler = {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
-                    var summary = data.currently.summary;
+                    var summary = data.currently.summary.toLowerCase();
 
                     if (difference == 0) {
                         _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
@@ -127,7 +127,7 @@ var defaultHandler = {
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.daily.summary;
+                    var summary = data.daily.summary.toLowerCase().replace(/.$/,",");
 
                     summary = summary.replace("°F", " degrees");
                     summary = summary.replace("°C", " degrees");
@@ -187,7 +187,7 @@ var defaultHandler = {
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for Today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "The forecast for today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted high is " + high + " degrees at " + timestamp.format("h:mma") + ".");
@@ -217,7 +217,7 @@ var defaultHandler = {
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for Today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
+                        _alexa.emit(":tell", "The forecast for today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted low is " + low + " degrees at " + timestamp.format("h:mma") + ".");
