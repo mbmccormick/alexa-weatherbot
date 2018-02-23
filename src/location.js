@@ -84,8 +84,9 @@ function getDeviceAddress(_alexa, callback) {
                 // successfully got the address associated with this deviceId
                 var address = "";
                 if (addressResponse.address["addressLine1"] &&
+                    addressResponse.address["city"] &&
                     addressResponse.address["stateOrRegion"]) {
-                    address = addressResponse.address["addressLine1"] + ", " + addressResponse.address["stateOrRegion"] + " " + addressResponse.address["postalCode"];
+                    address = addressResponse.address["addressLine1"] + ", " + addressResponse.address["city"] + ", " + addressResponse.address["stateOrRegion"] + " " + addressResponse.address["postalCode"];
                 }
                 else {
                     address = addressResponse.address["postalCode"];
