@@ -68,7 +68,9 @@ function getDeviceAddress(_alexa, callback) {
     var consentToken = _alexa.event.context.System.user.permissions.consentToken;
 
     if (!consentToken) {
-        _alexa.emit(":tellWithPermissionCard", "In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.", PERMISSIONS);
+        _alexa.response.speak("In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.")
+            .askForPermissionsConsentCard(PERMISSIONS);
+        _alexa.emit(":responseReady");
 
         return;
     }
@@ -114,7 +116,9 @@ function getDeviceAddress(_alexa, callback) {
                 break;
             case 403:
                 // the authentication token is invalid or doesn’t have access to the resource
-                _alexa.emit(":tellWithPermissionCard", "It doesn't look like you've granted Weatherbot permission to access your location yet. Please enable location permissions in the Alexa app.", PERMISSIONS);
+                _alexa.response.speak("It doesn't look like you've granted Weatherbot permission to access your location yet. Please enable location permissions in the Alexa app.")
+                    .askForPermissionsConsentCard(PERMISSIONS);
+                _alexa.emit(":responseReady");
 
                 break;
             default:
