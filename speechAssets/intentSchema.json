@@ -239,7 +239,40 @@
       ]
     },
     {
+      "intent": "AMAZON.NextIntent"
+    },
+    {
+      "intent": "AMAZON.PreviousIntent"
+    },
+    {
+      "intent": "AMAZON.ScrollDownIntent"
+    },
+    {
+      "intent": "AMAZON.ScrollUpIntent"
+    },
+    {
+      "intent": "AMAZON.ScrollRightIntent"
+    },
+    {
+      "intent": "AMAZON.ScrollLeftIntent"
+    },
+    {
+      "intent": "AMAZON.PageDownIntent"
+    },
+    {
+      "intent": "AMAZON.PageUpIntent"
+    },
+    {
+      "intent": "AMAZON.MoreIntent"
+    },
+    {
+      "intent": "AMAZON.NavigateSettingsIntent"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
     }
   ]
 }

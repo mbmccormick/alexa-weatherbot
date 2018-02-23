@@ -47,7 +47,8 @@ function getDeviceAddress(_alexa, callback) {
         printDebugInformation("ERROR: _alexa.event.context");
         printDebugInformation(_alexa.event);
         
-        _alexa.emit(":tell", "There was a problem accessing device permissions. Please try again later.");
+        _alexa.response.speak("There was a problem accessing device permissions. Please try again later.");
+        _alexa.emit(":responseReady");
 
         return;
     }
@@ -58,7 +59,8 @@ function getDeviceAddress(_alexa, callback) {
         printDebugInformation("ERROR: _alexa.event.context.System.user.permissions");
         printDebugInformation(_alexa.event.context.System.user);
         
-        _alexa.emit(":tell", "There was a problem accessing device permissions. Please try again later.");
+        _alexa.response.speak("There was a problem accessing device permissions. Please try again later.");
+        _alexa.emit(":responseReady");
 
         return;
     }
@@ -106,7 +108,8 @@ function getDeviceAddress(_alexa, callback) {
                 break;
             case 204:
                 // the query did not return any results
-                _alexa.emit(":tell", "It doesn't look like you've set up your address yet. Please enter your address in the Alexa app.");
+                _alexa.response.speak("It doesn't look like you've set up your address yet. Please enter your address in the Alexa app.");
+                _alexa.emit(":responseReady");
 
                 break;
             case 403:
@@ -116,7 +119,8 @@ function getDeviceAddress(_alexa, callback) {
                 break;
             default:
                 // catch all other responses
-                _alexa.emit(":tell", "There was a problem retrieving your address. Please try again later.");
+                _alexa.response.speak("There was a problem retrieving your address. Please try again later.");
+                _alexa.emit(":responseReady");
 
                 break;
         }
@@ -126,7 +130,8 @@ function getDeviceAddress(_alexa, callback) {
         printDebugInformation("ERROR: deviceAddressRequest()");
         printDebugInformation(err);
 
-        _alexa.emit(":tell", "There was a problem retrieving your address. Please try again later.");
+        _alexa.response.speak("There was a problem retrieving your address. Please try again later.");
+        _alexa.emit(":responseReady");
     });
 }
 
@@ -143,7 +148,8 @@ function getGeocodeResult(_alexa, address, cache, callback) {
             printDebugInformation("ERROR: getGeocodeResult()");
             printDebugInformation(err);
 
-            _alexa.emit(":tell", "There was a problem locating your address. Please try again later.");
+            _alexa.response.speak("There was a problem locating your address. Please try again later.");
+            _alexa.emit(":responseReady");
         }
 
         var data = JSON.parse(body);
@@ -188,7 +194,8 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
             printDebugInformation("ERROR: getTimezoneResult()");
             printDebugInformation(err);
 
-            _alexa.emit(":tell", "There was a problem detecting your timezone. Please try again later.");
+            _alexa.response.speak("There was a problem detecting your timezone. Please try again later.");
+            _alexa.emit(":responseReady");
         }
 
         var data = JSON.parse(body);

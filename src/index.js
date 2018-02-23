@@ -44,7 +44,8 @@ var defaultHandler = {
                     var high = timestamp <= data.daily.data[0].temperatureHighTime ? Math.round(data.daily.data[0].temperatureHigh) : Math.round(data.daily.data[1].temperatureHigh);
                     var low = timestamp <= data.daily.data[0].temperatureLowTime ? Math.round(data.daily.data[0].temperatureLow) : Math.round(data.daily.data[1].temperatureLow);
                     
-                    _alexa.emit(":tell", "Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    _alexa.response.speak("Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -62,7 +63,8 @@ var defaultHandler = {
                     var currently_summary = data.currently.summary.toLowerCase();
                     var minutely_summary = data.minutely.summary.toLowerCase().replace(/.$/,",");
 
-                    _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
+                    _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -81,14 +83,16 @@ var defaultHandler = {
                     var low = Math.round(data.daily.data[0].temperatureLow);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for today in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecast is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the weather was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + summary + " with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -106,14 +110,16 @@ var defaultHandler = {
                     var summary = data.currently.summary.toLowerCase();
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecast is " + temperature + " degrees and " + summary + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + temperature + " degrees and " + summary + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the weather was " + temperature + " degrees and " + summary + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + temperature + " degrees and " + summary + ".");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -133,14 +139,16 @@ var defaultHandler = {
                     summary = summary.replace("°C", " degrees");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "In " + location + ", " + summary + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("In " + location + ", " + summary + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "Sorry, weekly forecasts are not available for past dates or times.");
+                        _alexa.response.speak("Sorry, weekly forecasts are not available for past dates or times.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", "Sorry, weekly forecasts are not available for past dates or times.");
+                        _alexa.response.speak("Sorry, weekly forecasts are not available for past dates or times.");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -157,14 +165,16 @@ var defaultHandler = {
                     var temperature = Math.round(data.currently.temperature);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted temperature is " + temperature + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted temperature is " + temperature + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the temperature was " + temperature + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the temperature was " + temperature + " degrees.");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -187,14 +197,16 @@ var defaultHandler = {
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted high is " + high + " degrees at " + timestamp.format("h:mma") + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted high is " + high + " degrees at " + timestamp.format("h:mma") + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the high was " + high + " degrees at " + timestamp.format("h:mma") + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the high was " + high + " degrees at " + timestamp.format("h:mma") + ".");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -217,14 +229,16 @@ var defaultHandler = {
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "The forecast for today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted low is " + low + " degrees at " + timestamp.format("h:mma") + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted low is " + low + " degrees at " + timestamp.format("h:mma") + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the low was " + low + " degrees at " + timestamp.format("h:mma") + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the low was " + low + " degrees at " + timestamp.format("h:mma") + ".");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -242,14 +256,16 @@ var defaultHandler = {
                     var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", there's a " + probability + "% chance of " + type + "." + getPrecipitation(data) + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", there's a " + probability + "% chance of " + type + "." + getPrecipitation(data) + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", there's a " + probability + "% chance of " + type + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", there's a " + probability + "% chance of " + type + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", there was a " + probability + "% chance of " + type + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", there was a " + probability + "% chance of " + type + ".");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -280,28 +296,30 @@ var defaultHandler = {
 
                     if (difference == 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", "Right now in " + location + ", there's a " + speed + " " + units + " wind out of the " + direction + "." + getWeatherAlerts(data));
+                            _alexa.response.speak("Right now in " + location + ", there's a " + speed + " " + units + " wind out of the " + direction + "." + getWeatherAlerts(data));
                         }
                         else {
-                            _alexa.emit(":tell", "Right now in " + location + ", there's no wind." + getWeatherAlerts(data));
+                            _alexa.response.speak("Right now in " + location + ", there's no wind." + getWeatherAlerts(data));
                         }
                     }
                     else if (difference > 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's a forecasted " + speed + " " + units + " wind out of the " + direction + ".");
+                            _alexa.response.speak(calendarTime + " in " + location + ", there's a forecasted " + speed + " " + units + " wind out of the " + direction + ".");
                         }
                         else {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there's no wind forecasted.");
+                            _alexa.response.speak(calendarTime + " in " + location + ", there's no wind forecasted.");
                         }
                     }
                     else if (difference < 0) {
                         if (speed > 0) {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there was a " + speed + " " + units + " wind out of the " + direction + ".");
+                            _alexa.response.speak(calendarTime + " in " + location + ", there was a " + speed + " " + units + " wind out of the " + direction + ".");
                         }
                         else {
-                            _alexa.emit(":tell", calendarTime + " in " + location + ", there was no wind.");
+                            _alexa.response.speak(calendarTime + " in " + location + ", there was no wind.");
                         }
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -318,14 +336,16 @@ var defaultHandler = {
                     var humidity = Math.round(data.currently.humidity * 100);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the humidity is " + humidity + "%." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted humidity is " + humidity + "%.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted humidity is " + humidity + "%.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the humidity was " + humidity + "%.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the humidity was " + humidity + "%.");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -342,14 +362,16 @@ var defaultHandler = {
                     var dewPoint = Math.round(data.currently.dewPoint);
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", the dew point is " + dewPoint + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the dew point is " + dewPoint + " degrees." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted dew point is " + dewPoint + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted dew point is " + dewPoint + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the dew point was " + dewPoint + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the dew point was " + dewPoint + " degrees.");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -366,14 +388,16 @@ var defaultHandler = {
                     var uvIndex = data.currently.uvIndex;
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", the UV index is " + uvIndex + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the UV index is " + uvIndex + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted UV index is " + uvIndex + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted UV index is " + uvIndex + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the UV index was " + uvIndex + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the UV index was " + uvIndex + ".");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -402,14 +426,16 @@ var defaultHandler = {
                     }
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", "Right now in " + location + ", the visibility is " + visibility + " " + units + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the visibility is " + visibility + " " + units + "." + getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the forecasted visibility is " + visibility + " " + units + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecasted visibility is " + visibility + " " + units + ".");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", calendarTime + " in " + location + ", the visibility was " + visibility + " " + units + ".");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the visibility was " + visibility + " " + units + ".");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -454,14 +480,16 @@ var defaultHandler = {
                     }
 
                     if (difference == 0) {
-                        _alexa.emit(":tell", response);
+                        _alexa.response.speak(response);
                     }
                     else if (difference > 0) {
-                        _alexa.emit(":tell", "Sorry, weather alerts are not available for future dates or times.");
+                        _alexa.response.speak("Sorry, weather alerts are not available for future dates or times.");
                     }
                     else if (difference < 0) {
-                        _alexa.emit(":tell", "Sorry, weather alerts are not available for past dates or times.");
+                        _alexa.response.speak("Sorry, weather alerts are not available for past dates or times.");
                     }
+
+                    _alexa.emit(":responseReady");
                 });
             });
         });
@@ -470,13 +498,19 @@ var defaultHandler = {
     "AMAZON.HelpIntent": function () {
         printDebugInformation("defaultHandler:AMAZON.HelpIntent");
 
-        this.emit(":tell", "You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        var _alexa = this;
+        
+        _alexa.response.speak("You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        _alexa.emit(":responseReady");
     },
 
     "Unhandled": function () {
         printDebugInformation("defaultHandler:Unhandled");
 
-        this.emit(":tell", "Sorry, I didn't understand that. You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        var _alexa = this;
+        
+        _alexa.response.speak("Sorry, I didn't understand that. You can ask for things like the current forecast, today's forecast, this week's forecast, temperature, high, low, precipitation, wind, humidity, dew point, UV index, visibility, and weather alerts. You can ask for these things for a specific date, time, or location. For example, try asking for \"the UV index on Saturday at 3:00 PM in Seattle\".");
+        _alexa.emit(":responseReady");
     }
 
 };
@@ -500,7 +534,8 @@ function getForecast(_alexa, latitude, longitude, timestamp, callback) {
             printDebugInformation("ERROR: getForecast()");
             printDebugInformation(err);
 
-            _alexa.emit(":tell", "There was a problem retrieving your forecast. Please try again later.");
+            _alexa.response.speak("There was a problem retrieving your forecast. Please try again later.");
+            _alexa.emit(":responseReady");
         }
 
         var data = JSON.parse(body);
