@@ -1,10 +1,10 @@
 var Alexa = require("alexa-sdk");
-var Request = require("request");
 var Moment = require("moment-timezone");
 var Windrose = require("windrose");
 
 var location = require("./location");
 var datetime = require("./datetime");
+var forecast = require("./forecast");
 
 var alexa;
 
@@ -35,17 +35,17 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var currently_summary = data.currently.summary;
                     var minutely_summary = data.minutely.summary;
 
-                    var hourly_summary = data.hourly.summary.toLowerCase().replace(/.$/,",");
+                    var hourly_summary = data.hourly.summary.toLowerCase().replace(/.$/,"");
                     var high = timestamp <= data.daily.data[0].temperatureHighTime ? Math.round(data.daily.data[0].temperatureHigh) : Math.round(data.daily.data[1].temperatureHigh);
                     var low = timestamp <= data.daily.data[0].temperatureLowTime ? Math.round(data.daily.data[0].temperatureLow) : Math.round(data.daily.data[1].temperatureLow);
                     
-                    _alexa.response.speak("Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary.toLowerCase() + ". " + minutely_summary + getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
-                    
+                    _alexa.response.speak("Welcome to Weatherbot! Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary.toLowerCase() + ". " + minutely_summary + forecast.getPrecipitation(data) + " The forecast for the next 24 hours is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + forecast.getWeatherAlerts(data));
+                   
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
@@ -53,10 +53,10 @@ var defaultHandler = {
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='5'>" + temperature + "° " + currently_summary + "</font>" +
                                 "<br/>" +
-                                "<font size='3'>" + minutely_summary + getPrecipitation(data) + "</font>" +
+                                "<font size='3'>" + minutely_summary + forecast.getPrecipitation(data) + "</font>" +
                                 "<br/>" +
                                 "<br/>" +
-                                "<font size='3'>" + "The forecast for the next 24 hours is " + hourly_summary + " with a high of " + high + " degrees and a low of " + low + " degrees." + "</font>"
+                                "<font size='3'>" + "The forecast for the next 24 hours is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + "</font>"
                             ))
                             .build();
                         
@@ -76,12 +76,12 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var currently_summary = data.currently.summary;
                     var minutely_summary = data.minutely.summary;
 
-                    _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary.toLowerCase() + ". " + minutely_summary + getPrecipitation(data) + getWeatherAlerts(data));
+                    _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + currently_summary.toLowerCase() + ". " + minutely_summary + forecast.getPrecipitation(data) + forecast.getWeatherAlerts(data));
                     
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
@@ -90,7 +90,7 @@ var defaultHandler = {
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='5'>" + temperature + "° " + currently_summary + "</font>" +
                                 "<br/>" +
-                                "<font size='3'>" + minutely_summary + getPrecipitation(data) + "</font>"
+                                "<font size='3'>" + minutely_summary + forecast.getPrecipitation(data) + "</font>"
                             ))
                             .build();
                         
@@ -110,19 +110,19 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var summary = data.daily.data[0].summary;
                     var high = Math.round(data.daily.data[0].temperatureHigh);
                     var low = Math.round(data.daily.data[0].temperatureLow);
 
                     if (difference == 0) {
-                        _alexa.response.speak("The forecast for today in " + location + " is " + summary.toLowerCase().replace(/.$/,",") + " with a high of " + high + " degrees and a low of " + low + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " is " + summary.toLowerCase().replace(/.$/,"") + ", with a high of " + high + " degrees and a low of " + low + " degrees." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
-                        _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + summary.toLowerCase().replace(/.$/,",") + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + summary.toLowerCase().replace(/.$/,"") + ", with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
                     else if (difference < 0) {
-                        _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + summary.toLowerCase().replace(/.$/,",") + " with a high of " + high + " degrees and a low of " + low + " degrees.");
+                        _alexa.response.speak(calendarTime + " in " + location + ", the weather was " + summary.toLowerCase().replace(/.$/,"") + ", with a high of " + high + " degrees and a low of " + low + " degrees.");
                     }
 
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
@@ -152,12 +152,12 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
                     var summary = data.currently.summary.toLowerCase();
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", it's " + temperature + " degrees and " + summary + "." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecast is " + temperature + " degrees and " + summary + ".");
@@ -191,14 +191,14 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var summary = data.daily.summary.toLowerCase();
 
                     summary = summary.replace("°F", " degrees");
                     summary = summary.replace("°C", " degrees");
 
                     if (difference == 0) {
-                        _alexa.response.speak("In " + location + ", " + summary + getWeatherAlerts(data));
+                        _alexa.response.speak("In " + location + ", " + summary + forecast.getWeatherAlerts(data));
                         
                         if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                             var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
@@ -232,11 +232,11 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var temperature = Math.round(data.currently.temperature);
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", the temperature is " + temperature + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the temperature is " + temperature + " degrees." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted temperature is " + temperature + " degrees.");
@@ -273,14 +273,14 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var high = Math.round(data.daily.data[0].temperatureHigh);
                     var timestamp = Moment.unix(data.daily.data[0].temperatureHighTime).tz(timezone);
 
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.response.speak("The forecast for today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " has a high of " + high + " degrees at " + timestamp.format("h:mma") + "." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted high is " + high + " degrees at " + timestamp.format("h:mma") + ".");
@@ -319,14 +319,14 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var low = Math.round(data.daily.data[0].temperatureLow);
                     var timestamp = Moment.unix(data.daily.data[0].temperatureLowTime).tz(timezone);
 
                     var difference = timestamp.diff(Moment.tz(timezone), "hours");
 
                     if (difference == 0) {
-                        _alexa.response.speak("The forecast for today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("The forecast for today in " + location + " has a low of " + low + " degrees at " + timestamp.format("h:mma") + "." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted low is " + low + " degrees at " + timestamp.format("h:mma") + ".");
@@ -362,12 +362,12 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var probability = Math.round(data.currently.precipProbability * 100);
                     var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", there's a " + probability + "% chance of " + type + "." + getPrecipitation(data) + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", there's a " + probability + "% chance of " + type + "." + forecast.getPrecipitation(data) + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", there's a " + probability + "% chance of " + type + ".");
@@ -403,7 +403,7 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var speed = Math.round(data.currently.windSpeed);
                     var direction = Windrose.getPoint(data.currently.windBearing, { depth: 1 }).name;
 
@@ -421,10 +421,10 @@ var defaultHandler = {
 
                     if (difference == 0) {
                         if (speed > 0) {
-                            _alexa.response.speak("Right now in " + location + ", there's a " + speed + " " + units + " wind out of the " + direction + "." + getWeatherAlerts(data));
+                            _alexa.response.speak("Right now in " + location + ", there's a " + speed + " " + units + " wind out of the " + direction + "." + forecast.getWeatherAlerts(data));
                         }
                         else {
-                            _alexa.response.speak("Right now in " + location + ", there's no wind." + getWeatherAlerts(data));
+                            _alexa.response.speak("Right now in " + location + ", there's no wind." + forecast.getWeatherAlerts(data));
                         }
                     }
                     else if (difference > 0) {
@@ -457,11 +457,11 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var humidity = Math.round(data.currently.humidity * 100);
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", the humidity is " + humidity + "%." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the humidity is " + humidity + "%." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted humidity is " + humidity + "%.");
@@ -495,11 +495,11 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var dewPoint = Math.round(data.currently.dewPoint);
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", the dew point is " + dewPoint + " degrees." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the dew point is " + dewPoint + " degrees." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted dew point is " + dewPoint + " degrees.");
@@ -533,11 +533,11 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var uvIndex = data.currently.uvIndex;
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", the UV index is " + uvIndex + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the UV index is " + uvIndex + "." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted UV index is " + uvIndex + ".");
@@ -571,7 +571,7 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var visibility = Math.round(data.currently.visibility);
 
                     var units = "miles";
@@ -587,7 +587,7 @@ var defaultHandler = {
                     }
 
                     if (difference == 0) {
-                        _alexa.response.speak("Right now in " + location + ", the visibility is " + visibility + " " + units + "." + getWeatherAlerts(data));
+                        _alexa.response.speak("Right now in " + location + ", the visibility is " + visibility + " " + units + "." + forecast.getWeatherAlerts(data));
                     }
                     else if (difference > 0) {
                         _alexa.response.speak(calendarTime + " in " + location + ", the forecasted visibility is " + visibility + " " + units + ".");
@@ -623,7 +623,7 @@ var defaultHandler = {
 
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
-                getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+                forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var response = "";
 
                     if (data.alerts != null) {
@@ -695,77 +695,5 @@ var defaultHandler = {
 function printDebugInformation(message) {
     if (process.env.DEBUG) {
         console.log(message);
-    }
-}
-
-function getForecast(_alexa, latitude, longitude, timestamp, callback) {
-    var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null && isNaN(timestamp) == false ? "," + timestamp : "") + "/?units=auto&solar=1";
-
-    Request.get({
-        uri: url,
-        gzip: true
-    }, function (err, response, body) {
-        printDebugInformation(url);
-
-        if (err) {
-            printDebugInformation("ERROR: getForecast()");
-            printDebugInformation(err);
-
-            _alexa.response.speak("There was a problem retrieving your forecast. Please try again later.");
-            
-            _alexa.emit(":responseReady");
-        }
-
-        var data = JSON.parse(body);
-
-        callback(data);
-    });
-}
-
-function getPrecipitation(data) {
-    if (data.currently.nearestStormDistance > 0 &&
-        data.currently.nearestStormDistance < 100) {
-        var distance = data.currently.nearestStormDistance;
-        var direction = Windrose.getPoint(data.currently.nearestStormBearing, { depth: 1 }).name;
-
-        var units = "miles";
-        
-        if (data.flags.units == "ca") {
-            units = "kilometers";
-        }
-        else if (data.flags.units == "uk2") {
-            units = "miles";
-        }
-        else if (data.flags.units == "si") {
-            units = "kilometers";
-        }
-        
-        return " Nearest precipitation is " + distance + " " + units + " to the " + direction + ".";
-    }
-    else {
-        if (data.currently.precipIntensity > 0) {
-            return "";
-        }
-        else {
-            return " No precipitation anywhere in the area.";
-        }
-    }
-}
-
-function getWeatherAlerts(data) {
-    if (data.alerts != null) {
-        var response = "";
-
-        if (data.alerts.length > 1) {
-            response += " Weather alerts are in effect for this area.";
-        }
-        else {
-            response += " A weather alert is in effect for this area.";
-        }
-
-        return response + " If you'd like to know more, just ask for your weather alerts.";
-    }
-    else {
-        return "";
     }
 }
