@@ -1,11 +1,10 @@
+var Alexa = require("alexa-sdk");
 var Request = require("request");
 var Moment = require("moment-timezone");
 
 var PERMISSIONS = [
     "read::alexa:device:all:address"
 ];
-
-var AlexaDeviceAddressClient = require("./lib/AlexaDeviceAddressClient");
 
 exports.getRequestedLocation = function(_alexa, callback) {
     if (_alexa.event.request.intent &&
@@ -34,13 +33,10 @@ exports.getRequestedLocation = function(_alexa, callback) {
     }
 }
 
-function printDebugInformation(message) {
-    if (process.env.DEBUG) {
-        console.log(message);
-    }
-}
-
 function getDeviceAddress(_alexa, callback) {
+    var deviceId = _alexa.event.context.System.device.deviceId;
+    var apiEndpoint = _alexa.event.context.System.apiEndpoint;
+
     var context = _alexa.event.context;
 
     if (!context) {
@@ -67,9 +63,9 @@ function getDeviceAddress(_alexa, callback) {
         return;
     }
 
-    var consentToken = _alexa.event.context.System.user.permissions.consentToken;
+    var token = _alexa.event.context.System.user.permissions.consentToken;
 
-    if (!consentToken) {
+    if (!token) {
         _alexa.response.speak("In order to provide your hyperlocal weather forecast, I need to know your address. Please update your address and enable location permissions in the Alexa app.")
             .askForPermissionsConsentCard(PERMISSIONS);
         
@@ -78,66 +74,35 @@ function getDeviceAddress(_alexa, callback) {
         return;
     }
 
-    var deviceId = _alexa.event.context.System.device.deviceId;
-    var apiEndpoint = _alexa.event.context.System.apiEndpoint;
+    var deviceAddressService = new Alexa.services.DeviceAddressService();
 
-    var alexaDeviceAddressClient = new AlexaDeviceAddressClient(apiEndpoint, deviceId, consentToken);
-
-    let deviceAddressRequest = alexaDeviceAddressClient.getFullAddress();
-
-    deviceAddressRequest.then(function (addressResponse) {
-        switch (addressResponse.statusCode) {
-            case 200:
-                // successfully got the address associated with this deviceId
-                var address = "";
-                if (addressResponse.address["addressLine1"] &&
-                    addressResponse.address["city"] &&
-                    addressResponse.address["stateOrRegion"]) {
-                    address = addressResponse.address["addressLine1"] + ", " + addressResponse.address["city"] + ", " + addressResponse.address["stateOrRegion"] + " " + addressResponse.address["postalCode"];
-                }
-                else {
-                    address = addressResponse.address["postalCode"];
-                }
-
-                if (_alexa.attributes["ADDRESS"] != address) {
-                    _alexa.attributes["LATITUDE"] = null;
-                    _alexa.attributes["LONGITUDE"] = null;
-                    _alexa.attributes["LOCATION"] = null;
-                    _alexa.attributes["TIMEZONE"] = null;
-                }
-
-                _alexa.attributes["ADDRESS"] = address;
-
-                callback(address);
-
-                break;
-            case 204:
-                // the query did not return any results
-                _alexa.response.speak("It doesn't look like you've set up your address yet. Please enter your address in the Alexa app.");
-                
-                _alexa.emit(":responseReady");
-
-                break;
-            case 403:
-                // the authentication token is invalid or doesn’t have access to the resource
-                _alexa.response.speak("It doesn't look like you've granted Weatherbot permission to access your location yet. Please enable location permissions in the Alexa app.")
-                    .askForPermissionsConsentCard(PERMISSIONS);
-                
-                _alexa.emit(":responseReady");
-
-                break;
-            default:
-                // catch all other responses
-                _alexa.response.speak("There was a problem retrieving your address. Please try again later.");
-                
-                _alexa.emit(":responseReady");
-
-                break;
+    let deviceAddressServiceRequest = deviceAddressService.getFullAddress(deviceId, apiEndpoint, token)
+    
+    deviceAddressServiceRequest.then(function (addressResponse) {
+        var address = "";
+        if (addressResponse.addressLine1 &&
+            addressResponse.city &&
+            addressResponse.stateOrRegion) {
+            address = addressResponse.addressLine1 + ", " + addressResponse.city + ", " + addressResponse.stateOrRegion + " " + addressResponse.postalCode;
         }
+        else {
+            address = addressResponse.postalCode;
+        }
+
+        if (_alexa.attributes["ADDRESS"] != address) {
+            _alexa.attributes["LATITUDE"] = null;
+            _alexa.attributes["LONGITUDE"] = null;
+            _alexa.attributes["LOCATION"] = null;
+            _alexa.attributes["TIMEZONE"] = null;
+        }
+
+        _alexa.attributes["ADDRESS"] = address;
+
+        callback(address);
     });
 
-    deviceAddressRequest.catch(function (err) {
-        printDebugInformation("ERROR: deviceAddressRequest()");
+    deviceAddressServiceRequest.catch(function (err) {
+        printDebugInformation("ERROR: getFullAddress()");
         printDebugInformation(err);
 
         _alexa.response.speak("There was a problem retrieving your address. Please try again later.");
@@ -217,4 +182,10 @@ function getTimezoneResult(_alexa, latitude, longitude, callback) {
 
         callback(timezone);
     });
+}
+
+function printDebugInformation(message) {
+    if (process.env.DEBUG) {
+        console.log(message);
+    }
 }
