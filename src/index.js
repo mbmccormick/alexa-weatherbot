@@ -49,13 +49,12 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle("Current Weather in " + location)
+                        var template = builder.setTitle("Right Now in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='5'>" + temperature + "° " + currently_summary + "</font>" +
-                                "<br/>" +
-                                "<font size='3'>" + minutely_summary + forecast.getPrecipitation(data) + "</font>" +
-                                "<br/>" +
-                                "<br/>" +
+                                "<br/><br/>" +
+                                "<font size='3'>" + minutely_summary + " " + forecast.getPrecipitation(data) + "</font>" +
+                                "<br/><br/>" +
                                 "<font size='3'>" + "The forecast for the next 24 hours is " + hourly_summary + ", with a high of " + high + " degrees and a low of " + low + " degrees." + "</font>"
                             ))
                             .build();
@@ -86,11 +85,11 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle("Current Weather in " + location)
+                        var template = builder.setTitle("Right Now in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='5'>" + temperature + "° " + currently_summary + "</font>" +
-                                "<br/>" +
-                                "<font size='3'>" + minutely_summary + forecast.getPrecipitation(data) + "</font>"
+                                "<br/><br/>" +
+                                "<font size='3'>" + minutely_summary + " " + forecast.getPrecipitation(data) + "</font>"
                             ))
                             .build();
                         
@@ -128,10 +127,10 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Forecast in " + location)
+                        var template = builder.setTitle(calendarTime + ": Forecast in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='5'>" + high + "° / " + low + "°</font>" +
-                                "<br/>" +
+                                "<br/><br/>" +
                                 "<font size='3'>" + summary + "</font>"
                             ))
                             .build();
@@ -169,9 +168,9 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Forecast in " + location)
+                        var template = builder.setTitle(calendarTime + ": Forecast in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
-                                "<font size='5'>" + temperature + "° " + summary + "</font>"
+                                "<font size='7'>" + temperature + "° " + summary + "</font>"
                             ))
                             .build();
                     
@@ -248,7 +247,7 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Temperature in " + location)
+                        var template = builder.setTitle(calendarTime + ": Temperature in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + temperature + "°" + "</font>"
                             ))
@@ -292,11 +291,11 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s High in " + location)
+                        var template = builder.setTitle(calendarTime + ": High in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + high + "°" + "</font>" +
                                 "<br/>" +
-                                "<font size='3'>" + timestamp.format("h:mma") + "</font>"
+                                "<font size='5'>" + timestamp.format("h:mma") + "</font>"
                             ))
                             .build();
                     
@@ -338,11 +337,11 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Low in " + location)
+                        var template = builder.setTitle(calendarTime + ": Low in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + low + "°" + "</font>" +
                                 "<br/>" +
-                                "<font size='3'>" + timestamp.format("h:mma") + "</font>"
+                                "<font size='5'>" + timestamp.format("h:mma") + "</font>"
                             ))
                             .build();
                     
@@ -379,11 +378,11 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Precipitation in " + location)
+                        var template = builder.setTitle(calendarTime + ": Precipitation in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + probability + "%" + "</font>" +
                                 "<br/>" +
-                                "<font size='3'>" + type + "</font>"
+                                "<font size='5'>" + type + "</font>"
                             ))
                             .build();
                     
@@ -405,7 +404,7 @@ var defaultHandler = {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
                     var speed = Math.round(data.currently.windSpeed);
-                    var direction = Windrose.getPoint(data.currently.windBearing, { depth: 1 }).name;
+                    var direction = Windrose.getPoint(data.currently.windBearing, { depth: 1 }).name.toLowerCase().replace(" ", "");
 
                     var units = "miles per hour";
 
@@ -442,6 +441,22 @@ var defaultHandler = {
                         else {
                             _alexa.response.speak(calendarTime + " in " + location + ", there was no wind.");
                         }
+                    }                   
+                    
+                    if (_alexa.event.context.System.device.supportedInterfaces.Display) {
+                        var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
+                        
+                        var template = builder.setTitle(calendarTime + ": Wind in " + location)
+                            .setTextContent(Alexa.utils.TextUtils.makeRichText(
+                                "<font size='7'>" + speed + "</font>" +
+                                "<br/>" +
+                                "<font size='5'>" + units + "</font>" +
+                                "<br/>" +
+                                "<font size='5'>" + direction + "</font>"
+                            ))
+                            .build();
+                    
+                        _alexa.response.renderTemplate(template);
                     }
 
                     _alexa.emit(":responseReady");
@@ -473,7 +488,7 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Humidity in " + location)
+                        var template = builder.setTitle(calendarTime + ": Humidity in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + humidity + "%" + "</font>"
                             ))
@@ -511,7 +526,7 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Dew Point in " + location)
+                        var template = builder.setTitle(calendarTime + ": Dew Point in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + dewPoint + "°" + "</font>"
                             ))
@@ -549,7 +564,7 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s UV Index in " + location)
+                        var template = builder.setTitle(calendarTime + ": UV Index in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + uvIndex + "</font>"
                             ))
@@ -599,11 +614,11 @@ var defaultHandler = {
                     if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                         var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
                         
-                        var template = builder.setTitle(calendarTime + "'s Visibility in " + location)
+                        var template = builder.setTitle(calendarTime + ": Visibility in " + location)
                             .setTextContent(Alexa.utils.TextUtils.makeRichText(
                                 "<font size='7'>" + visibility + "</font>" +
                                 "<br/>" +
-                                "<font size='3'>" + units + "</font>"
+                                "<font size='5'>" + units + "</font>"
                             ))
                             .build();
                     

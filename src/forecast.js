@@ -29,7 +29,7 @@ exports.getPrecipitation = function(data) {
     if (data.currently.nearestStormDistance > 0 &&
         data.currently.nearestStormDistance < 100) {
         var distance = data.currently.nearestStormDistance;
-        var direction = Windrose.getPoint(data.currently.nearestStormBearing, { depth: 1 }).name;
+        var direction = Windrose.getPoint(data.currently.nearestStormBearing, { depth: 1 }).name.toLowerCase().replace(" ", "");
 
         var units = "miles";
         
