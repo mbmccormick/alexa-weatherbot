@@ -2,7 +2,7 @@ var Request = require("request");
 var Windrose = require("windrose");
 
 exports.getCurrentForecast = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var temperature = Math.round(data.currently.temperature);
 
         var currently_summary = data.currently.summary;
@@ -26,7 +26,7 @@ exports.getCurrentForecast = function(_alexa, latitude, longitude, timestamp, ca
 }
 
 exports.getDateForecast = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var summary = data.daily.data[0].summary;
         var high = Math.round(data.daily.data[0].temperatureHigh);
         var low = Math.round(data.daily.data[0].temperatureLow);
@@ -41,7 +41,7 @@ exports.getDateForecast = function(_alexa, latitude, longitude, timestamp, callb
 }
 
 exports.getDateTimeForecast = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var temperature = Math.round(data.currently.temperature);
         var summary = data.currently.summary.toLowerCase();
 
@@ -54,7 +54,7 @@ exports.getDateTimeForecast = function(_alexa, latitude, longitude, timestamp, c
 }
 
 exports.getWeekForecast = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var summary = data.daily.summary;
 
         summary = summary.replace("°F", " degrees");
@@ -68,7 +68,7 @@ exports.getWeekForecast = function(_alexa, latitude, longitude, timestamp, callb
 }
 
 exports.getTemperature = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var temperature = Math.round(data.currently.temperature);
 
         callback({
@@ -79,7 +79,7 @@ exports.getTemperature = function(_alexa, latitude, longitude, timestamp, callba
 }
 
 exports.getHigh = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var high = Math.round(data.daily.data[0].temperatureHigh);
         var timestamp = Moment.unix(data.daily.data[0].temperatureHighTime).tz(timezone);
 
@@ -92,7 +92,7 @@ exports.getHigh = function(_alexa, latitude, longitude, timestamp, callback) {
 }
 
 exports.getLow = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var low = Math.round(data.daily.data[0].temperatureLow);
         var timestamp = Moment.unix(data.daily.data[0].temperatureLowTime).tz(timezone);
 
@@ -105,7 +105,7 @@ exports.getLow = function(_alexa, latitude, longitude, timestamp, callback) {
 }
 
 exports.getPrecipitation = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var probability = Math.round(data.currently.precipProbability * 100);
         var type = data.currently.precipType ? data.currently.precipType : "precipitation";
 
@@ -118,7 +118,7 @@ exports.getPrecipitation = function(_alexa, latitude, longitude, timestamp, call
 }
 
 exports.getWind = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var speed = Math.round(data.currently.windSpeed);
         var direction = Windrose.getPoint(data.currently.windBearing, { depth: 1 }).name.toLowerCase().replace(" ", "");
 
@@ -144,7 +144,7 @@ exports.getWind = function(_alexa, latitude, longitude, timestamp, callback) {
 }
 
 exports.getHumidity = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var humidity = Math.round(data.currently.humidity * 100);
 
         callback({
@@ -155,7 +155,7 @@ exports.getHumidity = function(_alexa, latitude, longitude, timestamp, callback)
 }
 
 exports.getDewPoint = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var dewPoint = Math.round(data.currently.dewPoint);
 
         callback({
@@ -166,7 +166,7 @@ exports.getDewPoint = function(_alexa, latitude, longitude, timestamp, callback)
 }
 
 exports.getUvIndex = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var uvIndex = data.currently.uvIndex;
 
         callback({
@@ -177,7 +177,7 @@ exports.getUvIndex = function(_alexa, latitude, longitude, timestamp, callback) 
 }
 
 exports.getVisibility = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var visibility = Math.round(data.currently.visibility);
 
         var units = "miles";
@@ -201,7 +201,7 @@ exports.getVisibility = function(_alexa, latitude, longitude, timestamp, callbac
 }
 
 exports.getAlerts = function(_alexa, latitude, longitude, timestamp, callback) {
-    getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
+    getForecast(_alexa, latitude, longitude, timestamp, function (data) {
         var alerts = data.alerts;
 
         callback({
