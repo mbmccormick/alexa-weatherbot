@@ -1,4 +1,5 @@
 var Request = require("request");
+var Windrose = require("windrose");
 
 exports.getForecast = function(_alexa, latitude, longitude, timestamp, callback) {
     var url = "https://api.darksky.net/forecast/" + process.env.DARKSKY_API_KEY + "/" + latitude + "," + longitude + (timestamp != null && isNaN(timestamp) == false ? "," + timestamp : "") + "/?units=auto&solar=1";
