@@ -191,13 +191,13 @@ var defaultHandler = {
         location.getRequestedLocation(_alexa, function (latitude, longitude, location, timezone) {
             datetime.getRequestedDateTime(_alexa, timezone, function (timestamp, difference, calendarTime) {
                 forecast.getForecast(_alexa, latitude, longitude, difference == 0 ? null : timestamp, function (data) {
-                    var summary = data.daily.summary.toLowerCase();
+                    var summary = data.daily.summary;
 
                     summary = summary.replace("°F", " degrees");
                     summary = summary.replace("°C", " degrees");
 
                     if (difference == 0) {
-                        _alexa.response.speak("In " + location + ", " + summary + forecast.getWeatherAlerts(data));
+                        _alexa.response.speak("In " + location + ", " + summary.toLowerCase() + forecast.getWeatherAlerts(data));
                         
                         if (_alexa.event.context.System.device.supportedInterfaces.Display) {
                             var builder = new Alexa.templateBuilders.BodyTemplate2Builder();
