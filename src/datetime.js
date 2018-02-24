@@ -51,12 +51,12 @@ exports.getRequestedDateTime = function(_alexa, timezone, callback) {
         _alexa.event.request.intent.slots &&
         _alexa.event.request.intent.slots.Time.value) {
         calendarOptions = {
-            sameDay: "[Today] [at] h:mma",
-            nextDay: "[Tomorrow] [at] h:mma",
-            nextWeek: "dddd [at] h:mma",
-            lastDay: "[Yesterday] [at] h:mma",
-            lastWeek: "[Last] dddd [at] h:mma",
-            sameElse: "[On] MMMM Do, YYYY [at] h:mma"
+            sameDay: "[Today] [at] h:mm A",
+            nextDay: "[Tomorrow] [at] h:mm A",
+            nextWeek: "dddd [at] h:mm A",
+            lastDay: "[Yesterday] [at] h:mm A",
+            lastWeek: "[Last] dddd [at] h:mm A",
+            sameElse: "[On] MMMM Do, YYYY [at] h:mm A"
         };
     }
     else {
