@@ -19,7 +19,7 @@ exports.getCurrentForecast = function(_alexa, latitude, longitude, timestamp, ca
             hourly_summary: hourly_summary,
             high: high,
             low: low,
-            precipitation: getPrecipitation(data),
+            precipitation: getNearestPrecipitation(data),
             alerts: getWeatherAlerts(data)
         });
     });
@@ -112,7 +112,7 @@ exports.getPrecipitation = function(_alexa, latitude, longitude, timestamp, call
         callback({
             probability: probability,
             type: type,
-            precipitation: getPrecipitation(data),
+            precipitation: getNearestPrecipitation(data),
             alerts: getWeatherAlerts(data)
         });
     });
@@ -235,7 +235,7 @@ function getForecast(_alexa, latitude, longitude, timestamp, callback) {
     });
 }
 
-function getPrecipitation(data) {
+function getNearestPrecipitation(data) {
     if (data.currently.nearestStormDistance > 0 &&
         data.currently.nearestStormDistance < 100) {
         var distance = data.currently.nearestStormDistance;
