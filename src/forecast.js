@@ -112,6 +112,7 @@ exports.getPrecipitation = function(_alexa, latitude, longitude, timestamp, call
         callback({
             probability: probability,
             type: type,
+            precipitation: getPrecipitation(data),
             alerts: getWeatherAlerts(data)
         });
     });
